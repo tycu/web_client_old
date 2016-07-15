@@ -1,0 +1,29 @@
+{
+  "name": "tally-web_client",
+  "version": "0.0.1",
+  "description": "tally web client",
+  "main": "webpack.config.js",
+  "homepage": "https://tally.us",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tallyus/web_client.git"
+  },
+  "devDependencies": {},
+  "dependencies": {
+    "webpack": "^1.13.1",
+    "webpack-dev-server": "^1.14.1"
+  },
+  "optionalDependencies": {},
+  "engines": {},
+  "scripts": {
+    "dev": "webpack-dev-server --content-base src --inline --hot",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/tallyus/tally_web/issues"
+  },
+  "keywords": [],
+  "author": "tally_forth",
+  "private": true,
+  "license": "UNLICENSED"
+}
