@@ -59,7 +59,7 @@ export default class Todos extends React.Component {
 
     return (
       <div>
-        <h1>Todos</h1>
+        <h2>Todos</h2>
         <button onClick={this.reloadTodos.bind(this)}>Reload!</button>
         <form>
           <input type="text" placeholder='add new todo..' onChange={this.handleNewTodoText.bind(this)} value={this.state.newTodoText} />

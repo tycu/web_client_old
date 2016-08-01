@@ -5,6 +5,7 @@ import Footer from "../components/layout/Footer";
 import Nav from "../components/layout/Nav";
 
 export default class Layout extends React.Component {
+
   render() {
     const { location } = this.props;
     const containerStyle = {
@@ -20,10 +21,9 @@ export default class Layout extends React.Component {
               {this.props.children}
             </div>
           </div>
-          <Footer/>
+          <Footer />
         </div>
       </div>
-
     );
   }
 }

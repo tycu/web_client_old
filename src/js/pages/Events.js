@@ -59,7 +59,7 @@ export default class Events extends React.Component {
 
     return (
       <div>
-        <h1>Events</h1>
+        <h2>Events</h2>
         <button onClick={this.reloadEvents.bind(this)}>Reload!</button>
         <form>
           <input type="text" placeholder='add new event..' onChange={this.handleNewEventText.bind(this)} value={this.state.newEventText} />

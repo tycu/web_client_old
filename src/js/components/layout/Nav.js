@@ -1,17 +1,24 @@
 import React from "react";
 import { IndexLink, Link } from "react-router";
+import LoginActions from '../../actions/LoginActions';
+import Logout from '../Logout';
 
 export default class Nav extends React.Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
+
     this.state = {
       collapsed: true,
+      loggedIn: LoginActions.loggedIn()
     };
   }
 
   toggleCollapse() {
     const collapsed = !this.state.collapsed;
-    this.setState({collapsed});
+    this.setState({
+      collapsed: collapsed,
+      loggedIn: LoginActions.loggedIn()
+    });
   }
 
   render() {
@@ -20,7 +27,17 @@ export default class Nav extends React.Component {
     const eventsClass = location.pathname === "/" ? "active" : "";
     const todoClass     = location.pathname.match(/^\/todo/) ? "active" : "";
     const aboutClass    = location.pathname.match(/^\/about/) ? "active" : "";
-    const settingsClass = location.pathname.match(/^\/settings/) ? "active" : "";
+    const settingsClass = function() {
+      if (this.state.loggedIn == false) {
+        return ''
+      } else if (location.pathname.match(/^\/settings/) && this.state.loggedIn == true) {
+        return 'active'
+      } else {
+        ''
+      }
+    }
+    const donorInfoClass = location.pathname.match(/^\/donor-info/) ? "active" : "";
+    const loginClass    = (location.pathname.match(/^\/login/) || location.pathname.match(/^\/signup/)) ? "active" : "";
     const navClass      = collapsed ? "collapse" : "";
 
     return (
@@ -35,6 +52,7 @@ export default class Nav extends React.Component {
               <span class="icon-bar"></span>
             </button>
           </div>
+
           <div class={"navbar-collapse " + navClass} id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
 
@@ -50,6 +68,17 @@ export default class Nav extends React.Component {
               <li class={settingsClass}>
                 <Link to="settings" onClick={this.toggleCollapse.bind(this)}>Settings</Link>
               </li>
+                <li class={donorInfoClass}>
+                <Link to="donor-info" onClick={this.toggleCollapse.bind(this)}>Donor Info</Link>
+              </li>
+              <li class={loginClass}>
+                {this.state.loggedIn ? (
+                  <Link to="/logout" onClick={this.toggleCollapse.bind(this)}>Log out</Link>
+                ) : (
+                  <Link to="/login" onClick={this.toggleCollapse.bind(this)}>Sign in</Link>
+                )}
+              </li>
+
             </ul>
           </div>
         </div>
