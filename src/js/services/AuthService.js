@@ -1,13 +1,12 @@
 import request from 'reqwest';
 import when from 'when';
-import Constants from '../constants/LoginConstants';
 import LoginActions from '../actions/LoginActions';
 
 class AuthService {
 
-  login(email, password) {
+  login(email, password, url) {
     return this.handleAuth(when(request({
-      url: Constants.LOGIN_URL,
+      url: url,
       method: 'POST',
       crossOrigin: true,
       type: 'json',
@@ -18,13 +17,23 @@ class AuthService {
     })));
   }
 
-  logout() {
-    LoginActions.logoutUser();
+  signout(token, url) {
+    LoginActions.signoutUser();
+
+    return this.handleAuth(when(request({
+      url: url,
+      method: 'POST',
+      crossOrigin: true,
+      type: 'json',
+      data: {
+        token: token
+      }
+    })));
   }
 
-  signup(email, password) {
+  signup(email, password, url) {
     return this.handleAuth(when(request({
-      url: Constants.SIGINUP_URL,
+      url: url,
       method: 'POST',
       crossOrigin: true,
       type: 'json',
@@ -37,7 +46,7 @@ class AuthService {
 
   handleAuth(loginPromise) {
     return loginPromise.then(function(response) {
-      LoginActions.loginUser(response.sessionID);
+      LoginActions.loginUser(response.token, response.email, response.refreshToken);
       return true;
     });
   }

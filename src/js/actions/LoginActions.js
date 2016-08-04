@@ -3,28 +3,38 @@ import { Router, Route, IndexRoute, browserHistory } from "react-router";
 
 class LoginActions {
 
-  getToken() {
-    return localStorage.tallySession
+  getAuthToken() {
+    return localStorage.tallyToken;
   }
 
-  logout(cb) {
-    delete localStorage.tallySession
+  getRefreshToken() {
+    return localStorage.tallyEndureToken;
   }
 
-  loggedIn() {
-    return !!localStorage.tallySession
+  signedIn() {
+    // return !!localStorage.tallyToken;
+    return !!localStorage.tallyEndureToken;
   }
 
-  loginUser(sessionID) {
-    var savedSessionID = localStorage.getItem('tallySession');
-    if (savedSessionID !== sessionID) {
+  currentUser() {
+    return localStorage.getItem('tallyUserEmail');
+  }
+
+  loginUser(token, email, refreshToken) {
+    var savedToken = localStorage.getItem('tallyToken');
+    localStorage.setItem('tallyUserEmail', email);
+    localStorage.setItem('tallyEndureToken', refreshToken);
+
+    if (savedTokenses !== token) {
       browserHistory.push('/');
-      localStorage.setItem('tallySession', sessionID);
+      localStorage.setItem('tallyToken', token);
     }
   }
 
-  logoutUser() {
-    localStorage.removeItem('tallySession');
+  signoutUser() {
+    localStorage.removeItem('tallyToken');
+    localStorage.removeItem('tallyEndureToken');
+    localStorage.removeItem('tallyUserEmail');
     browserHistory.push('/');
   }
 }

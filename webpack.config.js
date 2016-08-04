@@ -1,6 +1,9 @@
 var debug = process.env.NODE_ENV !== "production";
+var LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 var webpack = require('webpack');
 var path = require('path');
+var StaticSiteGeneratorPlugin = require('static-site-generator-webpack-plugin');
+var staticContent = require('./src/static_site/static.js');
 
 module.exports = {
   context: path.join(__dirname, "src"),
@@ -25,8 +28,12 @@ module.exports = {
   },
   plugins: debug ? [] : [
     new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false }),
+    new StaticSiteGeneratorPlugin('routes.min.js', staticContent.routes, staticContent),
+    new LodashModuleReplacementPlugin({
+      'collections': true
+    }),
   ],
   devServer: {
     historyApiFallback: true

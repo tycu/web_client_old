@@ -1,15 +1,17 @@
 
 // NOTE will need to update for prod
 const BASE_URL    = 'http://localhost:5000/';
-var loginUrl      = BASE_URL + 'v1/login';
-var signup        = BASE_URL + 'v1/signup';
-const LOGIN_USER  = 'LOGIN_USER';
-const LOGOUT_USER = 'LOGOUT_USER';
+const SIGNIN_URL   = 'http://localhost:5000/api/v1/signin';
+const SIGNUP_URL  = 'http://localhost:5000/api/v1/signup';
+const SIGNOUT_URL = 'http://localhost:5000/api/v1/signout';
+const SIGNIN_USER  = 'SIGNIN_USER';
+const SIGNOUT_USER = 'SIGNOUT_USER';
 
 module.exports = {
   BASE_URL:    BASE_URL,
-  LOGIN_URL:   loginUrl,
-  SIGNUP_URL:  signup,
-  LOGIN_USER:  LOGIN_USER,
-  LOGOUT_USER: LOGOUT_USER
+  SIGNIN_URL: SIGNIN_URL,
+  SIGNUP_URL:  SIGNUP_URL,
+  SIGNOUT_URL: SIGNOUT_URL,
+  SIGNIN_USER:  SIGNIN_USER,
+  SIGNOUT_USER: SIGNOUT_USER
 };

@@ -8,7 +8,7 @@ export default class Settings extends React.Component {
     return (
       <div>
         <h2>Settings</h2>
-        <p>logged in {LoginActions.loggedIn()}</p>
+        <p>logged in {LoginActions.signedIn()}</p>
       </div>
     );
   }
