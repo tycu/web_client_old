@@ -1,5 +1,6 @@
 import React from 'react';
 import Radium from 'radium';
+import { Router, Route, IndexRoute, browserHistory, RouterContext } from "react-router";
 
 @Radium
 export default class NavItem extends React.Component {
@@ -24,25 +25,25 @@ export default class NavItem extends React.Component {
         }
       },
       link: {
-        paddingTop: '10px',
-        paddingBottom: '10px',
+        paddingTop: '15px',
+        paddingBottom: '15px',
         paddingLeft: '15px',
         paddingRight: '15px',
-        lineHeight: '20px',
+        lineHeight: '30px',
         position: 'relative',
         display: 'block',
         boxSizing: 'border-box',
         textDecoration: 'none',
         backgroundColor: 'transparent',
-        color: '#777',
+        color: '#ccc',
 
         ':hover': {
-          color: '#333',
+          color: '#111',
           backgroundColor: '#eee'
         },
 
         ':focus': {
-          color: '#333',
+          color: '#111',
           backgroundColor: 'transparent'
         },
 
@@ -54,12 +55,21 @@ export default class NavItem extends React.Component {
     };
   }
 
+  clickLink(e) {
+
+    // TODO get react router passed in context to components
+    // e.preventDefault();
+    // context.router.push(e.target.href)
+
+    // browserHistory.push(e.target.href);
+  }
+
   render() {
     const defStyle = this.getStyles();
     const {style, link, title, itemStyle} = this.props;
     return (
       <li ref="list" style={[defStyle.base, style && style]}>
-        <a ref="link" href={link} style={[defStyle.link, itemStyle && itemStyle]}>{title}</a>
+        <a ref="link" href={link} onClick={this.clickLink.bind(this)} style={[defStyle.link, itemStyle && itemStyle]}>{title}</a>
       </li>
     );
   }

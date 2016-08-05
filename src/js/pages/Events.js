@@ -1,53 +1,119 @@
 import React from "react";
-
+import Radium from 'radium';
 import Event from "../components/Event";
-import * as EventActions from "../actions/EventActions";
-import EventStore from "../stores/EventStore";
+// import * as EventActions from "../actions/EventActions";
+// import EventStore from "../stores/EventStore";
+import EventService from '../services/EventService';
+import Constants from '../constants/EventConstants';
 
 
+@Radium
 export default class Events extends React.Component {
-  constructor() {
-    super();
-    this.getEvents = this.getEvents.bind(this);
+  displayName = 'Events'
+
+
+  static propTypes = {
+    eventStyle:  React.PropTypes.object,
+    contStyle:   React.PropTypes.object,
+    children:    React.PropTypes.node
+  }
+
+  // state = {
+  //   collapseIn: false
+  // }
+
+  constructor(props) {
+    super(props);
+
     this.state = {
-      events: EventStore.getAll(),
-      newEventText: '',
+      events: []
     };
   }
 
-  // NOTE will fire only once upon initial render
-  componentWillMount() {
-    EventStore.on("change", () => {
-      this.setState({
-        events: EventStore.getAll()
+  componentDidMount() {
+    var that = this;
+
+    this.serverRequest = EventService.loadEvents(Constants.EVENTS_URL, 0)
+    .catch(function(response) {
+      if (response.status !== 200) {
+        alert("There is an error loading events");
+        console.log("Error loading events", response);
+      }
+    })
+    .then(function(response) {
+      that.setState({
+        events: response.events
       });
-    });
+    })
+    ;
   }
 
   componentWillUnmount() {
-    EventStore.removeListener("change", this.getEvents);
+    this.serverRequest.abort();
   }
 
-  getEvents() {
-    this.setState({
-      events: EventStore.getAll(),
-    });
-  }
+  // renderChildren = () => {
+  //   const {children} = this.props;
+  //   return React.Children.map(children, (child) => {
+  //     return React.cloneElement(child
+  //       // , { navbarToggle: this.navbarToggle, collapseIn: this.state.collapseIn}
+  //     );
+  //   });
+  // }
+  // {this.renderChildren()}
 
-  createEvent() {
-    if (!this.state.newEventText) {
-      return;
-    }
-    EventActions.createEvent(this.state.newEventText.trim());
-    this.setState({newEventText: ''});
-  }
+  // navbarToggle = () => {
+  //   this.setState({collapseIn: !this.state.collapseIn});
+  // }
 
-  reloadEvents() {
-    EventActions.reloadEvents();
-  }
+  getStyles = () => {
+    return {
+      events: {
+        // margin: '0 auto',
+        // backgroundColor: '#fff',
+        // border: '1px solid #e7e7e7',
+        // borderRadius: '0px',
+        position: 'relative',
+        top: '0px',
+        minHeight: '150px',
+        marginBottom: '20px',
+        display: 'block',
+        boxSizing: 'border-box',
+        maxWidth: '960px'
+        },
+        container: {
+          float: 'right',
+          paddingRight: '15px',
+          paddingLeft: '15px',
+          marginRight: 'auto',
+          marginLeft: 'auto',
+          boxSizing: 'border-box',
 
-  handleNewEventText(e) {
-    this.setState({newEventText: e.target.value});
+          '@media (min-width: 768px)': {
+            width: '720px'
+          },
+          '@media (min-width: 992px)': {
+            width: '820px'
+          },
+          '@media (min-width: 1200px)': {
+            width: '820px'
+          }
+        },
+        ul: {
+          listStyle: 'none'
+        },
+        pseudoBefore: {
+          display: 'table',
+          // content: ' ',
+          boxSizing: 'border-box'
+        },
+        pseudoAfter: {
+          clear: 'both',
+          display: 'table',
+          // content: ' ',
+          boxSizing: 'border-box'
+        }
+      };
   }
 
   render() {
@@ -57,17 +123,22 @@ export default class Events extends React.Component {
       return <Event key={event.id} {...event}/>;
     });
 
+    const defStyle = this.getStyles();
+    const {eventStyle, contStyle, ulStyle} = this.props;
+
     return (
       <div>
-        <h2>Events</h2>
-        <button onClick={this.reloadEvents.bind(this)}>Reload!</button>
-        <form>
-          <input type="text" placeholder='add new event..' onChange={this.handleNewEventText.bind(this)} value={this.state.newEventText} />
-          <button type="button" onClick={this.createEvent.bind(this)}>Create Event</button>
-        </form>
-
-        <ul>{EventComponents}</ul>
+        <nav ref="events" style={[defStyle.events, eventStyle && eventStyle]}>
+          <span style={[defStyle.pseudoBefore]} />
+            <div ref="container" style={[defStyle.container, contStyle && contStyle]}>
+              <span style={[defStyle.pseudoBefore]} />
+                <ul ref="ul" style={[defStyle.ul]}>{EventComponents}</ul>
+              <span style={[defStyle.pseudoAfter]} />
+            </div>
+          <span style={[defStyle.pseudoAfter]} />
+        </nav>
       </div>
     );
   }
 }
+

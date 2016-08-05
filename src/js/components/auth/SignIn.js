@@ -34,9 +34,15 @@ export default class SignIn extends React.Component {
 
 
   render() {
+    const loginStyles = {
+      width: '450px',
+      height: '350px',
+      background: '#fff',
+
+    };
 
     return (
-      <div className="login jumbotron center-block">
+      <div className="login jumbotron center-block" style={loginStyles}>
         <h2>Login</h2>
         <form role="form">
           <Email onUpdate={this.onUpdate.bind(this)} />

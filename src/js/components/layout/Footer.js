@@ -3,7 +3,7 @@ import React from "react";
 export default class Footer extends React.Component {
   render() {
     const footerStyles = {
-      marginTop: "30px",
+      margin: "30px",
     };
 
     return (

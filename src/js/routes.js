@@ -29,6 +29,7 @@ let routes = (
   <Router history={browserHistory}>
     <Route path="/" component={Layout}>
       <IndexRoute component={Events}></IndexRoute>
+      <Route path="events" component={Events}></Route>
       <Route path="about" component={About}></Route>
       <Route path="faq" component={Faq}></Route>
       <Route path="settings" component={Settings} onEnter={requireAuth}></Route>

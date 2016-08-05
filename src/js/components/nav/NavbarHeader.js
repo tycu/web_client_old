@@ -15,8 +15,8 @@ export default class NavbarHeader extends React.Component {
   getStyles = () => {
     return {
       header: {
-        marginRight: '-15px',
-        marginLeft: '-15px',
+        // marginRight: '-15px',
+        // marginLeft: '-15px',
         boxSizing: 'border-box',
 
         '@media (min-width: 768px)': {
@@ -29,21 +29,21 @@ export default class NavbarHeader extends React.Component {
         float: 'left',
         height: '50px',
         padding: '15px',
-        lineHeight: '20px',
+        lineHeight: '30px',
         textDecoration: 'none',
         backgroundColor: 'transparent',
         boxSizing: 'border-box',
 
-        fontSize: '18px',
-        color: '#777',
+        fontSize: '26px',
+        color: '#eee',
         fontFamily: '"Helvetica Neue",Helvetica,Arial,sans-serif',
 
         ':hover': {
-          color: '#5e5e5e'
+          color: '#999'
         },
 
         ':focus': {
-          color: '#5e5e5e'
+          color: '#999'
         },
 
         '@media (min-width: 768px)': {
@@ -62,17 +62,17 @@ export default class NavbarHeader extends React.Component {
         borderWidth: '1px',
         borderStyle: 'solid',
         borderRadius: '4px',
-        borderColor: '#ddd',
+        borderColor: '#888',
         cursor: 'pointer',
         boxSizing: 'border-box',
 
         ':hover': {
-          backgroundColor: '#ddd'
+          backgroundColor: '#aaa'
         },
 
         ':focus': {
           outline: '0',
-          backgroundColor: '#ddd'
+          backgroundColor: '#aaa'
         },
         '@media (min-width: 768px)': {
           display: 'none'

@@ -19,33 +19,30 @@ export default class Navbar extends React.Component {
     return {
       navbar: {
         margin: '0 auto',
-        backgroundColor: '#f8f8f8',
-        border: '1px solid #e7e7e7',
-        borderRadius: '0px',
+        backgroundColor: '#333',
         position: 'relative',
         top: '0px',
         minHeight: '50px',
-        marginBottom: '20px',
         display: 'block',
-        boxSizing: 'border-box',
-        maxWidth: '1170px'
+        boxSizing: 'border-box'
         },
         container: {
-          float: 'right',
-          paddingRight: '15px',
-          paddingLeft: '15px',
+          // float: 'right',
+          // paddingRight: '15px',
+          // paddingLeft: '15px',
           marginRight: 'auto',
           marginLeft: 'auto',
           boxSizing: 'border-box',
+          margin: '0 auto',
 
           '@media (min-width: 768px)': {
             width: '750px'
           },
           '@media (min-width: 992px)': {
-            width: '970px'
+            width: '860px'
           },
           '@media (min-width: 1200px)': {
-            width: '1170px'
+            width: '860px'
           }
         },
         pseudoBefore: {
@@ -60,7 +57,7 @@ export default class Navbar extends React.Component {
           boxSizing: 'border-box'
         }
       };
-    }
+  }
 
   renderChildren = () => {
     const {children} = this.props;

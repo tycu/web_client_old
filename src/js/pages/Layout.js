@@ -28,7 +28,6 @@ export default class Layout extends React.Component {
   getStyles = () => {
     return {
       container: {
-        border: '1px solid red',
         marginTop: '30px'
       }
     }
