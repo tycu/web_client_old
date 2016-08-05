@@ -32,8 +32,9 @@ module.exports = {
     new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false }),
     new StaticSiteGeneratorPlugin('routes.min.js', staticContent.routes, staticContent),
     new LodashModuleReplacementPlugin({
-      'collections': true
+      'collections': true,
     }),
+    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/)
   ],
   devServer: {
     historyApiFallback: true
