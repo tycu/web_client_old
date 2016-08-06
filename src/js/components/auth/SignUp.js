@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from "react-router";
 import AuthService from '../../services/AuthService';
-import Constants from '../../constants/LoginConstants';
+import Constants from '../../constants/AuthConstants';
 import Email from './Email';
-import Password from './Password'
+import Password from './Password';
+import PasswordMatch from './PasswordMatch';
 
 export default class SignUp extends React.Component {
 
@@ -11,7 +12,10 @@ export default class SignUp extends React.Component {
     super(props)
     this.state = {
       email: '',
-      password: ''
+      password: '',
+      passwordMatch: false,
+      message: '',
+      error: ''
     };
   }
 

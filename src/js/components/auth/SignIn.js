@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from "react-router";
 import AuthService from '../../services/AuthService';
-import Constants from '../../constants/LoginConstants';
+import Constants from '../../constants/AuthConstants';
 import Email from './Email';
 import Password from './Password'
 

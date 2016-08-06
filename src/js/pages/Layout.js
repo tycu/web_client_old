@@ -2,7 +2,7 @@ import React from "react";
 import Radium from 'radium'
 import { StyleRoot } from 'radium';
 import { Link } from "react-router";
-import LoginActions from '../actions/LoginActions';
+import SignInActions from '../actions/SignInActions';
 
 import Footer from "../components/layout/Footer";
 import TallyNav from "../components/layout/TallyNav";
@@ -34,8 +34,8 @@ export default class Layout extends React.Component {
   }
 
   componentWillMount() {
-    var loggedIn = LoginActions.signedIn()
-    var currentUserEmail =  LoginActions.currentUser()
+    var loggedIn = SignInActions.signedIn();
+    var currentUserEmail =  SignInActions.currentUser();
     if(loggedIn){
       this.setState({
         loggedIn : true,

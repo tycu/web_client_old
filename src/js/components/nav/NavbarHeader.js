@@ -1,5 +1,7 @@
 import React from 'react';
 import Radium from 'radium';
+var Link = require('react-router').Link;
+Link = Radium(Link);
 
 @Radium
 export default class NavbarHeader extends React.Component {
@@ -134,9 +136,9 @@ export default class NavbarHeader extends React.Component {
       <div key="header" style={[defStyle.header, headerStyle && headerStyle]}>
         <span style={[defStyle.pseudoBefore]} />
           {this.renderToggleButton()}
-          <a key="brand" style={[defStyle.brand, brandStyle && brandStyle]} href={href}>
+          <Link key="brand" to={href} style={[defStyle.brand, brandStyle && brandStyle]}>
             {name}
-          </a>
+          </Link>
         <span style={[defStyle.pseudoAfter]} />
       </div>
     );

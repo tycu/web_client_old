@@ -49,7 +49,8 @@ export default class Events extends React.Component {
   }
 
   componentWillUnmount() {
-    this.serverRequest.abort();
+    // Note this doesn't work, promises are not cancellable:
+    // this.serverRequest.abort();
   }
 
   // renderChildren = () => {

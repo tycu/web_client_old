@@ -1,5 +1,7 @@
 import React from 'react';
 import Radium from 'radium';
+var Link = require('react-router').Link;
+Link = Radium(Link);
 
 @Radium
 export default class DropdownMenu extends React.Component {
@@ -24,7 +26,7 @@ export default class DropdownMenu extends React.Component {
         minWidth: '160px',
         margin: '0px',
         padding: '5px 0px',
-        fontSize: '14px',
+        fontSize: '16px',
         textAlign: 'left',
         listStyle: 'none',
         backgroundColor: '#fff',
@@ -93,7 +95,7 @@ export default class DropdownMenu extends React.Component {
     _.times(menuItems.length-1, function(){
       lastChildArray.push({})
     });
-    lastChildArray.push({ 'border-top': '1px solid #999' })
+    lastChildArray.push({ 'borderTop': '1px solid #999' })
 
 
     return (
@@ -103,9 +105,9 @@ export default class DropdownMenu extends React.Component {
             <span key={i+200}>
               <li key={i+100} style={lastChildArray[i]} ></li>
               <li key={i}>
-                <a key={item.name} style={[defStyle.link, menuItemStyle && menuItemStyle] }
-                  href={item.href}>{item.name}
-                </a>
+                <Link to={item.href} key={item.name} style={[defStyle.link, menuItemStyle && menuItemStyle] }>
+                  {item.name}
+                </Link>
               </li>
             </span>
           );

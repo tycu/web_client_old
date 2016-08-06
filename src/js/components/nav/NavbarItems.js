@@ -20,7 +20,7 @@ export default class NavbarItems extends React.Component {
         boxSizing: 'border-box',
 
         fontFamily: '"Helvetica Neue",Helvetica,Arial,sans-serif',
-        fontSize: '14px',
+        fontSize: '16px',
         float: 'right',
 
         '@media (min-width: 768px)': {

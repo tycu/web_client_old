@@ -79,7 +79,7 @@ export default class DonorInfo extends React.Component {
     var unemployed = !this.state.donorInfo.employed
 
     return (
-      <div className="login jumbotron center-block">
+      <div className="signin jumbotron center-block">
         <h2>Donor Info</h2>
         <form role="form">
         <div className="form-group">

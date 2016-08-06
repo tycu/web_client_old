@@ -1,5 +1,5 @@
 import React from "react";
-import LoginActions from '../actions/LoginActions';
+import SignInActions from '../actions/SignInActions';
 
 export default class Settings extends React.Component {
 
@@ -8,7 +8,7 @@ export default class Settings extends React.Component {
     return (
       <div>
         <h2>Settings</h2>
-        <p>logged in {LoginActions.signedIn()}</p>
+        <p>logged in {SignInActions.signedIn()}</p>
       </div>
     );
   }

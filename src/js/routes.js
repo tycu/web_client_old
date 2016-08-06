@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Router, Route, IndexRoute, browserHistory } from "react-router";
-import auth from './actions/LoginActions';
+import auth from './actions/SignInActions';
 
 import Events from "./pages/Events";
 import About from "./pages/static/About";
@@ -16,9 +16,9 @@ import SignOut from './components/auth/SignOut';
 const app = document.getElementById('app');
 
 var requireAuth = function(nextState, replace) {
-  if (!auth.loggedIn()) {
+  if (!auth.signedIn()) {
     replace({
-      pathname: '/login',
+      pathname: '/signin',
       state: { nextPathname: nextState.location.pathname }
     })
   }

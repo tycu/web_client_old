@@ -1,6 +1,7 @@
 import React from 'react';
 import Radium from 'radium';
-import { Router, Route, IndexRoute, browserHistory, RouterContext } from "react-router";
+var Link = require('react-router').Link;
+Link = Radium(Link);
 
 @Radium
 export default class NavItem extends React.Component {
@@ -69,7 +70,7 @@ export default class NavItem extends React.Component {
     const {style, link, title, itemStyle} = this.props;
     return (
       <li ref="list" style={[defStyle.base, style && style]}>
-        <a ref="link" href={link} onClick={this.clickLink.bind(this)} style={[defStyle.link, itemStyle && itemStyle]}>{title}</a>
+        <Link ref="link" to={link} onClick={this.clickLink.bind(this)} style={[defStyle.link, itemStyle && itemStyle]}>{title}</Link>
       </li>
     );
   }

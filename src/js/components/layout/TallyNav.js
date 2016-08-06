@@ -38,10 +38,6 @@ export default class TallyNav extends React.Component {
       {href: 'signout', name: 'Logout'}
     ];
 
-    // debugger;
-
-
-    //
     var dropdown = <span></span>;
     if (!loggedIn) {
       _(loggedOutNavItems).forEach(function(LogOutNavItem) {

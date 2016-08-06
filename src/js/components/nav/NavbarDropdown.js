@@ -40,17 +40,18 @@ export default class NavbarDropdown extends React.Component {
         borderLeft: '4px solid transparent'
       },
       link: {
-        paddingTop: '10px',
+        paddingTop: '15px',
         paddingBottom: '10px',
+        fontSize: '16px',
         paddingLeft: '15px',
         paddingRight: '15px',
-        lineHeight: '20px',
+        lineHeight: '30px',
         position: 'relative',
         display: 'block',
         boxSizing: 'border-box',
         textDecoration: 'none',
         backgroundColor: 'transparent',
-        color: '#777',
+        color: '#ccc',
 
         ':hover': {
           color: '#333',

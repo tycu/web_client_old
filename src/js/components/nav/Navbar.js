@@ -18,7 +18,6 @@ export default class Navbar extends React.Component {
   getStyles = () => {
     return {
       navbar: {
-        margin: '0 auto',
         backgroundColor: '#333',
         position: 'relative',
         top: '0px',
@@ -27,11 +26,6 @@ export default class Navbar extends React.Component {
         boxSizing: 'border-box'
         },
         container: {
-          // float: 'right',
-          // paddingRight: '15px',
-          // paddingLeft: '15px',
-          marginRight: 'auto',
-          marginLeft: 'auto',
           boxSizing: 'border-box',
           margin: '0 auto',
 

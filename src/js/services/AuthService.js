@@ -1,10 +1,10 @@
 import request from 'reqwest';
 import when from 'when';
-import LoginActions from '../actions/LoginActions';
+import SignInActions from '../actions/SignInActions';
 
 class AuthService {
 
-  login(email, password, url) {
+  signin(email, password, url) {
     return this.handleAuth(when(request({
       url: url,
       method: 'POST',
@@ -18,7 +18,7 @@ class AuthService {
   }
 
   signout(token, url) {
-    LoginActions.signoutUser();
+    SignInActions.signoutUser();
 
     return this.handleAuth(when(request({
       url: url,
@@ -44,9 +44,9 @@ class AuthService {
     })));
   }
 
-  handleAuth(loginPromise) {
-    return loginPromise.then(function(response) {
-      LoginActions.loginUser(response.token, response.email, response.refreshToken);
+  handleAuth(signInPromise) {
+    return signInPromise.then(function(response) {
+      SignInActions.signInUser(response.token, response.email, response.refreshToken);
       return true;
     });
   }
