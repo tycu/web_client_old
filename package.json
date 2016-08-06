@@ -45,9 +45,10 @@
   "optionalDependencies": {},
   "engines": {},
   "scripts": {
-    "dev": "webpack-dev-server --content-base src --inline --hot",
+    "dev": "NODE_ENV=development webpack-dev-server --content-base src --inline --hot",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack -p",
+    "build": "webpack -p --progress --colors",
+    "build-prod": "NODE_ENV=production webpack -p --progress --colors",
     "static": "webpack --progress --colors"
   },
   "bugs": {
