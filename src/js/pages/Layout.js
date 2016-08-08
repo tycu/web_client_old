@@ -2,11 +2,10 @@ import React from "react";
 import Radium from 'radium'
 import { StyleRoot } from 'radium';
 import { Link } from "react-router";
-import SignInActions from '../actions/SignInActions';
-
+import AuthActions from '../actions/AuthActions';
+import AuthStore from '../stores/AuthStore';
 import Footer from "../components/layout/Footer";
 import TallyNav from "../components/layout/TallyNav";
-import AuthService from '../services/AuthService';
 
 
 @Radium
@@ -19,10 +18,6 @@ export default class Layout extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = {
-      loggedIn : false,
-      currentUserEmail: ''
-    }
   }
 
   getStyles = () => {
@@ -32,21 +27,43 @@ export default class Layout extends React.Component {
       }
     }
   }
+  // shouldComponentUpdate(nextProps, nextState) {
+    // must return true or false
+    // return true;
+  // }
 
   componentWillMount() {
-    var loggedIn = SignInActions.signedIn();
-    var currentUserEmail =  SignInActions.currentUser();
+    var loggedIn = AuthStore.signedIn();
+    var email =  AuthStore.currentUser();
+
     if(loggedIn){
       this.setState({
         loggedIn : true,
-        currentUserEmail: currentUserEmail
+        email: email
       });
     } else {
       this.setState({
         loggedIn : false,
-        currentUserEmail: ''
+        email: ''
       });
     }
+    AuthStore.on("change", () => {
+      this.setState({
+        loggedIn: AuthStore.signedIn(),
+        email:    AuthStore.currentUser()
+      });
+    });
+  }
+
+  componentWillUnmount() {
+    AuthStore.removeListener("change", this.getAuthState);
+  }
+
+  getAuthState() {
+    this.setState({
+      loggedIn: AuthStore.signedIn(),
+      email:    AuthStore.currentUser()
+    });
   }
 
   render() {

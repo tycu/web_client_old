@@ -1,7 +1,7 @@
 import dispatcher from "../dispatcher";
 
 
-// Not Create,edit,update, more like
+// Not Create, edit, update, more like
 // support/oppose/refresh
 
 

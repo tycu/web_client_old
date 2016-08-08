@@ -18,7 +18,7 @@ export default class Password extends React.Component {
     return (
       <div className="form-group">
         <label htmlFor="password">Password</label>
-        <input type="password" value={this.props.password} onChange={this.handlePasswordChange.bind(this)} className="form-control" ref="password" placeholder="password" />
+        <input type="password" id="password" value={this.props.password} onChange={this.handlePasswordChange.bind(this)} className="form-control" ref="password" placeholder="password" />
       </div>
     );
   }

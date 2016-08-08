@@ -1,30 +1,51 @@
 import React from 'react';
 import { Link } from "react-router";
-import AuthService from '../../services/AuthService';
-import Constants from '../../constants/AuthConstants';
+import * as AuthActions from "../../actions/AuthActions";
+import AuthStore from '../../stores/AuthStore';
+
 import Email from './Email';
-import Password from './Password'
+import Password from './Password';
+import MessageErrors from './MessageErrors';
 
 export default class SignIn extends React.Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      email: '',
-      password: ''
+      loggedIn: false
     };
+  }
+
+  componentWillMount() {
+    AuthStore.on("change", () => {
+      this.setState({
+        loggedIn: AuthStore.signedIn(),
+        email:    AuthStore.currentUser(),
+        message:  AuthStore.getMessage(),
+        error:    AuthStore.getError(),
+        password: AuthStore.getPassword()
+      });
+    });
+  }
+
+  componentWillUnmount() {
+    AuthStore.removeListener("change", this.getAuthState);
+  }
+
+  getAuthState() {
+    this.setState({
+      loggedIn: AuthStore.signedIn(),
+      email:    AuthStore.currentUser(),
+      message:  AuthStore.getMessage(),
+      error:    AuthStore.getError(),
+      password: AuthStore.getPassword()
+    });
   }
 
   signin(e) {
     e.preventDefault();
-    AuthService.login(this.state.email, this.state.password, Constants.SIGNIN_URL)
-      .catch(function(response) {
-        if (response.status !== 200) {
-          alert("There is an error logging in");
-          console.log("Error logging in", response);
-        }
-      });
-  }
+    AuthActions.signInUser(this.state.email, this.state.password);
+  };
 
   onUpdate(key, val){
     this.setState({
@@ -32,19 +53,20 @@ export default class SignIn extends React.Component {
     });
   }
 
-
   render() {
-    const loginStyles = {
-      width: '450px',
-      height: '350px',
+    const signInStyles = {
+      width: '550px',
+      height: '400px',
       background: '#fff',
 
     };
 
     return (
-      <div className="login jumbotron center-block" style={loginStyles}>
+
+      <div className="signin jumbotron center-block" style={signInStyles}>
         <h2>Login</h2>
         <form role="form">
+          <MessageErrors {...this.state} />
           <Email onUpdate={this.onUpdate.bind(this)} />
           <Password onUpdate={this.onUpdate.bind(this)} />
 
@@ -61,4 +83,3 @@ export default class SignIn extends React.Component {
     );
   }
 }
-

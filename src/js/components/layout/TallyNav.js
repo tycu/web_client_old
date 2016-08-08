@@ -12,10 +12,6 @@ import { collections } from 'lodash';
 export default class TallyNav extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      loggedIn: this.props.loggedIn,
-      currentUserEmail: this.props.currentUserEmail
-    }
   }
 
   render() {
@@ -44,13 +40,14 @@ export default class TallyNav extends React.Component {
         navitems.push(LogOutNavItem);
       });
     } else {
-      dropdown = <NavbarDropdown name={this.props.currentUserEmail}>
+      const maxDisplayEmailLength = 25;
+      dropdown = <NavbarDropdown name={this.props.email.substring(0, maxDisplayEmailLength)}>
         <DropdownMenu menuItems={dropdownItems}/>
       </NavbarDropdown>
     }
 
     return (
-      <Navbar>
+      <Navbar {...this.props}>
         <NavbarHeader href="/" name="Tally.us"/>
           <NavbarItems>
             {navitems.map(item => {
