@@ -1,16 +1,13 @@
 import React from "react";
 import Radium from 'radium';
 import Event from "../components/Event";
-// import * as EventActions from "../actions/EventActions";
-// import EventStore from "../stores/EventStore";
-import EventService from '../services/EventService';
-import Constants from '../constants/EventConstants';
+import * as EventActions from "../actions/EventActions";
+import EventStore from '../stores/EventStore';
 
 
 @Radium
 export default class Events extends React.Component {
   displayName = 'Events'
-
 
   static propTypes = {
     eventStyle:  React.PropTypes.object,
@@ -30,22 +27,30 @@ export default class Events extends React.Component {
     };
   }
 
-  componentDidMount() {
-    var that = this;
-
-    this.serverRequest = EventService.loadEvents(Constants.EVENTS_URL, 0)
-    .catch(function(response) {
-      if (response.status !== 200) {
-        alert("There is an error loading events");
-        console.log("Error loading events", response);
-      }
-    })
-    .then(function(response) {
-      that.setState({
-        events: response.events
+  componentWillMount() {
+    EventStore.on("change", () => {
+      this.setState({
+        events: EventStore.getAll(),
       });
-    })
-    ;
+    });
+  }
+
+  componentWillUnmount() {
+    EventStore.removeListener("change", this.getEvents);
+  }
+
+  getEvents() {
+    this.setState({
+      events: EventStore.getAll()
+    });
+  }
+
+
+  componentDidMount() {
+    // can add ajax polling to this method if desired
+    var offset = 0;
+
+    EventActions.getEvents(offset);
   }
 
   componentWillUnmount() {

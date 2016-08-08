@@ -1,37 +1,41 @@
 import { EventEmitter } from "events";
-
 import dispatcher from "../dispatcher";
+
+import request from 'reqwest';
+import when from 'when';
+import Constants from '../constants/EventConstants';
+
 
 class EventStore extends EventEmitter {
   constructor() {
     super()
-
-    // can call endpoint
-    this.events = [
-      {
-        id: 113464613,
-        text: "Go Shopping",
-        complete: false
-      },
-      {
-        id: 235684679,
-        text: "Pay Water Bill",
-        complete: false
-      },
-    ];
   }
+  // won't be creating, will be on admin unless we switch over/create admin role
 
-  // won't be creating events
 
-  createEvent(text) {
-    const id = Date.now(); // TODO not great
-    this.events.push({
-      id,
-      text,
-      complete: false,
-    });
 
-    this.emit("change");
+  loadEvents(offset) {
+    var that = this;
+    var url = Constants.EVENTS_URL;
+
+    return when(request({
+      url: url,
+      method: 'GET',
+      crossOrigin: true,
+      type: 'json',
+      data: {
+        offset: offset
+      }
+    })).then(function(response) {
+      that.events = response
+      that.emit('change');
+    })
+    .catch(function(response) {
+      if (response.status !== 200) {
+        alert("There is an error loading events");
+        console.log("Error loading events", response);
+      }
+    })
   }
 
   getAll() {
@@ -42,15 +46,15 @@ class EventStore extends EventEmitter {
     console.log("EventStore received an action", action);
 
     switch(action.type) {
-      case "CREATE_EVENT": {
-        this.createEvent(action.text);
+      case "FETCH_EVENTS": {
+        this.loadEvents(action.offset);
         break;
       }
-      case "RECEIVE_EVENTS": {
-        this.events = action.events;
-        this.emit("change");
-        break;
-      }
+      // case "FETCH_EVENTS": {
+        // this.localFunctionCall(action);
+        // this.emit("change");
+        // break;
+      // }
     }
   }
 
