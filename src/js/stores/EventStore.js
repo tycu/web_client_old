@@ -13,7 +13,6 @@ class EventStore extends EventEmitter {
   // won't be creating, will be on admin unless we switch over/create admin role
 
 
-
   loadEvents(offset) {
     var that = this;
     var url = Constants.EVENTS_URL;
@@ -26,7 +25,8 @@ class EventStore extends EventEmitter {
       data: {
         offset: offset
       }
-    })).then(function(response) {
+    }))
+    .then(function(response) {
       that.events = response
       that.emit('change');
     })

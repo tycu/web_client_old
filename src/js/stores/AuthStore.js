@@ -37,6 +37,10 @@ class AuthStore extends EventEmitter {
     return localStorage.getItem('tallyUserEmail');
   }
 
+  currentUserId() {
+    return localStorage.getItem('tallyUserId');
+  }
+
   getMessage() {
     return this.message;
   }
@@ -86,6 +90,7 @@ class AuthStore extends EventEmitter {
       var savedToken = localStorage.getItem('tallyToken');
       localStorage.setItem('tallyUserEmail', response.email);
       // localStorage.setItem('tallyEndureToken', response.refreshToken);
+      localStorage.setItem('tallyUserId', response.id)
 
       if (savedToken !== response.token) {
         browserHistory.push('/');
@@ -95,12 +100,17 @@ class AuthStore extends EventEmitter {
       // return true;
     })
     .catch(function (response) {
-      if (response.status !== 200) {
+      // NOTE Model validation errors
+      if (response.status) {
+        alertText = JSON.parse(response.response).message.message;
+        console.log("Error logging in", response);
+        that.error = alertText;
+
+      } else if (response.status !== 200) {
         var alertText = JSON.parse(response.response).message;
         console.log("Error logging in", response);
         that.error = alertText;
       }
-
       that.emit("change");
       return false;
     });
@@ -116,6 +126,7 @@ class AuthStore extends EventEmitter {
     localStorage.removeItem('tallyToken');
     localStorage.removeItem('tallyEndureToken');
     localStorage.removeItem('tallyUserEmail');
+    localStorage.removeItem('tallyUserId');
     browserHistory.push('/');
 
     return this.handleSignOut(when(request({
@@ -123,8 +134,8 @@ class AuthStore extends EventEmitter {
       method: 'GET',
       crossOrigin: true,
       type: 'json',
-      data: {
-        token: tokenLocal
+      headers: {
+        authorization: "JWT " + tokenLocal
       }
     })));
   }

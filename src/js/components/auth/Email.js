@@ -18,7 +18,14 @@ export default class Email extends React.Component {
     return (
       <div className="form-group">
         <label htmlFor="email">Email</label>
-        <input autoFocus type="text" value={this.props.email} onChange={this.handleEmailChange.bind(this)} className="form-control" id="email" placeholder="email" />
+        <input
+          autoFocus
+          type="text"
+          value={this.props.email}
+          onChange={this.handleEmailChange.bind(this)}
+          className="form-control"
+          id="email"
+          placeholder="email" />
       </div>
     );
   }
