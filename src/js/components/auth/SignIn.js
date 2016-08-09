@@ -9,11 +9,19 @@ import MessageErrors from '../layout/MessageErrors';
 
 export default class SignIn extends React.Component {
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      loggedIn: false
-    };
+  static propTypes = {
+    email:  React.PropTypes.string,
+    password:  React.PropTypes.string,
+    message:  React.PropTypes.string,
+    error:  React.PropTypes.string
+  }
+
+  state = {
+    loggedIn: false,
+    email: '',
+    password: '',
+    message: '',
+    error: ''
   }
 
   componentWillMount() {
@@ -58,7 +66,6 @@ export default class SignIn extends React.Component {
       width: '550px',
       height: '400px',
       background: '#fff',
-
     };
 
     return (

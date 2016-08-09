@@ -8,25 +8,18 @@ import { collections } from 'lodash';
 
 export default class DonorInfo extends React.Component {
 
-  // TODO fetch this info from store/server
-  // TODO make sure DB aligns with this.
+  static propTypes = {
+    hideEmployerOccupation:  React.PropTypes.bool,
+    employed:  React.PropTypes.bool,
+    message: React.PropTypes.string,
+    error:  React.PropTypes.string,
+  }
 
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      hideEmployerOccupation: false,
-      occupation: '',
-      employer: '',
-      name: '',
-      streetAddress: '',
-      city: '',
-      residenceState: '',
-      zip: '',
-      employed: true,
-      message: '',
-      error: ''
-    }
+  state = {
+    hideEmployerOccupation: false,
+    employed: true,
+    message: '',
+    error: ''
   }
 
   checkEmployed() {
@@ -49,10 +42,14 @@ export default class DonorInfo extends React.Component {
   }
 
   componentWillUnmount() {
-    DonorInfoStore.removeListener("change"); // , this.getDonorInfo
+    DonorInfoStore.removeListener("change", this.getDonorInfo);
   }
 
   componentDidMount() {
+    this.getDonorInfo();
+  }
+
+  getDonorInfo() {
     var userId = AuthStore.currentUserId();
     DonorInfoActions.fetchDonorInfo(userId);
   }

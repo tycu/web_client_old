@@ -21,7 +21,7 @@ export default class Events extends React.Component {
 
   constructor(props) {
     super(props);
-
+    this.getEvents.bind(this);
     this.state = {
       events: []
     };
@@ -45,11 +45,9 @@ export default class Events extends React.Component {
     });
   }
 
-
   componentDidMount() {
     // can add ajax polling to this method if desired
     var offset = 0;
-
     EventActions.getEvents(offset);
   }
 

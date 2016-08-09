@@ -2,11 +2,8 @@ import React from 'react';
 
 export default class Email extends React.Component {
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      email: this.props.email
-    };
+  static propTypes = {
+    email:  React.PropTypes.string
   }
 
   handleEmailChange(event) {
@@ -15,13 +12,15 @@ export default class Email extends React.Component {
 
 
   render() {
+    const {email} = this.props;
+
     return (
       <div className="form-group">
         <label htmlFor="email">Email</label>
         <input
           autoFocus
           type="text"
-          value={this.props.email}
+          value={email}
           onChange={this.handleEmailChange.bind(this)}
           className="form-control"
           id="email"

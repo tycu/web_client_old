@@ -23,7 +23,7 @@ class DonorInfoStore extends EventEmitter {
       crossOrigin: true,
       type: 'json',
       headers: {
-        authorization: "JWT " + tokenLocal
+        authorization: "Bearer " + tokenLocal
       }
     }))
     .then(function(response) {
@@ -83,7 +83,7 @@ class DonorInfoStore extends EventEmitter {
         crossOrigin: true,
         method: 'PUT',
         headers: {
-          authorization: "JWT " + tokenLocal
+          authorization: "Bearer " + tokenLocal
         },
         data: {
           donorInfo: donorInfo

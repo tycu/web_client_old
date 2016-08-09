@@ -10,11 +10,21 @@ import MessageErrors from '../layout/MessageErrors';
 
 export default class SignUp extends React.Component {
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      passwordMatch: false
-    };
+  static propTypes = {
+    email:  React.PropTypes.string,
+    password:  React.PropTypes.string,
+    passwordMatch: React.PropTypes.string,
+    message:  React.PropTypes.string,
+    error:  React.PropTypes.string,
+  }
+
+  state = {
+    loggedIn: false,
+    passwordMatch: '',
+    email: null,
+    password: null,
+    message: null,
+    error: '',
   }
 
   componentWillMount() {
@@ -76,7 +86,7 @@ export default class SignUp extends React.Component {
     }
   }
 
-  onUpdate(key, val){
+  onUpdate(key, val) {
     this.setState({
       [key]: val
     });
@@ -89,6 +99,10 @@ export default class SignUp extends React.Component {
       height: '450px',
       background: '#fff',
     };
+
+    const { email } = this.state;
+    const { password } = this.state;
+    const { passwordMatch } = this.state;
 
     return (
       <div className="signin jumbotron center-block" style={signUpStyles}>

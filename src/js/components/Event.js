@@ -25,10 +25,6 @@ export default class Event extends React.Component {
     itemStyle: React.PropTypes.object
   }
 
-  constructor(props) {
-    super(props);
-  }
-
   getStyles = () => {
     return {
       base: {

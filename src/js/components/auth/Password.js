@@ -2,11 +2,8 @@ import React from 'react';
 
 export default class Password extends React.Component {
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      password: this.props.password
-    };
+  static propTypes = {
+    password:  React.PropTypes.string
   }
 
   handlePasswordChange(event) {

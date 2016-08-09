@@ -10,6 +10,7 @@ import when from 'when';
 class AuthStore extends EventEmitter {
   constructor() {
     super()
+
     this.loggedIn = '';
     this.email    = '';
     this.message  = '';
@@ -34,7 +35,7 @@ class AuthStore extends EventEmitter {
   }
 
   currentUser() {
-    return localStorage.getItem('tallyUserEmail');
+    return localStorage.getItem('tallyUserEmail') || '';
   }
 
   currentUserId() {
@@ -97,22 +98,21 @@ class AuthStore extends EventEmitter {
         localStorage.setItem('tallyToken', response.token);
       }
       that.emit("change");
-      // return true;
     })
     .catch(function (response) {
       // NOTE Model validation errors
       if (response.status) {
-        alertText = JSON.parse(response.response).message.message;
-        console.log("Error logging in", response);
+        alertText = JSON.parse(response.response).message;
+        console.log("Error logging in", alertText);
         that.error = alertText;
 
+        that.emit("change");
       } else if (response.status !== 200) {
         var alertText = JSON.parse(response.response).message;
-        console.log("Error logging in", response);
+        console.log("Error logging in", alertText);
         that.error = alertText;
+        that.emit("change");
       }
-      that.emit("change");
-      return false;
     });
   }
 
@@ -131,11 +131,11 @@ class AuthStore extends EventEmitter {
 
     return this.handleSignOut(when(request({
       url: url,
-      method: 'GET',
+      method: 'PUT',
       crossOrigin: true,
       type: 'json',
       headers: {
-        authorization: "JWT " + tokenLocal
+        authorization: "Bearer " + tokenLocal
       }
     })));
   }

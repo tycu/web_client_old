@@ -50,11 +50,6 @@ class EventStore extends EventEmitter {
         this.loadEvents(action.offset);
         break;
       }
-      // case "FETCH_EVENTS": {
-        // this.localFunctionCall(action);
-        // this.emit("change");
-        // break;
-      // }
     }
   }
 
