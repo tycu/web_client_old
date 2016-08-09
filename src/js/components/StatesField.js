@@ -7,42 +7,49 @@ export default class StatesField extends React.Component {
   constructor(props) {
     super(props)
 
-    this.getTodos = this.getTodos.bind(this);
+    this.getStates = this.getStates.bind(this);
+    // this.handleChange = this.handleChange.bind(this);
+
     this.state = {
-      availableStates: StateStore.getAll()
+      availableStates: StateStore.getAll(),
+      value: this.props.value
     }
   }
 
-  componentWillMount() {
-    this.setState({
-      availableStates: StateStore.getAll()
-    });
+  handleStateChange(event) {
+    this.props.onChange(event.target.value);
   }
 
-  handleChange (e) {
-    this.setState({
-      value: e
-    })
-  }
-
-  getTodos() {
+  getStates() {
     this.setState({
       availableStates: StateStore.getAll(),
     });
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      residenceState: nextProps.value
+    });
+  }
 
   render () {
     const { availableStates } = this.state;
+    const { residenceState }  = this.state;
 
     const stateList = availableStates.map((stateItem, i) => {
-      return <option value={stateItem.value} key={i}>{stateItem.value}</option>
+      return  <option
+                value={stateItem.value}
+                key={i}>{stateItem.value}
+              </option>
     });
 
     return (
       <div>
-        <select type='select' value={this.state.value}
-                  onChange={this.handleChange.bind(this)} >
+        <select
+          type="select"
+          value={residenceState}
+          onChange={this.handleStateChange.bind(this)}
+          id="residenceState">
           {stateList}
         </select>
       </div>
