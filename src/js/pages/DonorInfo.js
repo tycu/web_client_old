@@ -74,10 +74,6 @@ export default class DonorInfo extends React.Component {
 
     if (!that.donorInfoComplete()) {
       that.setState({error: "You must complete all Fields"});
-
-
-      debugger;
-
       return false;
     } else {
       var userId = AuthStore.currentUserId();
@@ -120,6 +116,7 @@ export default class DonorInfo extends React.Component {
 
 
   render() {
+    // TODO make incomplete fields highlighted red on error
     return (
       <div className="signin jumbotron center-block">
         <h2>Donor Info</h2>

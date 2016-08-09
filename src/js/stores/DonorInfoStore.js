@@ -90,6 +90,14 @@ class DonorInfoStore extends EventEmitter {
         }
       })
     );
+    this.occupation = donorInfo.occupation
+    this.employer = donorInfo.employer
+    this.name = donorInfo.name
+    this.streetAddress = donorInfo.streetAddress
+    this.city = donorInfo.city
+    this.residenceState = donorInfo.residenceState
+    this.zip = donorInfo.zip
+    this.emit('change');
   }
 
   handleActions(action) {
@@ -98,7 +106,6 @@ class DonorInfoStore extends EventEmitter {
 
       case "UPDATE_DONOR_INFO": {
         this.updateDonorInfo(action.userId, action.donorInfo);
-        this.emit('change');
         break;
       }
       case "FETCH_DONOR_INFO": {
