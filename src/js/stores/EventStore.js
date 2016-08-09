@@ -3,7 +3,7 @@ import dispatcher from "../dispatcher";
 
 import request from 'reqwest';
 import when from 'when';
-import Constants from '../constants/EventConstants';
+import * as Constants from '../constants/EventConstants';
 
 
 class EventStore extends EventEmitter {

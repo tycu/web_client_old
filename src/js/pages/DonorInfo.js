@@ -116,6 +116,10 @@ export default class DonorInfo extends React.Component {
 
 
   render() {
+    const retiredEmployed = {
+      marginLeft: '10px'
+    }
+
     // TODO make incomplete fields highlighted red on error
     return (
       <div className="signin jumbotron center-block">
@@ -147,7 +151,7 @@ export default class DonorInfo extends React.Component {
 
           <div className="form-group">
             <label htmlFor="employed">Retired or Unemployed</label>
-            <input type="checkbox" checked={!this.state.employed} onChange={this.onUpdate.bind(this, 'employed')} />
+            <input style={retiredEmployed} type="checkbox" checked={!this.state.employed} onChange={this.onUpdate.bind(this, 'employed')} />
           </div>
 
           <div className='form-group'>

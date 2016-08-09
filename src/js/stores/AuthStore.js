@@ -3,7 +3,7 @@ import { EventEmitter } from "events";
 import dispatcher from "../dispatcher";
 import AuthActions from '../actions/AuthActions';
 import { Router, Route, IndexRoute, browserHistory } from "react-router";
-import Constants from '../constants/AuthConstants';
+import * as Constants from '../constants/AuthConstants';
 import request from 'reqwest';
 import when from 'when';
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from "react-router";
 import * as AuthActions from "../../actions/AuthActions";
+import * as AuthUtils from "../../utils/AuthUtils";
 import AuthStore from '../../stores/AuthStore';
 
 import Email from './Email';
@@ -55,7 +56,14 @@ export default class SignIn extends React.Component {
 
   signin(e) {
     e.preventDefault();
-    AuthActions.signInUser(this.state.email, this.state.password);
+    var that = this;
+
+    if (!AuthUtils.validEmail(this.state.email)) {
+      that.setState({error: "Invalid email address"});
+      return false;
+    } else {
+      AuthActions.signInUser(this.state.email, this.state.password);
+    }
   };
 
   onUpdate(key, val){

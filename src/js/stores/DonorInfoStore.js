@@ -2,8 +2,7 @@ import { EventEmitter } from "events";
 import dispatcher from "../dispatcher";
 var Promise = require("bluebird");
 import AuthStore from './AuthStore';
-
-import Constants from '../constants/UserConstants';
+import * as Constants from '../constants/UserConstants';
 import request from 'reqwest';
 import when from 'when';
 
