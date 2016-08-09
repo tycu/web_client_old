@@ -16,6 +16,7 @@ export default class SignUp extends React.Component {
     passwordMatch: React.PropTypes.string,
     message:  React.PropTypes.string,
     error:  React.PropTypes.string,
+    key: React.PropTypes.number
   }
 
   state = {
@@ -25,6 +26,7 @@ export default class SignUp extends React.Component {
     password: null,
     message: null,
     error: '',
+    key: 1
   }
 
   componentWillMount() {
@@ -33,7 +35,8 @@ export default class SignUp extends React.Component {
         loggedIn: AuthStore.signedIn(),
         email:    AuthStore.currentUser(),
         message:  AuthStore.getMessage(),
-        error:    AuthStore.getError()
+        error:    AuthStore.getError(),
+        key:      Math.random()
       });
     });
   }
@@ -111,9 +114,9 @@ export default class SignUp extends React.Component {
 
           <MessageErrors {...this.state} />
 
-          <Email onUpdate={this.onUpdate.bind(this)} />
-          <Password onUpdate={this.onUpdate.bind(this)} />
-          <PasswordMatch onUpdate={this.onUpdate.bind(this)} />
+          <Email key={this.state.key + 1} onUpdate={this.onUpdate.bind(this)} value={email} />
+          <Password key={this.state.key + 2 } onUpdate={this.onUpdate.bind(this)} value={password} />
+          <PasswordMatch key={this.state.key + 3} onUpdate={this.onUpdate.bind(this)} value={passwordMatch} />
           <div className="form-group pull-right">
             <button type="submit" className="btn btn-default" onClick={this.signup.bind(this)}>Create Account</button>
           </div>

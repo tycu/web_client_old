@@ -13,7 +13,8 @@ export default class SignIn extends React.Component {
     email:  React.PropTypes.string,
     password:  React.PropTypes.string,
     message:  React.PropTypes.string,
-    error:  React.PropTypes.string
+    error:  React.PropTypes.string,
+    key: React.PropTypes.number
   }
 
   state = {
@@ -21,7 +22,8 @@ export default class SignIn extends React.Component {
     email: '',
     password: '',
     message: '',
-    error: ''
+    error: '',
+    key: 1
   }
 
   componentWillMount() {
@@ -31,7 +33,8 @@ export default class SignIn extends React.Component {
         email:    AuthStore.currentUser(),
         message:  AuthStore.getMessage(),
         error:    AuthStore.getError(),
-        password: AuthStore.getPassword()
+        password: AuthStore.getPassword(),
+        key:      Math.random()
       });
     });
   }
@@ -74,8 +77,8 @@ export default class SignIn extends React.Component {
         <h2>Login</h2>
         <form role="form">
           <MessageErrors {...this.state} />
-          <Email onUpdate={this.onUpdate.bind(this)} />
-          <Password onUpdate={this.onUpdate.bind(this)} />
+          <Email key={this.state.key + 1} onUpdate={this.onUpdate.bind(this)} />
+          <Password key={this.state.key + 2} onUpdate={this.onUpdate.bind(this)} />
 
           <div className="form-group pull-right">
             <button type="submit" className="btn btn-default" onClick={this.signin.bind(this)}>Login</button>
