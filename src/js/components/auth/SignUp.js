@@ -6,7 +6,7 @@ import AuthStore from '../../stores/AuthStore';
 import Email from './Email';
 import Password from './Password';
 import PasswordMatch from './PasswordMatch';
-import MessageErrors from './MessageErrors';
+import MessageErrors from '../layout/MessageErrors';
 
 export default class SignUp extends React.Component {
 

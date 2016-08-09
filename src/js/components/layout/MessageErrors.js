@@ -2,11 +2,7 @@ import React from 'react';
 import { Link } from "react-router";
 import AuthStore from '../../stores/AuthStore';
 
-import Email from './Email';
-import Password from './Password'
-
-export default class SignIn extends React.Component {
-
+export default class MessageErrors extends React.Component {
 
   constructor(props) {
     super(props)

@@ -2,6 +2,7 @@ import React from "react";
 import StatesField from "../components/StatesField";
 import * as DonorInfoActions from "../actions/DonorInfoActions";
 import DonorInfoStore from "../stores/DonorInfoStore";
+import MessageErrors from '../components/layout/MessageErrors';
 
 export default class DonorInfo extends React.Component {
 
@@ -111,6 +112,7 @@ export default class DonorInfo extends React.Component {
         </div>
 
         <div className={showExtrafield}>
+          <MessageErrors {...this.state} />
 
           <div className='form-group'>
             <label htmlFor="occupation">Occupation</label>
