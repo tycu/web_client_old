@@ -12,6 +12,7 @@ import DonorInfo from "./pages/DonorInfo";
 import SignUp from "./components/auth/SignUp";
 import SignIn from "./components/auth/SignIn";
 import SignOut from './components/auth/SignOut';
+import FourOhFour from './pages/static/FourOhFour';
 
 const app = document.getElementById('app');
 
@@ -45,6 +46,7 @@ let routes = (
       <Route path="signup" component={SignUp} onEnter={invalidIfSignedIn}></Route>
       <Route path="signin" component={SignIn} onEnter={invalidIfSignedIn}></Route>
       <Route path="signout" component={SignOut} onEnter={requireAuth}></Route>
+      <Route path='*' component={FourOhFour} />
     </Route>
   </Router>
 );

@@ -2,6 +2,7 @@ module.exports = {
   title: 'My Static Site',
   routes: [
     '/about',
-    '/faq'
+    '/faq',
+    // '/404' // not sure how to export 404 page
   ]
 }
