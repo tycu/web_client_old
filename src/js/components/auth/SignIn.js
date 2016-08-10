@@ -15,7 +15,8 @@ export default class SignIn extends React.Component {
     password:  React.PropTypes.string,
     message:  React.PropTypes.string,
     error:  React.PropTypes.string,
-    key: React.PropTypes.number
+    emailError: React.PropTypes.bool,
+    pwError: React.PropTypes.bool
   }
 
   state = {
@@ -24,18 +25,23 @@ export default class SignIn extends React.Component {
     password: '',
     message: '',
     error: '',
-    key: 1
+    key: 1,
+    emailError: false,
+    pwError: false
   }
+
 
   componentWillMount() {
     AuthStore.on("change", () => {
       this.setState({
-        loggedIn: AuthStore.signedIn(),
-        email:    AuthStore.currentUser(),
-        message:  AuthStore.getMessage(),
-        error:    AuthStore.getError(),
-        password: AuthStore.getPassword(),
-        key:      Math.random()
+        loggedIn:   AuthStore.signedIn(),
+        email:      AuthStore.currentUser(),
+        message:    AuthStore.getMessage(),
+        error:      AuthStore.getError(),
+        password:   AuthStore.getPassword(),
+        emailError: AuthStore.getEmailError(),
+        pwError:    AuthStore.getPasswordError(),
+        key:        Math.random()
       });
     });
   }
@@ -57,9 +63,21 @@ export default class SignIn extends React.Component {
   signin(e) {
     e.preventDefault();
     var that = this;
+    var pwErrorConfig;
 
     if (!AuthUtils.validEmail(this.state.email)) {
-      that.setState({error: "Invalid email address"});
+      that.setState({
+        error: "Invalid email address",
+        emailError: true
+      });
+    }
+    pwErrorConfig = AuthUtils.getPasswordErrorSettings();
+
+    if (!pwErrorConfig.pwRegex.test(this.state.password)) {
+      that.setState({
+        error: pwErrorConfig.pwErrorText,
+        pwError: true
+      });
       return false;
     } else {
       AuthActions.signInUser(this.state.email, this.state.password);
@@ -80,13 +98,12 @@ export default class SignIn extends React.Component {
     };
 
     return (
-
       <div className="signin jumbotron center-block" style={signInStyles}>
         <h2>Login</h2>
         <form role="form">
-          <MessageErrors {...this.state} />
-          <Email key={this.state.key + 1} onUpdate={this.onUpdate.bind(this)} />
-          <Password key={this.state.key + 2} onUpdate={this.onUpdate.bind(this)} />
+          <MessageErrors key={this.state.key + 1}  {...this.state} />
+          <Email {...this.state} key={this.state.key + 2} onUpdate={this.onUpdate.bind(this)} />
+          <Password {...this.state} key={this.state.key + 3} onUpdate={this.onUpdate.bind(this)} />
 
           <div className="form-group pull-right">
             <button type="submit" className="btn btn-default" onClick={this.signin.bind(this)}>Login</button>

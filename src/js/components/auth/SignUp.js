@@ -17,27 +17,34 @@ export default class SignUp extends React.Component {
     passwordMatch: React.PropTypes.string,
     message:  React.PropTypes.string,
     error:  React.PropTypes.string,
-    key: React.PropTypes.number
+    emailError: React.PropTypes.bool,
+    pwError: React.PropTypes.bool
   }
 
   state = {
     loggedIn: false,
     passwordMatch: '',
-    email: null,
-    password: null,
-    message: null,
+    email: '',
+    password: '',
+    message: '',
     error: '',
-    key: 1
+    key: 1,
+    emailError: false,
+    pwError: false
   }
 
   componentWillMount() {
     AuthStore.on("change", () => {
       this.setState({
-        loggedIn: AuthStore.signedIn(),
-        email:    AuthStore.currentUser(),
-        message:  AuthStore.getMessage(),
-        error:    AuthStore.getError(),
-        key:      Math.random()
+        loggedIn:   AuthStore.signedIn(),
+        email:      AuthStore.currentUser(),
+        password:   '',
+        passwordMatch: '',
+        message:    AuthStore.getMessage(),
+        error:      AuthStore.getError(),
+        emailError: AuthStore.getEmailError(),
+        pwError:    AuthStore.getPasswordError(),
+        key:        Math.random()
       });
     });
   }
@@ -61,16 +68,25 @@ export default class SignUp extends React.Component {
     var pwErrorConfig;
 
     if (!AuthUtils.validEmail(this.state.email)) {
-      that.setState({error: "Invalid email address"});
+      that.setState({
+        error: "Invalid email address",
+        emailError: true
+      });
       return false;
     }
     pwErrorConfig = AuthUtils.getPasswordErrorSettings();
 
     if (this.state.password !== this.state.passwordMatch) {
-      that.setState({error: 'Passwords Do Not Match'});
+      that.setState({
+        error: 'Passwords Do Not Match',
+        pwError: true
+      });
       return false;
     } else if (!pwErrorConfig.pwRegex.test(this.state.password)) {
-      that.setState({error: pwErrorConfig.pwErrorText});
+      that.setState({
+        error: pwErrorConfig.pwErrorText,
+        pwError: true
+      });
       return false;
     } else {
       AuthActions.signUpUser(this.state.email, this.state.password);
@@ -100,11 +116,11 @@ export default class SignUp extends React.Component {
         <h2>Sign up For Tally</h2>
         <form role="form">
 
-          <MessageErrors {...this.state} />
+          <MessageErrors key={this.state.key + 1} {...this.state} />
 
-          <Email key={this.state.key + 1} onUpdate={this.onUpdate.bind(this)} value={email} />
-          <Password key={this.state.key + 2 } onUpdate={this.onUpdate.bind(this)} value={password} />
-          <PasswordMatch key={this.state.key + 3} onUpdate={this.onUpdate.bind(this)} value={passwordMatch} />
+          <Email {...this.state} key={this.state.key + 2} onUpdate={this.onUpdate.bind(this)} value={email} />
+          <Password {...this.state} key={this.state.key + 3 } onUpdate={this.onUpdate.bind(this)} value={password} />
+          <PasswordMatch {...this.state} key={this.state.key + 4} onUpdate={this.onUpdate.bind(this)} value={passwordMatch} />
           <div className="form-group pull-right">
             <button type="submit" className="btn btn-default" onClick={this.signup.bind(this)}>Create Account</button>
           </div>

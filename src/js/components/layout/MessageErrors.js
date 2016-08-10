@@ -4,8 +4,14 @@ import AuthStore from '../../stores/AuthStore';
 
 export default class MessageErrors extends React.Component {
 
-  constructor(props) {
-    super(props)
+  static propTypes = {
+    error:  React.PropTypes.string,
+    message:  React.PropTypes.string
+  }
+
+  state = {
+    error: '',
+    message: ''
   }
 
   render() {

@@ -34,6 +34,13 @@ class AuthStore extends EventEmitter {
     return this.password;
   }
 
+  getEmailError() {
+    return this.emailError;
+  }
+  getPasswordError() {
+    return this.pwError;
+  }
+
   currentUser() {
     return localStorage.getItem('tallyUserEmail') || '';
   }
@@ -105,12 +112,17 @@ class AuthStore extends EventEmitter {
         alertText = JSON.parse(response.response).message;
         console.log("Error logging in", alertText);
         that.error = alertText;
+        that.emailError = true;
+        that.pwError = true;
 
         that.emit("change");
       } else if (response.status !== 200) {
         var alertText = JSON.parse(response.response).message;
         console.log("Error logging in", alertText);
         that.error = alertText;
+        that.emailError = true;
+        that.pwError = true;
+
         that.emit("change");
       }
     });
