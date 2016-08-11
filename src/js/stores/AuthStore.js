@@ -171,6 +171,98 @@ class AuthStore extends EventEmitter {
     });
   }
 
+  verifyEmail() {
+    var that = this;
+    var url = Constants.EMAIL_VERIFICATION;
+    var emailConfirmToken = window.location.search.split('?email_confirm_token=')[1];
+
+    return this.handleEmailVerify(when(request({
+      url: url + "?email_confirm_token=" + emailConfirmToken,
+      method: 'GET',
+      crossOrigin: true,
+      type: 'json'
+    })));
+  }
+
+  handleEmailVerify(verifyPromise) {
+    var that = this;
+
+    return verifyPromise.then(function(response) {
+      // Could post signed out success message here
+      that.emit('change');
+      return true;
+    })
+    .catch(function(response) {
+      if (response.status !== 200) {
+        var alertText = JSON.parse(response.response).message;
+        that.emailError = true;
+        that.error = alertText;
+        console.log("Error verifying email address.", response);
+        that.emit('change');
+        return false;
+      }
+    });
+  }
+
+  resetPassword(email) {
+    var that = this;
+    var url = Constants.EMAIL_RESET;
+    browserHistory.push('/reset_password_submit');
+
+    // NOTE dont report on if email address is found, always suggest sent
+    return when(request({
+      url: url,
+      method: 'PUT',
+      crossOrigin: true,
+      type: 'json',
+      data: {
+        email: email
+      }
+    }));
+  }
+
+  changePassword(oldPassword, newPassword) {
+    var that = this;
+    var url = Constants.CHANGE_PASSWORD;
+    var tokenLocal = this.getAuthToken();
+    var email = this.currentUser();
+
+    return this.handlePasswordChange(when(request({
+      url: url,
+      method: 'POST',
+      crossOrigin: true,
+      type: 'json',
+      headers: {
+        authorization: "Bearer " + tokenLocal
+      },
+      data: {
+        email: email,
+        password: oldPassword,
+        newPassword: newPassword
+      }
+    })));
+  }
+
+  handlePasswordChange(verifyPromise) {
+    var that = this;
+
+    return verifyPromise.then(function(response) {
+      // Could post signed out success message here
+      that.emit('change');
+      return true;
+    })
+    .catch(function(response) {
+      if (response.status !== 200) {
+        var alertText = JSON.parse(response.response).message;
+        that.emailError = true;
+        that.error = alertText;
+        console.log("Error changing password.", response);
+        that.emit('change');
+        return false;
+      }
+    });
+  }
+
 
   handleActions(action) {
     console.log("AuthStore received an action", action);
@@ -186,6 +278,20 @@ class AuthStore extends EventEmitter {
       }
       case "SIGN_OUT_USER": {
         this.signout()
+        break;
+      }
+      case "VERIFY_USER_EMAIL": {
+        this.verifyEmail()
+        break;
+      }
+
+      case  "RESET_PASSWORD": {
+        this.resetPassword();
+        break;
+      }
+
+      case "CHANGE_PASSWORD": {
+        this.changePassword(action.oldPassword, action.password);
         break;
       }
     }

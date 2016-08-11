@@ -1,9 +1,9 @@
 
 // NOTE will need to update for prod
 export const PROD_EMAIL_REGEX  = new RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/);
-export const DEV_EMAIL_REGEX   = new RegExp(/^[A-Za-z\d]{4,}$/);
+export const DEV_EMAIL_REGEX   = new RegExp(/^[A-Za-z\d]{2,}$/);
 export const PROD_EMAIL_REGEX_TEXT  = "Your password must be 8 characters and contain a number.";
-export const DEV_EMAIL_REGEX_TEXT = "Your password must be at least 4 characters (non prod)";
+export const DEV_EMAIL_REGEX_TEXT = "Your password must be at least 2 characters (non prod)";
 
 
 

@@ -101,18 +101,23 @@ export default class SignUp extends React.Component {
 
 
   render() {
-    const signUpStyles = {
-      width: '550px',
-      height: '450px',
-      background: '#fff',
-    };
-
     const { email } = this.state;
     const { password } = this.state;
     const { passwordMatch } = this.state;
 
+    const style = {
+      container: {
+        width: '550px',
+        height: '450px',
+        background: '#fff',
+      },
+      account: {
+        marginTop: '30'
+      }
+    };
+
     return (
-      <div className="signin jumbotron center-block" style={signUpStyles}>
+      <div className="signin jumbotron center-block" style={style.container}>
         <h2>Sign up For Tally</h2>
         <form role="form">
 
@@ -121,14 +126,14 @@ export default class SignUp extends React.Component {
           <Email {...this.state} key={this.state.key + 2} onUpdate={this.onUpdate.bind(this)} value={email} />
           <Password {...this.state} key={this.state.key + 3 } onUpdate={this.onUpdate.bind(this)} value={password} />
           <PasswordMatch {...this.state} key={this.state.key + 4} onUpdate={this.onUpdate.bind(this)} value={passwordMatch} />
-          <div className="form-group pull-right">
+          <div className="form-group pull-left">
             <button type="submit" className="btn btn-default" onClick={this.signup.bind(this)}>Create Account</button>
+            <div style={style.account}>
+              <span>Already have an Account? | </span>
+              <Link to="/signin"> Log In</Link>
+            </div>
           </div>
           <br />
-          <div>
-            <span>Already have an Account? | </span>
-            <Link to="/signin"> Log In</Link>
-          </div>
 
       </form>
     </div>

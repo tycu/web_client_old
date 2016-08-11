@@ -1,0 +1,55 @@
+import React from 'react';
+import * as AuthActions from "../../actions/AuthActions";
+import MessageErrors from '../layout/MessageErrors';
+import AuthStore from '../../stores/AuthStore';
+
+export default class EmailVerification extends React.Component {
+
+  static propTypes = {
+    error:  React.PropTypes.string
+  }
+
+  state = {
+    error: '',
+    emailError: false
+  }
+
+  componentWillMount() {
+    AuthActions.verifyEmail();
+    AuthStore.on("change", () => {
+      this.setState({
+        error: AuthStore.getError(),
+        emailError: AuthStore.getEmailError(),
+        key: Math.random()
+      });
+    });
+  }
+
+  render() {
+
+    const styles = {
+      padding: '40px',
+      margin: '0 auto',
+      backgroundColor: '#fff',
+      width: '450px',
+      height: '250px'
+    }
+
+    return (
+      <div style={styles}>
+        {(this.state.emailError ? (
+          <div>
+            <h2>Error Verifying Email</h2>
+            <MessageErrors key={this.state.key + 1}  {...this.state} />
+          </div>
+        ) : (
+          <div>
+            <h2>Thank you for confirming your email address.</h2>
+            <p>You now have full access to all of Tally's features.</p>
+            <p>Let's get on with it <a href='/'>Check out some events!</a></p>
+          </div>
+        ))}
+      </div>
+    )
+  }
+}

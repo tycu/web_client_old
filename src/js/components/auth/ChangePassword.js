@@ -4,29 +4,32 @@ import * as AuthActions from "../../actions/AuthActions";
 import * as AuthUtils from "../../utils/AuthUtils";
 import AuthStore from '../../stores/AuthStore';
 
-import Email from './Email';
+import OldPassword from './OldPassword';
 import Password from './Password';
+import PasswordMatch from './PasswordMatch';
 import MessageErrors from '../layout/MessageErrors';
 
-export default class SignIn extends React.Component {
+export default class ChangePassword extends React.Component {
 
   static propTypes = {
-    email:  React.PropTypes.string,
+    oldPassword: React.PropTypes.string,
     password:  React.PropTypes.string,
     message:  React.PropTypes.string,
+    passwordMatch: React.PropTypes.string,
     error:  React.PropTypes.string,
-    emailError: React.PropTypes.bool,
+    oldPasswordError: React.PropTypes.bool,
     pwError: React.PropTypes.bool
   }
 
   state = {
     loggedIn: false,
-    email: '',
+    oldPassword: '',
     password: '',
+    passwordMatch: '',
     message: '',
     error: '',
     key: 1,
-    emailError: false,
+    oldPasswordError: false,
     pwError: false
   }
 
@@ -34,11 +37,12 @@ export default class SignIn extends React.Component {
     AuthStore.on("change", () => {
       this.setState({
         loggedIn:   AuthStore.signedIn(),
-        email:      AuthStore.currentUser(),
         message:    AuthStore.getMessage(),
         error:      AuthStore.getError(),
+        oldPassword: '',
         password:   AuthStore.getPassword(),
-        emailError: AuthStore.getEmailError(),
+        passwordMatch: '',
+        oldPasswordError: AuthStore.oldPasswordError(),
         pwError:    AuthStore.getPasswordError(),
         key:        Math.random()
       });
@@ -59,17 +63,11 @@ export default class SignIn extends React.Component {
     });
   }
 
-  signin(e) {
+  changePassword(e) {
     e.preventDefault();
     var that = this;
     var pwErrorConfig;
 
-    if (!AuthUtils.validEmail(this.state.email)) {
-      that.setState({
-        error: "Invalid email address",
-        emailError: true
-      });
-    }
     pwErrorConfig = AuthUtils.getPasswordErrorSettings();
 
     if (!pwErrorConfig.pwRegex.test(this.state.password)) {
@@ -79,7 +77,7 @@ export default class SignIn extends React.Component {
       });
       return false;
     } else {
-      AuthActions.signInUser(this.state.email, this.state.password);
+      AuthActions.changePassword(this.state.password, this.state.oldPassword);
     }
   };
 
@@ -93,39 +91,42 @@ export default class SignIn extends React.Component {
     const style = {
       container: {
         width: '550px',
-        height: '400px',
+        height: '470px',
         background: '#fff',
       },
       account: {
-        marginTop: '30'
+        marginTop: '30px'
       },
       resetPassword: {
-        marginTop: '62'
+        marginTop: '62px'
       }
     };
+    const { oldPassword } = this.state;
+    const { password } = this.state;
+    const { passwordMatch } = this.state;
+
+
+    // need old pw
+    // need need new PW
+    // need new PW conf
+
+    //
 
     return (
       <div className="signin jumbotron center-block" style={style.container}>
-        <h2>Login</h2>
+        <h2>Change Your Password</h2>
         <form role="form">
           <MessageErrors key={this.state.key + 1}  {...this.state} />
-          <Email {...this.state} key={this.state.key + 2} onUpdate={this.onUpdate.bind(this)} />
-          <Password {...this.state} key={this.state.key + 3} onUpdate={this.onUpdate.bind(this)} />
+
+          <OldPassword {...this.state} key={this.state.key + 2} onUpdate={this.onUpdate.bind(this)} value={oldPassword} />
+
+          <Password {...this.state} key={this.state.key + 3} onUpdate={this.onUpdate.bind(this)} value={password} title="New Password" />
+
+          <PasswordMatch {...this.state} key={this.state.key + 4} onUpdate={this.onUpdate.bind(this)} value={passwordMatch} title="Confirm New Password" />
 
           <div className="form-group pull-left">
-            <button type="submit" className="btn btn-default" onClick={this.signin.bind(this)}>Login</button>
-            <div style={style.account}>
-              <span>No Account? | </span>
-              <Link to="/signup"> Sign Up</Link>
-            </div>
+            <button type="submit" className="btn btn-default" onClick={this.changePassword.bind(this)}>Change Password</button>
           </div>
-          <div className="form-group pull-right">
-            <div style={style.resetPassword}>
-              <Link to="/reset_password">Forgot Password</Link>
-            </div>
-          </div>
-          <br/>
-
       </form>
     </div>
     );

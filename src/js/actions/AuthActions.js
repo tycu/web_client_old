@@ -22,3 +22,24 @@ export function signOutUser(token) {
     token
   });
 }
+
+export function verifyEmail() {
+  dispatcher.dispatch({
+    type: "VERIFY_USER_EMAIL"
+  });
+}
+
+export function resetPassword(email) {
+  dispatcher.dispatch({
+    type: "RESET_PASSWORD",
+    email
+  });
+}
+
+export function changePassword(oldPassword, password) {
+  dispatcher.dispatch({
+    type: "CHANGE_PASSWORD",
+    oldPassword,
+    password
+  });
+}

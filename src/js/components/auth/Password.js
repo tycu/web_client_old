@@ -32,10 +32,11 @@ export default class Password extends React.Component {
         borderColor: 'red'
       }
     };
+    const title = this.props.title || 'Password';
 
     return (
       <div className="form-group has-feedback">
-        <label htmlFor="password">Password</label>
+        <label htmlFor="password">{title}</label>
         <input
         style={m(styles.container, this.props.pwError && styles.error)}
         type="password"
@@ -45,7 +46,7 @@ export default class Password extends React.Component {
         onBlur={this.handleBlur.bind(this)}
         className="form-control"
         ref="password"
-        placeholder="password" />
+        placeholder={this.props.title.toLowerCase()} />
         {(this.props.pwError ? (<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>) : (<span></span>))}
       </div>
     );
