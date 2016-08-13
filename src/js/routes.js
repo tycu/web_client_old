@@ -8,6 +8,7 @@ import About from "./pages/static/About";
 import Faq from "./pages/static/Faq";
 import Layout from "./pages/Layout";
 import Settings from "./pages/Settings";
+import Contributions from "./pages/Contributions";
 import DonorInfo from "./pages/DonorInfo";
 import SignUp from "./components/auth/SignUp";
 import SignIn from "./components/auth/SignIn";
@@ -49,6 +50,7 @@ let routes = (
       <Route path="faq" component={Faq}></Route>
       <Route path="settings" component={Settings} onEnter={requireAuth}></Route>
       <Route path="change_password" component={ChangePassword} onEnter={requireAuth}></Route>
+      <Route path="contributions" component={Contributions} onEnter={requireAuth}></Route>
       <Route path="donor-info" component={DonorInfo} onEnter={requireAuth}></Route>
       <Route path="signup" component={SignUp} onEnter={invalidIfSignedIn}></Route>
       <Route path="signin" component={SignIn} onEnter={invalidIfSignedIn}></Route>

@@ -29,6 +29,7 @@ export default class TallyNav extends React.Component {
     ];
 
     const dropdownItems = [
+      {href: 'contributions', name: 'Contributions'},
       {href: 'settings', name: 'Settings'},
       {href: 'donor-info', name: 'Donor Info'},
       {href: 'signout', name: 'Logout'}
