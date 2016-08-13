@@ -28,7 +28,7 @@ export default class ForgotPassword extends React.Component {
 
     if (!AuthUtils.validEmail(this.state.email)) {
       that.setState({
-        error: "Invalid email address",
+        error: AuthUtils.invalidEmail(),
         emailError: true
       });
       return false;

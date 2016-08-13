@@ -33,6 +33,10 @@ export default class PasswordMatch extends React.Component {
       }
     };
     const title = this.props.title || 'Password';
+    var placeholder = this.props.title || 'password';
+    if (placeholder) {
+      placeholder.toLowerCase();
+    }
 
     return (
       <div className="form-group has-feedback">
@@ -45,7 +49,7 @@ export default class PasswordMatch extends React.Component {
           onBlur={this.handleBlur.bind(this)}
           className="form-control"
           ref="passwordMatch"
-          placeholder={this.props.title.toLowerCase()} />
+          placeholder={placeholder} />
           {(this.props.pwError ? (<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>) : (<span></span>))}
       </div>
     );

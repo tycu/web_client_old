@@ -6,7 +6,7 @@ import AuthStore from '../../stores/AuthStore';
 
 import Email from './Email';
 import Password from './Password';
-import MessageErrors from '../layout/MessageErrors';
+import Messages from '../layout/Messages';
 
 export default class SignIn extends React.Component {
 
@@ -62,19 +62,17 @@ export default class SignIn extends React.Component {
   signin(e) {
     e.preventDefault();
     var that = this;
-    var pwErrorConfig;
 
     if (!AuthUtils.validEmail(this.state.email)) {
       that.setState({
-        error: "Invalid email address",
+        error: AuthUtils.invalidEmail(),
         emailError: true
       });
     }
-    pwErrorConfig = AuthUtils.getPasswordErrorSettings();
 
-    if (!pwErrorConfig.pwRegex.test(this.state.password)) {
+    if (!AuthUtils.validEmail(this.state.email)) {
       that.setState({
-        error: pwErrorConfig.pwErrorText,
+        error: AuthUtils.pwErrorText,
         pwError: true
       });
       return false;
@@ -108,7 +106,7 @@ export default class SignIn extends React.Component {
       <div className="signin jumbotron center-block" style={style.container}>
         <h2>Login</h2>
         <form role="form">
-          <MessageErrors key={this.state.key + 1}  {...this.state} />
+          <Messages key={this.state.key + 1}  {...this.state} />
           <Email {...this.state} key={this.state.key + 2} onUpdate={this.onUpdate.bind(this)} />
           <Password {...this.state} key={this.state.key + 3} onUpdate={this.onUpdate.bind(this)} />
 

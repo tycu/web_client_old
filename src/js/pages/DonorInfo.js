@@ -3,7 +3,7 @@ import StatesField from "../components/StatesField";
 import * as DonorInfoActions from "../actions/DonorInfoActions";
 import DonorInfoStore from "../stores/DonorInfoStore";
 import AuthStore from '../stores/AuthStore';
-import MessageErrors from '../components/layout/MessageErrors';
+import Messages from '../components/layout/Messages';
 import { collections } from 'lodash';
 
 export default class DonorInfo extends React.Component {
@@ -125,7 +125,7 @@ export default class DonorInfo extends React.Component {
       <div className="signin jumbotron center-block">
         <h2>Donor Info</h2>
         <form role="form">
-          <MessageErrors {...this.state} />
+          <Messages {...this.state} />
           <div className="form-group">
             <label htmlFor="name">Name</label>
             <input type="text" value={this.state.name} onChange={this.onUpdate.bind(this, 'name')} className="form-control" id="name" ref="name" placeholder="Full Name" />

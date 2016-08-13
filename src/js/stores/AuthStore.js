@@ -41,6 +41,10 @@ class AuthStore extends EventEmitter {
     return this.pwError;
   }
 
+  oldPasswordError() {
+    return this.oldPwError;
+  }
+
   currentUser() {
     return localStorage.getItem('tallyUserEmail') || '';
   }
@@ -108,8 +112,8 @@ class AuthStore extends EventEmitter {
     })
     .catch(function (response) {
       // NOTE Model validation errors
+      alertText = JSON.parse(response.response).message;
       if (response.status) {
-        alertText = JSON.parse(response.response).message;
         console.log("Error logging in", alertText);
         that.error = alertText;
         that.emailError = true;
@@ -229,7 +233,7 @@ class AuthStore extends EventEmitter {
 
     return this.handlePasswordChange(when(request({
       url: url,
-      method: 'POST',
+      method: 'PUT',
       crossOrigin: true,
       type: 'json',
       headers: {
@@ -247,18 +251,30 @@ class AuthStore extends EventEmitter {
     var that = this;
 
     return verifyPromise.then(function(response) {
-      // Could post signed out success message here
+      that.message = response.message;
+      that.error = '';
+      that.pwError = false;
       that.emit('change');
       return true;
     })
     .catch(function(response) {
       if (response.status !== 200) {
         var alertText = JSON.parse(response.response).message;
-        that.emailError = true;
-        that.error = alertText;
-        console.log("Error changing password.", response);
-        that.emit('change');
-        return false;
+
+        if (alertText === 'Invalid email or password') {
+          that.oldPwError = true;
+          that.message = '';
+          that.error = alertText;
+          that.emit('change');
+          return false;
+        } else {
+          that.pwError = true;
+          that.message = '';
+          that.error = alertText;
+          that.emit('change');
+          return false;
+          console.log("Error changing password.", response);
+        }
       }
     });
   }

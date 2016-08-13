@@ -7,7 +7,7 @@ import AuthStore from '../../stores/AuthStore';
 import OldPassword from './OldPassword';
 import Password from './Password';
 import PasswordMatch from './PasswordMatch';
-import MessageErrors from '../layout/MessageErrors';
+import Messages from '../layout/Messages';
 
 export default class ChangePassword extends React.Component {
 
@@ -66,18 +66,28 @@ export default class ChangePassword extends React.Component {
   changePassword(e) {
     e.preventDefault();
     var that = this;
-    var pwErrorConfig;
 
-    pwErrorConfig = AuthUtils.getPasswordErrorSettings();
-
-    if (!pwErrorConfig.pwRegex.test(this.state.password)) {
+    if (!AuthUtils.validPassword(this.state.password)) {
       that.setState({
-        error: pwErrorConfig.pwErrorText,
+        error: AuthUtils.passwordErrorText(),
+        pwError: true
+      });
+      return false;
+    }
+    if (this.state.password !== this.state.passwordMatch) {
+      that.setState({
+        error: AuthUtils.passwordNoMatch(),
+        pwError: true
+      });
+      return false;
+    } else if (!AuthUtils.validPassword(this.state.password)) {
+      that.setState({
+        error: AuthUtils.pwErrorText,
         pwError: true
       });
       return false;
     } else {
-      AuthActions.changePassword(this.state.password, this.state.oldPassword);
+      AuthActions.changePassword(this.state.oldPassword, this.state.password);
     }
   };
 
@@ -116,7 +126,7 @@ export default class ChangePassword extends React.Component {
       <div className="signin jumbotron center-block" style={style.container}>
         <h2>Change Your Password</h2>
         <form role="form">
-          <MessageErrors key={this.state.key + 1}  {...this.state} />
+          <Messages key={this.state.key + 1}  {...this.state} />
 
           <OldPassword {...this.state} key={this.state.key + 2} onUpdate={this.onUpdate.bind(this)} value={oldPassword} />
 

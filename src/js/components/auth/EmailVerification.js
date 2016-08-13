@@ -1,6 +1,6 @@
 import React from 'react';
 import * as AuthActions from "../../actions/AuthActions";
-import MessageErrors from '../layout/MessageErrors';
+import Messages from '../layout/Messages';
 import AuthStore from '../../stores/AuthStore';
 
 export default class EmailVerification extends React.Component {
@@ -40,7 +40,7 @@ export default class EmailVerification extends React.Component {
         {(this.state.emailError ? (
           <div>
             <h2>Error Verifying Email</h2>
-            <MessageErrors key={this.state.key + 1}  {...this.state} />
+            <Messages key={this.state.key + 1}  {...this.state} />
           </div>
         ) : (
           <div>

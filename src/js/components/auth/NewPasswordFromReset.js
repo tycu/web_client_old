@@ -6,7 +6,7 @@ import AuthStore from '../../stores/AuthStore';
 
 import Password from './Password';
 import PasswordMatch from './PasswordMatch';
-import MessageErrors from '../layout/MessageErrors';
+import Messages from '../layout/Messages';
 
 export default class NewPasswordFromReset extends React.Component {
 
@@ -57,19 +57,16 @@ export default class NewPasswordFromReset extends React.Component {
   signup(e) {
     e.preventDefault();
     var that = this;
-    var pwErrorConfig;
-
-    pwErrorConfig = AuthUtils.getPasswordErrorSettings();
 
     if (this.state.password !== this.state.passwordMatch) {
       that.setState({
-        error: 'Passwords Do Not Match',
+        error: AuthUtils.passwordNoMatch(),
         pwError: true
       });
       return false;
-    } else if (!pwErrorConfig.pwRegex.test(this.state.password)) {
+    } else if (!AuthUtils.validPassword(this.state.password)) {
       that.setState({
-        error: pwErrorConfig.pwErrorText,
+        error: AuthUtils.passwordErrorText(),
         pwError: true
       });
       return false;
@@ -105,7 +102,7 @@ export default class NewPasswordFromReset extends React.Component {
         <h2>Reset Your Password</h2>
         <form role="form">
 
-          <MessageErrors key={this.state.key + 1} {...this.state} />
+          <Messages key={this.state.key + 1} {...this.state} />
 
           <Password {...this.state} key={this.state.key + 3 } onUpdate={this.onUpdate.bind(this)} value={password} />
           <PasswordMatch {...this.state} key={this.state.key + 4} onUpdate={this.onUpdate.bind(this)} value={passwordMatch} />

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from "react-router";
 import AuthStore from '../../stores/AuthStore';
 
-export default class MessageErrors extends React.Component {
+export default class Messages extends React.Component {
 
   static propTypes = {
     error:  React.PropTypes.string,
@@ -28,14 +28,20 @@ export default class MessageErrors extends React.Component {
       color: 'red'
     };
     const messageStyles = {
-      color: '#333'
+      color: '#44c4a1'
     };
 
     return (
       <div>
         <ul style={listStyle}>
-          <li style={errorStyles}>{error}</li>
-          <li style={messageStyles}>{message}</li>
+          <li style={errorStyles}>
+            {(this.props.error ? (<span class="glyphicon glyphicon-remove" aria-hidden="true">&nbsp;</span>) : (<span></span>))}
+            {error}
+          </li>
+          <li style={messageStyles}>
+            {(this.props.message ? (<span class="glyphicon glyphicon-ok" aria-hidden="true">&nbsp;</span>) : (<span></span>))}
+            {message}
+          </li>
         </ul>
       </div>
     )

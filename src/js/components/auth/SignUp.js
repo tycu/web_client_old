@@ -7,7 +7,7 @@ import AuthStore from '../../stores/AuthStore';
 import Email from './Email';
 import Password from './Password';
 import PasswordMatch from './PasswordMatch';
-import MessageErrors from '../layout/MessageErrors';
+import Messages from '../layout/Messages';
 
 export default class SignUp extends React.Component {
 
@@ -65,26 +65,24 @@ export default class SignUp extends React.Component {
   signup(e) {
     e.preventDefault();
     var that = this;
-    var pwErrorConfig;
 
     if (!AuthUtils.validEmail(this.state.email)) {
       that.setState({
-        error: "Invalid email address",
+        error: AuthUtils.invalidEmail(),
         emailError: true
       });
       return false;
     }
-    pwErrorConfig = AuthUtils.getPasswordErrorSettings();
 
     if (this.state.password !== this.state.passwordMatch) {
       that.setState({
-        error: 'Passwords Do Not Match',
+        error: AuthUtils.passwordNoMatch(),
         pwError: true
       });
       return false;
-    } else if (!pwErrorConfig.pwRegex.test(this.state.password)) {
+    } else if (!AuthUtils.validPassword(this.state.password)) {
       that.setState({
-        error: pwErrorConfig.pwErrorText,
+        error: AuthUtils.pwErrorText,
         pwError: true
       });
       return false;
@@ -121,7 +119,7 @@ export default class SignUp extends React.Component {
         <h2>Sign up For Tally</h2>
         <form role="form">
 
-          <MessageErrors key={this.state.key + 1} {...this.state} />
+          <Messages key={this.state.key + 1} {...this.state} />
 
           <Email {...this.state} key={this.state.key + 2} onUpdate={this.onUpdate.bind(this)} value={email} />
           <Password {...this.state} key={this.state.key + 3 } onUpdate={this.onUpdate.bind(this)} value={password} />
