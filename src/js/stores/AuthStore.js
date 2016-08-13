@@ -302,7 +302,8 @@ class AuthStore extends EventEmitter {
       }
 
       case  "RESET_PASSWORD": {
-        this.resetPassword();
+        this.resetPassword(action.email);
+        this.emit('change');
         break;
       }
 

@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link } from "react-router";
 import * as AuthActions from "../../actions/AuthActions";
-import Email from './Email';
 import * as AuthUtils from "../../utils/AuthUtils";
+import AuthStore from '../../stores/AuthStore';
+import Messages from '../layout/Messages';
+import Email from './Email';
 
 export default class ForgotPassword extends React.Component {
   static propTypes = {
@@ -19,8 +21,17 @@ export default class ForgotPassword extends React.Component {
   }
 
   componentWillMount() {
-    // AuthActions.resetPassword()
+    AuthStore.on("change", () => {
+      this.setState({
+        loggedIn:   AuthStore.signedIn(),
+        email:      AuthStore.currentUser(),
+        message:    AuthStore.getMessage(),
+        error:      AuthStore.getError(),
+        key:        Math.random()
+      });
+    });
   }
+
 
   resetPassword(e) {
     e.preventDefault();
@@ -51,10 +62,10 @@ export default class ForgotPassword extends React.Component {
         background: '#fff',
       },
       account: {
-        marginTop: '30'
+        marginTop: '30px'
       },
       resetPassword: {
-        marginTop: '62'
+        marginTop: '62px'
       }
     };
 
@@ -62,6 +73,7 @@ export default class ForgotPassword extends React.Component {
       <div className="signin jumbotron center-block" style={style.container}>
         <h2>Forgot Your Password</h2>
         <form role="form">
+          <Messages key={this.state.key + 1} {...this.state} />
           <Email {...this.state} key={this.state.key + 2} onUpdate={this.onUpdate.bind(this)} />
 
           <div className="form-group pull-left">
