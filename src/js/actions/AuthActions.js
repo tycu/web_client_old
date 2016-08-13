@@ -43,3 +43,10 @@ export function changePassword(oldPassword, password) {
     password
   });
 }
+
+export function updatePasswordFromReset(password) {
+  dispatcher.dispatch({
+    type: "UPDATE_PW_FROM_RESET",
+    password
+  })
+}

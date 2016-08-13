@@ -7,3 +7,4 @@ export const SIGNOUT_URL  = 'http://localhost:5000/api/v1/signout';
 export const EMAIL_VERIFICATION  = 'http://localhost:5000/api/v1/email_verification';
 export const EMAIL_RESET  = 'http://localhost:5000/api/v1/email_reset';
 export const CHANGE_PASSWORD  = 'http://localhost:5000/api/v1/change_password';
+export const UPDATE_PW = 'http://localhost:5000/api/v1/update_password';

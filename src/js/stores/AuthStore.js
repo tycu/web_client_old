@@ -115,6 +115,7 @@ class AuthStore extends EventEmitter {
       alertText = JSON.parse(response.response).message;
       if (response.status) {
         console.log("Error logging in", alertText);
+        that.message = '';
         that.error = alertText;
         that.emailError = true;
         that.pwError = true;
@@ -123,6 +124,7 @@ class AuthStore extends EventEmitter {
       } else if (response.status !== 200) {
         var alertText = JSON.parse(response.response).message;
         console.log("Error logging in", alertText);
+        that.message = '';
         that.error = alertText;
         that.emailError = true;
         that.pwError = true;
@@ -178,10 +180,10 @@ class AuthStore extends EventEmitter {
   verifyEmail() {
     var that = this;
     var url = Constants.EMAIL_VERIFICATION;
-    var emailConfirmToken = window.location.search.split('?email_confirm_token=')[1];
+    var emailConfirmToken = window.location.search.split('?single_use_token=')[1];
 
     return this.handleEmailVerify(when(request({
-      url: url + "?email_confirm_token=" + emailConfirmToken,
+      url: url + "?single_use_token=" + emailConfirmToken,
       method: 'GET',
       crossOrigin: true,
       type: 'json'
@@ -223,6 +225,24 @@ class AuthStore extends EventEmitter {
         email: email
       }
     }));
+  }
+
+  updatePwFromReset(newPassword) {
+    var that = this;
+    var url = Constants.UPDATE_PW;
+
+    var emailConfirmToken = window.location.search.split('?single_use_token=')[1];
+    browserHistory.push('/password_update_submit')
+
+    return this.handleEmailVerify(when(request({
+      url: url + "?single_use_token=" + emailConfirmToken,
+      method: 'PUT',
+      crossOrigin: true,
+      type: 'json',
+      data: {
+        newPassword: newPassword
+      }
+    })));
   }
 
   changePassword(oldPassword, newPassword) {
@@ -300,15 +320,17 @@ class AuthStore extends EventEmitter {
         this.verifyEmail()
         break;
       }
-
       case  "RESET_PASSWORD": {
         this.resetPassword(action.email);
         this.emit('change');
         break;
       }
-
       case "CHANGE_PASSWORD": {
         this.changePassword(action.oldPassword, action.password);
+        break;
+      }
+      case "UPDATE_PW_FROM_RESET": {
+        this.updatePwFromReset(action.password);
         break;
       }
     }

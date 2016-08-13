@@ -54,7 +54,7 @@ export default class NewPasswordFromReset extends React.Component {
     });
   }
 
-  signup(e) {
+  updatePassword(e) {
     e.preventDefault();
     var that = this;
 
@@ -71,7 +71,7 @@ export default class NewPasswordFromReset extends React.Component {
       });
       return false;
     } else {
-      AuthActions.signUpUser(this.state.password);
+      AuthActions.updatePasswordFromReset(this.state.password);
     }
   }
 
@@ -107,7 +107,7 @@ export default class NewPasswordFromReset extends React.Component {
           <Password {...this.state} key={this.state.key + 3 } onUpdate={this.onUpdate.bind(this)} value={password} />
           <PasswordMatch {...this.state} key={this.state.key + 4} onUpdate={this.onUpdate.bind(this)} value={passwordMatch} />
           <div className="form-group pull-left">
-            <button type="submit" className="btn btn-default" onClick={this.signup.bind(this)}>Create Account</button>
+            <button type="submit" className="btn btn-default" onClick={this.updatePassword.bind(this)}>Set New Password</button>
           </div>
           <br />
 

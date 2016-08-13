@@ -40,7 +40,7 @@ export default class PasswordMatch extends React.Component {
 
     return (
       <div className="form-group has-feedback">
-        <label htmlFor="password">{this.props.title}</label>
+        <label htmlFor="password">Password Confirmation</label>
         <input
           style={m(styles.container, this.props.pwError && styles.error)}
           type="password"

@@ -15,6 +15,7 @@ import SignIn from "./components/auth/SignIn";
 import SignOut from './components/auth/SignOut';
 import ForgotPassword from './components/auth/ForgotPassword';
 import ForgotPasswordSubmit from './components/auth/ForgotPasswordSubmit';
+import ResetPasswordSubmit from './components/auth/ResetPasswordSubmit';
 import EmailVerification from "./components/auth/EmailVerification";
 import ChangePassword from './components/auth/ChangePassword';
 import NewPasswordFromReset from './components/auth/NewPasswordFromReset';
@@ -57,6 +58,7 @@ let routes = (
       <Route path="signout" component={SignOut} onEnter={requireAuth}></Route>
       <Route path="reset_password" component={ForgotPassword}></Route>
       <Route path="reset_password_submit" component={ForgotPasswordSubmit}></Route>
+      <Route path="password_update_submit" component={ResetPasswordSubmit}></Route>
       <Route path="new_password_from_reset" component={NewPasswordFromReset}></Route>
       <Route path='*' component={FourOhFour}></Route>
     </Route>
