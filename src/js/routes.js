@@ -21,6 +21,9 @@ import ChangePassword from './components/auth/ChangePassword';
 import NewPasswordFromReset from './components/auth/NewPasswordFromReset';
 import FourOhFour from './pages/static/FourOhFour';
 
+// IMPORT BOOTSTRAP to whole app
+import 'bootstrap/dist/css/bootstrap.css';
+
 const app = document.getElementById('app');
 
 var requireAuth = function(nextState, replace) {
