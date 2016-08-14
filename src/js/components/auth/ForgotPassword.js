@@ -77,7 +77,7 @@ export default class ForgotPassword extends React.Component {
           <Email {...this.state} key={this.state.key + 2} onUpdate={this.onUpdate.bind(this)} />
 
           <div className="form-group pull-left">
-            <button type="submit" className="btn btn-default" onClick={this.resetPassword.bind(this)}>
+            <button type="submit" className="btn btn-primary" onClick={this.resetPassword.bind(this)}>
               Reset My Password
             </button>
             <div style={style.account}>

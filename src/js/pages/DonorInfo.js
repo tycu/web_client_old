@@ -116,13 +116,41 @@ export default class DonorInfo extends React.Component {
 
 
   render() {
-    const retiredEmployed = {
-      marginLeft: '10px'
+    const style = {
+      container: {
+        padding: '20px',
+        background: 'white',
+        width: '490px',
+        borderRadius: '2px'
+      },
+      employed: {
+        marginLeft: '10px',
+        clear: 'both',
+        width: '300px'
+      },
+      city: {
+        width: '200px',
+        display: 'inline',
+        float: 'left',
+        marginRight: '20px'
+      },
+      residenceState: {
+        width: '90px',
+        display: 'inline',
+        float: 'left',
+        marginRight: '20px'
+      },
+      zip: {
+        width: '100px',
+        display: 'inline',
+        float: 'left',
+        marginRight: '20px'
+      }
     }
 
     // TODO make incomplete fields highlighted red on error
     return (
-      <div className="signin jumbotron center-block">
+      <div className="signin jumbotron center-block" style={style.container}>
         <h2>Donor Info</h2>
         <form role="form">
           <Messages {...this.state} />
@@ -134,24 +162,25 @@ export default class DonorInfo extends React.Component {
             <label htmlFor="streetAddress">Street Address</label>
             <input type="text" value={this.state.streetAddress} onChange={this.onUpdate.bind(this, 'streetAddress')} className="form-control" id="streetAddress" ref="streetAddress" placeholder="Street Address" />
           </div>
-          <div className="form-group">
+          <div className="form-group" style={style.city}>
             <label htmlFor="city">City</label>
             <input type="text" value={this.state.city} onChange={this.onUpdate.bind(this, 'city')} className="form-control" id="city" ref="city" placeholder="City" />
           </div>
 
-          <div className="form-group">
+          <div className="form-group" style={style.residenceState}>
             <label htmlFor="name">State</label>
             <StatesField value={this.state.residenceState} onChange={this.onUpdate.bind(this, 'residenceState')} />
           </div>
 
-          <div className="form-group">
+          <div className="form-group" style={style.zip}>
             <label htmlFor="name">Zip</label>
             <input type="text" value={this.state.zip} onChange={this.onUpdate.bind(this, 'zip')} className="form-control" id="zip" ref="zip" placeholder="Zip" />
           </div>
+          <br/>
 
           <div className="form-group">
             <label htmlFor="employed">Retired or Unemployed</label>
-            <input style={retiredEmployed} type="checkbox" checked={!this.state.employed} onChange={this.onUpdate.bind(this, 'employed')} />
+            <input style={style.employed} type="checkbox" checked={!this.state.employed} onChange={this.onUpdate.bind(this, 'employed')} />
           </div>
 
           <div className='form-group'>
@@ -164,7 +193,7 @@ export default class DonorInfo extends React.Component {
           </div>
 
           <div className='form-group'>
-            <button type="submit" className="btn btn-default" onClick={this.updateDonorInfo.bind(this)}>Submit</button>
+            <button type="submit" className="btn btn-primary" onClick={this.updateDonorInfo.bind(this)}>Submit</button>
           </div>
         </form>
       </div>

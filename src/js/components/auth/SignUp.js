@@ -110,7 +110,7 @@ export default class SignUp extends React.Component {
         background: '#fff',
       },
       account: {
-        marginTop: '30'
+        marginTop: '30px'
       }
     };
 
@@ -125,7 +125,7 @@ export default class SignUp extends React.Component {
           <Password {...this.state} key={this.state.key + 3 } onUpdate={this.onUpdate.bind(this)} value={password} />
           <PasswordMatch {...this.state} key={this.state.key + 4} onUpdate={this.onUpdate.bind(this)} value={passwordMatch} />
           <div className="form-group pull-left">
-            <button type="submit" className="btn btn-default" onClick={this.signup.bind(this)}>Create Account</button>
+            <button type="submit" className="btn btn-primary" onClick={this.signup.bind(this)}>Create Account</button>
             <div style={style.account}>
               <span>Already have an Account? | </span>
               <Link to="/signin"> Log In</Link>

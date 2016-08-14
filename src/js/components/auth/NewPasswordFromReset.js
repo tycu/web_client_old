@@ -93,7 +93,7 @@ export default class NewPasswordFromReset extends React.Component {
         background: '#fff',
       },
       account: {
-        marginTop: '30'
+        marginTop: '30px'
       }
     };
 
@@ -107,7 +107,7 @@ export default class NewPasswordFromReset extends React.Component {
           <Password {...this.state} key={this.state.key + 3 } onUpdate={this.onUpdate.bind(this)} value={password} />
           <PasswordMatch {...this.state} key={this.state.key + 4} onUpdate={this.onUpdate.bind(this)} value={passwordMatch} />
           <div className="form-group pull-left">
-            <button type="submit" className="btn btn-default" onClick={this.updatePassword.bind(this)}>Set New Password</button>
+            <button type="submit" className="btn btn-primary" onClick={this.updatePassword.bind(this)}>Set New Password</button>
           </div>
           <br />
 

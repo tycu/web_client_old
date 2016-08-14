@@ -46,6 +46,7 @@ export default class StatesField extends React.Component {
     return (
       <div>
         <select
+          class="form-control"
           type="select"
           value={residenceState}
           onChange={this.handleStateChange.bind(this)}

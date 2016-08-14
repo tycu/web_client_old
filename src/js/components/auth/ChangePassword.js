@@ -135,7 +135,7 @@ export default class ChangePassword extends React.Component {
           <PasswordMatch {...this.state} key={this.state.key + 4} onUpdate={this.onUpdate.bind(this)} value={passwordMatch} title="Confirm New Password" />
 
           <div className="form-group pull-left">
-            <button type="submit" className="btn btn-default" onClick={this.changePassword.bind(this)}>Change Password</button>
+            <button type="submit" className="btn btn-primary" onClick={this.changePassword.bind(this)}>Change Password</button>
           </div>
       </form>
     </div>

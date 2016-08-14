@@ -95,10 +95,10 @@ export default class SignIn extends React.Component {
         background: '#fff',
       },
       account: {
-        marginTop: '30'
+        marginTop: '30px'
       },
       resetPassword: {
-        marginTop: '62'
+        marginTop: '62px'
       }
     };
 
@@ -111,7 +111,7 @@ export default class SignIn extends React.Component {
           <Password {...this.state} key={this.state.key + 3} onUpdate={this.onUpdate.bind(this)} />
 
           <div className="form-group pull-left">
-            <button type="submit" className="btn btn-default" onClick={this.signin.bind(this)}>Login</button>
+            <button type="submit" className="btn btn-primary" onClick={this.signin.bind(this)}>Login</button>
             <div style={style.account}>
               <span>No Account? | </span>
               <Link to="/signup"> Sign Up</Link>
