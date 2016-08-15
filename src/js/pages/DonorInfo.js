@@ -9,7 +9,7 @@ import { collections } from 'lodash';
 export default class DonorInfo extends React.Component {
 
   static propTypes = {
-    hideEmployerOccupation:  React.PropTypes.bool,
+    hideEmployerOccupation: React.PropTypes.bool,
     employed:  React.PropTypes.bool,
     message: React.PropTypes.string,
     error:  React.PropTypes.string,

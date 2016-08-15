@@ -1,5 +1,4 @@
 import { EventEmitter } from "events";
-
 import dispatcher from "../dispatcher";
 
 class StateStore extends EventEmitter {
@@ -74,12 +73,6 @@ class StateStore extends EventEmitter {
 
   handleActions(action) {
     console.log("StateStore received an action", action);
-
-    switch(action.type) {
-      case "LOAD_STATES": {
-        break;
-      }
-    }
   }
 
 }

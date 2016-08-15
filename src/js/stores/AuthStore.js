@@ -145,6 +145,7 @@ class AuthStore extends EventEmitter {
     localStorage.removeItem('tallyEndureToken');
     localStorage.removeItem('tallyUserEmail');
     localStorage.removeItem('tallyUserId');
+    localStorage.removeItem('stripeCustomerId');
     browserHistory.push('/');
 
     return this.handleSignOut(when(request({

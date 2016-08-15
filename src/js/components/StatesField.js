@@ -1,4 +1,3 @@
-// import Dropdown from 'react-drop-down'
 import ReactDOM from 'react-dom'
 import React, { Component, PropTypes } from 'react'
 import StateStore from "../stores/StateStore";
@@ -8,7 +7,6 @@ export default class StatesField extends React.Component {
     super(props)
 
     this.getStates = this.getStates.bind(this);
-    // this.handleChange = this.handleChange.bind(this);
 
     this.state = {
       availableStates: StateStore.getAll(),
