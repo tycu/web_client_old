@@ -9,6 +9,7 @@ import CardNumber from "./CardNumber";
 import MonthList from "./MonthList";
 import YearList from "./YearList";
 import Cvc from "./Cvc";
+import Messages from '../layout/Messages';
 
 export default class SetCard extends React.Component {
 
@@ -88,18 +89,41 @@ export default class SetCard extends React.Component {
       publicKey = Constants.PUBLIC_KEY_TEST;
     }
     Stripe.setPublishableKey(publicKey);
-    CardActions.getCustomerId(this.state.email);
+    // CardActions.getCustomerId(this.state.email);
   }
 
+  cardInfoComplete() {
+    var that = this;
+    var requiredFields = ['number', 'cvc', 'exp_month', 'exp_year'];
+    var shouldContinue = true;
+
+    _(requiredFields).forEach(function(value) {
+      if (_.isEmpty(that.state[value])) {
+        shouldContinue = false
+        return false;
+      }
+    });
+    return shouldContinue;
+  }
 
   setCard(e) {
     e.preventDefault();
+    var that = this;
 
-    Stripe.createToken(this.state.card, function (status, response) {
-      console.log( status, response );
-      // then send this response to server
-      CardActions.setCustomer(response.id)
-    });
+    debugger;
+    // validate that month/year is used, otherwise add error
+    if (!that.cardInfoComplete()) {
+      that.setState({error: "You must complete all Fields to save your Credit Card."});
+      return false;
+    } else {
+      that.setState({error: ""});
+
+      Stripe.createToken(this.state.card, function (status, response) {
+        console.log( status, response );
+        // then send this response to server
+        CardActions.setCustomer(response.id)
+      });
+    }
   }
 
   onUpdate(key, val, fromCard) {
@@ -121,7 +145,7 @@ export default class SetCard extends React.Component {
         padding: '20px',
         background: 'white',
         width: '400px',
-        height: '300px',
+        height: '330px',
         borderRadius: '2px'
       },
       number: {
@@ -151,8 +175,10 @@ export default class SetCard extends React.Component {
 
     return (
       <form role='form' style={style.container}>
+        <Messages key={this.state.key + 1}  {...this.state} />
+
         <CardNumber value={this.state.number} onChange={this.onUpdate.bind(this, 'number')} style={style.number} />
-        <MonthList value={this.state.exp_month} onChange={this.onUpdate.bind(this, 'exp_month')} style={style.exp_month} />
+        <MonthList value={this.state.exp_month} onChange={this.onUpdate.bind(this, 'exp_month')} defaultValue="1" style={style.exp_month} />
         <YearList value={this.state.exp_year} onChange={this.onUpdate.bind(this, 'exp_year')} style={style.exp_year}/>
         <Cvc value={this.state.cvc} onChange={this.onUpdate.bind(this, 'cvc')} style={style.cvc} />
         <div className="form-group">

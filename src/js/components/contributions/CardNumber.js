@@ -2,11 +2,10 @@ import ReactDOM from 'react-dom'
 import React, { Component, PropTypes } from 'react'
 
 export default class CardNumber extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      value: this.props.value
-    }
+
+  state = {
+    value: this.props.value,
+    number: ''
   }
 
   handleNumberChange(event) {

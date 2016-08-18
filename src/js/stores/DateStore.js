@@ -6,6 +6,7 @@ class DateStore extends EventEmitter {
     super()
 
     this.months = [
+      { value: '0',  label: 'Month' },
       { value: '1',  label: '01 - Jan' },
       { value: '2',  label: '02 - Feb' },
       { value: '3',  label: '03 - Mar' },
@@ -21,6 +22,7 @@ class DateStore extends EventEmitter {
     ];
 
     this.years = [
+      { value: 'NA',  label: 'Year' },
       { value: '2016',  label: '2016' },
       { value: '2017',  label: '2017' },
       { value: '2018',  label: '2018' },

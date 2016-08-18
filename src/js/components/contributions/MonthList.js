@@ -3,15 +3,10 @@ import React, { Component, PropTypes } from 'react'
 import DateStore from "../../stores/DateStore";
 
 export default class MonthList extends React.Component {
-  constructor(props) {
-    super(props)
 
-    this.getMonths = this.getMonths.bind(this);
-
-    this.state = {
-      availableMonths: DateStore.getMonths(),
-      value: this.props.value
-    }
+  state = {
+    availableMonths: DateStore.getMonths(),
+    value: this.props.value
   }
 
   handleMonthChange(event) {
@@ -20,13 +15,15 @@ export default class MonthList extends React.Component {
 
   getMonths() {
     this.setState({
-      availableMonths: DateStore.getMonths(),
+      availableMonths: DateStore.getMonths()
     });
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      exp_month: nextProps.value
+      card: {
+        exp_month: nextProps.value
+      }
     });
   }
 

@@ -76,6 +76,7 @@ export default class DonorInfo extends React.Component {
       that.setState({error: "You must complete all Fields"});
       return false;
     } else {
+      that.setState({error: ""});
       var userId = AuthStore.currentUserId();
 
       DonorInfoActions.updateDonorInfo(userId, {
@@ -113,7 +114,6 @@ export default class DonorInfo extends React.Component {
       this.setState(object);
     }
   }
-
 
   render() {
     const style = {

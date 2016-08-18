@@ -12,19 +12,14 @@ export default class Events extends React.Component {
   static propTypes = {
     eventStyle:  React.PropTypes.object,
     contStyle:   React.PropTypes.object,
-    children:    React.PropTypes.node
+    children:    React.PropTypes.node,
+    collapseIn:  React.PropTypes.bool,
+    events:      React.PropTypes.array
   }
 
-  // state = {
-  //   collapseIn: false
-  // }
-
-  constructor(props) {
-    super(props);
-    this.getEvents.bind(this);
-    this.state = {
-      events: []
-    };
+  state = {
+    collapseIn: false,
+    events: []
   }
 
   componentWillMount() {

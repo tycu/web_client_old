@@ -3,15 +3,10 @@ import React, { Component, PropTypes } from 'react'
 import DateStore from "../../stores/DateStore";
 
 export default class YearList extends React.Component {
-  constructor(props) {
-    super(props)
 
-    this.getYears = this.getYears.bind(this);
-
-    this.state = {
-      availableYears: DateStore.getYears(),
-      value: this.props.value
-    }
+  state = {
+    availableYears: DateStore.getYears(),
+    value: this.props.value
   }
 
   handleYearChange(event) {
@@ -20,13 +15,15 @@ export default class YearList extends React.Component {
 
   getYears() {
     this.setState({
-      availableYears: DateStore.getYears(),
+      availableYears: DateStore.getYears()
     });
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      exp_year: nextProps.value
+      card: {
+        exp_year: nextProps.value
+      }
     });
   }
 
@@ -44,7 +41,7 @@ export default class YearList extends React.Component {
 
     return (
       <div className="form-group" style={this.props.style}>
-        <label htmlFor="exp_month">&nbsp;</label>
+        <label htmlFor="exp_year">&nbsp;</label>
         <select
           class="form-control"
           type="select"
