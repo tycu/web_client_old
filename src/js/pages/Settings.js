@@ -6,7 +6,7 @@ export default class Settings extends React.Component {
   render() {
 
     return (
-      <div className="signin jumbotron center-block">
+      <div className="jumbotron center-block">
         <h2>Settings</h2>
         <Link to='change_password'>Change Password</Link>
       </div>

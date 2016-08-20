@@ -1,9 +1,9 @@
 import dispatcher from "../dispatcher";
 
-export function getCustomerId(email) {
+export function getCustomerId(stripePublicKey) {
   dispatcher.dispatch({
     type: "GET_CUSTOMER_ID",
-    email
+    stripePublicKey
   });
 }
 
@@ -14,9 +14,9 @@ export function setCustomer(cardToken) {
   });
 }
 
-// export function getCustomer(cardToken) {
-//   dispatcher.dispatch({
-//     type: "GET_CUSTOMER",
-//     cardToken
-//   });
-// }
+export function deleteCustomer(cardToken) {
+  dispatcher.dispatch({
+    type: "DELETE_CUSTOMER",
+    cardToken
+  });
+}

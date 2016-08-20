@@ -100,7 +100,7 @@ class DonorInfoStore extends EventEmitter {
   }
 
   handleActions(action) {
-    console.log("DonorInfoStore received an action", action);
+    // console.log("DonorInfoStore received an action", action);
     switch(action.type) {
 
       case "UPDATE_DONOR_INFO": {

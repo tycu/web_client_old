@@ -302,7 +302,7 @@ class AuthStore extends EventEmitter {
 
 
   handleActions(action) {
-    console.log("AuthStore received an action", action);
+    // console.log("AuthStore received an action", action);
 
     switch(action.type) {
       case "SIGN_IN_USER": {

@@ -2,9 +2,9 @@ import React from "react";
 import ChangePassword from '../components/auth/ChangePassword';
 import { Link } from "react-router";
 import SetCard from '../components/contributions/SetCard';
+import MainCard from '../components/contributions/MainCard';
 
-export default class Settings extends React.Component {
-
+export default class Contributions extends React.Component {
 
   // check if has card from user object
   // if no prompt to create
@@ -15,16 +15,12 @@ export default class Settings extends React.Component {
 
 
   render() {
-    // const =
-    // debugger;
 
     return (
-      <div className="signin jumbotron center-block">
+      <div className="jumbotron center-block">
         <h2>Contributions</h2>
-
+        <MainCard />
         <SetCard />
-
-
       </div>
     );
   }

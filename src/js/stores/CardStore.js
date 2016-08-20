@@ -38,7 +38,14 @@ class CardStore extends EventEmitter {
     return this.customer;
   }
 
-  fetchCustomerId() {
+  getCCLast4() {
+    return this.last4;
+  }
+  getCCBrand() {
+    return this.brand;
+  }
+
+  fetchCustomerId(stripePublicKey) {
     var that = this;
     const url = Constants.GET_CUSTOMER;
     const tokenLocal = AuthStore.getAuthToken();
@@ -46,14 +53,15 @@ class CardStore extends EventEmitter {
 
     return this.handleGetCustomer(when(request({
       url: url,
-      method: 'GET',
+      method: 'POST',
       crossOrigin: true,
       type: 'json',
       headers: {
         authorization: "Bearer " + tokenLocal
       },
       data: {
-        email: email
+        email: email,
+        stripePublicKey: stripePublicKey
       }
     })));
   }
@@ -71,6 +79,9 @@ class CardStore extends EventEmitter {
       var customer = response.customer;
       if (customer) {
         that.customer = customer;
+        var showCardData = customer.sources.data[0]
+        that.last4 = showCardData.last4;
+        that.brand = showCardData.brand;
       }
       localStorage.setItem('stripeCustomerId', customerId)
       that.stripeError = false;
@@ -143,7 +154,7 @@ class CardStore extends EventEmitter {
 
     switch(action.type) {
       case "GET_CUSTOMER_ID": {
-        this.fetchCustomerId(action.email);
+        this.fetchCustomerId(action.stripePublicKey);
         break;
       }
     }
@@ -153,12 +164,7 @@ class CardStore extends EventEmitter {
         break;
       }
     }
-    // switch(action.type) {
-    //   case "GET_CUSTOMER": {
-    //     this.getCustomer(action.email, action.stripeToken);
-    //     break;
-    //   }
-    // }
+
 
 
 
@@ -168,9 +174,10 @@ class CardStore extends EventEmitter {
     //     break;
     //   }
     // }
+
     // switch(action.type) {
     //   case "DELETE_CARD": {
-    //     this.signin(action.email, action.password);
+    //     this.deleteCustomer(action.email, action.password);
     //     break;
     //   }
     // }

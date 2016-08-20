@@ -43,7 +43,7 @@ class EventStore extends EventEmitter {
   }
 
   handleActions(action) {
-    console.log("EventStore received an action", action);
+    // console.log("EventStore received an action", action);
 
     switch(action.type) {
       case "FETCH_EVENTS": {

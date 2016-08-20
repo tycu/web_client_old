@@ -72,7 +72,7 @@ class StateStore extends EventEmitter {
   }
 
   handleActions(action) {
-    console.log("StateStore received an action", action);
+    // console.log("StateStore received an action", action);
   }
 
 }

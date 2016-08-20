@@ -47,7 +47,7 @@ class DateStore extends EventEmitter {
   }
 
   handleActions(action) {
-    console.log("DateStore received an action", action);
+    // console.log("DateStore received an action", action);
   }
 }
 

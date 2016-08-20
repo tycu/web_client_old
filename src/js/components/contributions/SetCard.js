@@ -34,7 +34,6 @@ export default class SetCard extends React.Component {
   // get user token back
   // send this to api
 
-  // TODO remove test data
   state = {
     card: {
       number: '',
@@ -82,14 +81,14 @@ export default class SetCard extends React.Component {
   }
 
   componentDidMount() {
-    var publicKey;
+    var stripePublicKey;
     if (process.env.NODE_ENV === "production") {
-      publicKey = Constants.PUBLIC_KEY_LIVE;
+      stripePublicKey = Constants.PUBLIC_KEY_LIVE;
     } else {
-      publicKey = Constants.PUBLIC_KEY_TEST;
+      stripePublicKey = Constants.PUBLIC_KEY_TEST;
     }
-    Stripe.setPublishableKey(publicKey);
-    // CardActions.getCustomerId(this.state.email);
+    Stripe.setPublishableKey(stripePublicKey);
+    CardActions.getCustomerId(stripePublicKey);
   }
 
   cardInfoComplete() {
@@ -110,7 +109,6 @@ export default class SetCard extends React.Component {
     e.preventDefault();
     var that = this;
 
-    debugger;
     // validate that month/year is used, otherwise add error
     if (!that.cardInfoComplete()) {
       that.setState({error: "You must complete all Fields to save your Credit Card."});
@@ -175,6 +173,7 @@ export default class SetCard extends React.Component {
 
     return (
       <form role='form' style={style.container}>
+        <h3>Add/Update Card</h3>
         <Messages key={this.state.key + 1}  {...this.state} />
 
         <CardNumber value={this.state.number} onChange={this.onUpdate.bind(this, 'number')} style={style.number} />

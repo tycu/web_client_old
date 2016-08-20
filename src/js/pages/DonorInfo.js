@@ -150,7 +150,7 @@ export default class DonorInfo extends React.Component {
 
     // TODO make incomplete fields highlighted red on error
     return (
-      <div className="signin jumbotron center-block" style={style.container}>
+      <div className="jumbotron center-block" style={style.container}>
         <h2>Donor Info</h2>
         <form role="form">
           <Messages {...this.state} />
