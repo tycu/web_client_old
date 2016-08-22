@@ -20,7 +20,7 @@ export default class Contributions extends React.Component {
       <div className="jumbotron center-block">
         <h2>Contributions</h2>
         <MainCard />
-        <SetCard />
+        <Link to="/edit-card">Add or Edit Card</Link>
       </div>
     );
   }

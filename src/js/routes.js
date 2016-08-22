@@ -19,6 +19,7 @@ import ResetPasswordSubmit from './components/auth/ResetPasswordSubmit';
 import EmailVerification from "./components/auth/EmailVerification";
 import ChangePassword from './components/auth/ChangePassword';
 import NewPasswordFromReset from './components/auth/NewPasswordFromReset';
+import SetCard from './components/contributions/SetCard';
 import FourOhFour from './pages/static/FourOhFour';
 
 // IMPORT BOOTSTRAP to whole app
@@ -55,6 +56,7 @@ let routes = (
       <Route path="settings" component={Settings} onEnter={requireAuth}></Route>
       <Route path="change_password" component={ChangePassword} onEnter={requireAuth}></Route>
       <Route path="contributions" component={Contributions} onEnter={requireAuth}></Route>
+      <Route path="edit-card" component={SetCard} onEnter={requireAuth}></Route>
       <Route path="donor-info" component={DonorInfo} onEnter={requireAuth}></Route>
       <Route path="signup" component={SignUp} onEnter={invalidIfSignedIn}></Route>
       <Route path="signin" component={SignIn} onEnter={invalidIfSignedIn}></Route>

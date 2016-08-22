@@ -1,5 +1,6 @@
 import React from 'react';
 import * as CardActions from '../../actions/CardActions';
+import * as Constants from '../../constants/CardConstants';
 import CardStore from '../../stores/CardStore';
 
 export default class MainCard extends React.Component {
@@ -21,6 +22,15 @@ export default class MainCard extends React.Component {
 
   // NOTE will fire only once upon initial render
   componentWillMount() {
+    var stripePublicKey;
+    if (process.env.NODE_ENV === "production") {
+      stripePublicKey = Constants.PUBLIC_KEY_LIVE;
+    } else {
+      stripePublicKey = Constants.PUBLIC_KEY_TEST;
+    }
+    Stripe.setPublishableKey(stripePublicKey);
+    CardActions.getCustomerId(stripePublicKey);
+
     CardStore.on("change", () => {
       this.setState({
         last4: CardStore.getCCLast4(),
@@ -36,7 +46,6 @@ export default class MainCard extends React.Component {
   }
 
   componentDidMount() {
-
     this.setState({
       cardText: '<img class="alignnone" src="https://i0.wp.com/cdnjs.cloudflare.com/ajax/libs/galleriffic/2.0.1/css/loader.gif?resize=48%2C48" alt="" width="32" height="32"/>'
     });

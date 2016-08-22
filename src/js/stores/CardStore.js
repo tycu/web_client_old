@@ -31,7 +31,7 @@ class CardStore extends EventEmitter {
   }
 
   getCustomerId() {
-    return localStorage.stripeCustomerId;;
+    return localStorage.stripeCustomerId;
   }
 
   getCustomer() {

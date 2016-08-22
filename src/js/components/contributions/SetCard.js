@@ -1,5 +1,6 @@
 import React from 'react';
 import * as CardActions from '../../actions/CardActions';
+import { Link } from "react-router";
 import AuthStore from '../../stores/AuthStore';
 import CardStore from '../../stores/CardStore';
 import DateStore from "../../stores/DateStore";
@@ -47,8 +48,6 @@ export default class SetCard extends React.Component {
     error: '',
     message: '',
     email: '',
-    exp_month: '',
-    exp_year: '',
     customer: {},
     key: 1
   }
@@ -114,7 +113,8 @@ export default class SetCard extends React.Component {
       that.setState({error: "You must complete all Fields to save your Credit Card."});
       return false;
     } else {
-      that.setState({error: ""});
+      that.setState({
+        error: ''});
 
       Stripe.createToken(this.state.card, function (status, response) {
         console.log( status, response );
@@ -125,12 +125,13 @@ export default class SetCard extends React.Component {
   }
 
   onUpdate(key, val, fromCard) {
+    var that = this;
     if (fromCard) {
       let card = this.state.card;
       card[key] = val;
-      this.setState(card);
+      that.setState(card);
     } else {
-      this.setState({
+      that.setState({
         [key]: val
       });
     }
@@ -168,6 +169,10 @@ export default class SetCard extends React.Component {
         display: 'inline',
         float: 'left',
         marginRight: '20px'
+      },
+      linkback: {
+        clear: 'both',
+        marginTop: '20px'
       }
     }
 
@@ -176,14 +181,18 @@ export default class SetCard extends React.Component {
         <h3>Add/Update Card</h3>
         <Messages key={this.state.key + 1}  {...this.state} />
 
-        <CardNumber value={this.state.number} onChange={this.onUpdate.bind(this, 'number')} style={style.number} />
-        <MonthList value={this.state.exp_month} onChange={this.onUpdate.bind(this, 'exp_month')} defaultValue="1" style={style.exp_month} />
-        <YearList value={this.state.exp_year} onChange={this.onUpdate.bind(this, 'exp_year')} style={style.exp_year}/>
-        <Cvc value={this.state.cvc} onChange={this.onUpdate.bind(this, 'cvc')} style={style.cvc} />
+        <CardNumber value={this.state.card.number} onChange={this.onUpdate.bind(this, 'number')} style={style.number} />
+        <MonthList value={this.state.card.exp_month} onChange={this.onUpdate.bind(this, 'exp_month')} defaultValue="1" style={style.exp_month} />
+        <YearList value={this.state.card.exp_year} onChange={this.onUpdate.bind(this, 'exp_year')} style={style.exp_year}/>
+        <Cvc value={this.state.card.cvc} onChange={this.onUpdate.bind(this, 'cvc')} style={style.cvc} />
         <div className="form-group">
           <div className="form-group pull-left">
             <button type="submit" className="btn btn-primary" onClick={this.setCard.bind(this)}>Add Card</button>
           </div>
+        </div>
+
+        <div style={style.linkback}>
+          <Link to="/contributions">Back To Contributions</Link>
         </div>
       </form>
     )
