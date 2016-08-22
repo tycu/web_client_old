@@ -34,6 +34,7 @@ export default class Layout extends React.Component {
 
   componentWillMount() {
     var loggedIn = AuthStore.signedIn();
+    var isAdmin = AuthStore.isAdmin();
     var email =  AuthStore.currentUser();
 
     if(loggedIn){
@@ -47,9 +48,16 @@ export default class Layout extends React.Component {
         email: ''
       });
     }
+    if (isAdmin) {
+      this.setState({isAdmin: true})
+    } else {
+      this.setState({isAdmin: false})
+    }
+
     AuthStore.on("change", () => {
       this.setState({
         loggedIn: AuthStore.signedIn(),
+        isAdmin:  AuthStore.isAdmin(),
         email:    AuthStore.currentUser()
       });
     });
@@ -62,6 +70,7 @@ export default class Layout extends React.Component {
   getAuthState() {
     this.setState({
       loggedIn: AuthStore.signedIn(),
+      isAdmin:  AuthStore.isAdmin(),
       email:    AuthStore.currentUser()
     });
   }

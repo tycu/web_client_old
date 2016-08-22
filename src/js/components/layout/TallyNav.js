@@ -16,6 +16,7 @@ export default class TallyNav extends React.Component {
 
   render() {
     const loggedIn = this.props.loggedIn;
+    const isAdmin  = this.props.isAdmin;
 
     const loggedOutNavItems = [
       {link: 'signup', title: 'SIGNUP'},
@@ -28,6 +29,8 @@ export default class TallyNav extends React.Component {
       {link: 'faq', title: 'FAQ'}
     ];
 
+    var adminItem = {link: 'admin', title: 'Admin'};
+
     const dropdownItems = [
       {href: 'contributions', name: 'Contributions'},
       {href: 'settings', name: 'Settings'},
@@ -36,6 +39,9 @@ export default class TallyNav extends React.Component {
     ];
 
     var dropdown = <span></span>;
+    if (isAdmin) {
+      navitems.push(adminItem);
+    }
     if (!loggedIn) {
       _(loggedOutNavItems).forEach(function(LogOutNavItem) {
         navitems.push(LogOutNavItem);

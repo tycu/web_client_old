@@ -8,6 +8,12 @@ import About from "./pages/static/About";
 import Faq from "./pages/static/Faq";
 import Layout from "./pages/Layout";
 import Settings from "./pages/Settings";
+
+import Admin from './pages/Admin';
+import ManageEvents from './pages/admin/ManageEvents';
+import ManagePoliticians from './pages/admin/ManagePoliticians';
+import ManagePacs from './pages/admin/ManagePacs';
+import EditPac from './pages/admin/pacs/EditPac';
 import Contributions from "./pages/Contributions";
 import DonorInfo from "./pages/DonorInfo";
 import SignUp from "./components/auth/SignUp";
@@ -36,6 +42,15 @@ var requireAuth = function(nextState, replace) {
   }
 }
 
+var requireAdmin = function(nextState, replace) {
+  if (!AuthStore.signedIn() || !AuthStore.isAdmin()) {
+    replace({
+      pathname: '/signin',
+      state: { nextPathname: nextState.location.pathname }
+    })
+  }
+}
+
 var invalidIfSignedIn = function(nextState, replace) {
   if (AuthStore.signedIn()) {
     replace({
@@ -54,6 +69,10 @@ let routes = (
       <Route path="about" component={About}></Route>
       <Route path="faq" component={Faq}></Route>
       <Route path="settings" component={Settings} onEnter={requireAuth}></Route>
+
+      <Route path="admin" component={Admin} onEnter={requireAdmin}></Route>
+      <Route path="manage_pacs" component={ManagePacs} onEnter={requireAdmin}></Route>
+      <Route path="edit_pacs/:pacId" component={EditPac} onEnter={requireAdmin}></Route>
       <Route path="change_password" component={ChangePassword} onEnter={requireAuth}></Route>
       <Route path="contributions" component={Contributions} onEnter={requireAuth}></Route>
       <Route path="edit-card" component={SetCard} onEnter={requireAuth}></Route>

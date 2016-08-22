@@ -44,31 +44,31 @@ class DonorInfoStore extends EventEmitter {
   }
 
   getOccupation() {
-    return this.occupation
+    return this.occupation;
   };
 
   getEmployer() {
-    return this.employer
+    return this.employer;
   };
 
   getName() {
-    return this.name
+    return this.name;
   };
 
   getStreetAddress() {
-    return this.streetAddress
+    return this.streetAddress;
   };
 
   getCity() {
-    return this.city
+    return this.city;
   };
 
   getResidenceState() {
-    return this.residenceState
+    return this.residenceState;
   };
 
   getZip() {
-    return this.zip
+    return this.zip;
   };
 
   updateDonorInfo(userId, donorInfo) {

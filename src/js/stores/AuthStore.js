@@ -30,6 +30,10 @@ class AuthStore extends EventEmitter {
     // return !!localStorage.tallyEndureToken;
   }
 
+  isAdmin() {
+    return localStorage.fullPerms === 'true';
+  }
+
   getPassword() {
     return this.password;
   }
@@ -102,8 +106,11 @@ class AuthStore extends EventEmitter {
       var savedToken = localStorage.getItem('tallyToken');
       localStorage.setItem('tallyUserEmail', response.email);
       // localStorage.setItem('tallyEndureToken', response.refreshToken);
-      localStorage.setItem('tallyUserId', response.id)
+      localStorage.setItem('tallyUserId', response.id);
 
+      if (response.role === 'admin') {
+        localStorage.setItem('fullPerms', 'true');
+      }
       if (savedToken !== response.token) {
         browserHistory.push('/');
         localStorage.setItem('tallyToken', response.token);
