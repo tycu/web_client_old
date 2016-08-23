@@ -30,7 +30,7 @@ export default class Events extends React.Component {
   componentWillMount() {
     EventStore.once("change", () => {
       this.setState({
-        events: EventStore.getAll(),
+        events: EventStore.getEvents(),
       });
     });
   }
@@ -45,7 +45,7 @@ export default class Events extends React.Component {
 
   getEvents() {
     var offset = 0;
-    EventActions.getEvents(offset);
+    EventActions.fetchEvents(offset);
   }
 
   shouldComponentUpdate(nextProps, nextState) {

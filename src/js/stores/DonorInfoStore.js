@@ -36,7 +36,7 @@ class DonorInfoStore extends EventEmitter {
       that.emit('change');
     })
     .catch(function(response) {
-      if (response.status !== 200) {
+      if ((response.status !== 200) || response.status !== 304) {
         alert("There is an error loading donorInfo");
         console.log("Error loading events", response);
       }

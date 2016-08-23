@@ -128,7 +128,7 @@ class AuthStore extends EventEmitter {
         that.pwError = true;
 
         that.emit("change");
-      } else if (response.status !== 200) {
+      } else if ((response.status !== 200) || response.status !== 304) {
         var alertText = JSON.parse(response.response).message;
         console.log("Error logging in", alertText);
         that.message = '';
@@ -176,7 +176,7 @@ class AuthStore extends EventEmitter {
       return true;
     })
     .catch(function(response) {
-      if (response.status !== 200) {
+      if ((response.status !== 200) || response.status !== 304) {
         var alertText = JSON.parse(response.response).message;
         that.error = alertText
         console.log("Error signing out.", response);
@@ -208,7 +208,7 @@ class AuthStore extends EventEmitter {
       return true;
     })
     .catch(function(response) {
-      if (response.status !== 200) {
+      if ((response.status !== 200) || response.status !== 304) {
         var alertText = JSON.parse(response.response).message;
         that.emailError = true;
         that.error = alertText;
@@ -287,7 +287,7 @@ class AuthStore extends EventEmitter {
       return true;
     })
     .catch(function(response) {
-      if (response.status !== 200) {
+      if ((response.status !== 200) || response.status !== 304) {
         var alertText = JSON.parse(response.response).message;
 
         if (alertText === 'Invalid email or password') {

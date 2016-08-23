@@ -11,10 +11,15 @@ import Settings from "./pages/Settings";
 
 import Admin from './pages/Admin';
 import ManageEvents from './pages/admin/ManageEvents';
+import EditEvent from './pages/admin/events/EditEvent';
+import NewEvent from './pages/admin/events/NewEvent';
 import ManagePoliticians from './pages/admin/ManagePoliticians';
+import EditPolitician from './pages/admin/politicians/EditPolitician';
+import NewPolitician from './pages/admin/politicians/NewPolitician';
 import ManagePacs from './pages/admin/ManagePacs';
 import EditPac from './pages/admin/pacs/EditPac';
 import NewPac from './pages/admin/pacs/NewPac';
+
 import Contributions from "./pages/Contributions";
 import DonorInfo from "./pages/DonorInfo";
 import SignUp from "./components/auth/SignUp";
@@ -72,9 +77,19 @@ let routes = (
       <Route path="settings" component={Settings} onEnter={requireAuth}></Route>
 
       <Route path="admin" component={Admin} onEnter={requireAdmin}></Route>
+
       <Route path="manage_pacs" component={ManagePacs} onEnter={requireAdmin}></Route>
       <Route path="new_pac" component={NewPac} onEnter={requireAdmin}></Route>
       <Route path="edit_pacs/:pacId" component={EditPac} onEnter={requireAdmin}></Route>
+
+      <Route path="manage_events" component={ManageEvents} onEnter={requireAdmin}></Route>
+      <Route path="new_event" component={NewEvent} onEnter={requireAdmin}></Route>
+      <Route path="edit_events/:eventId" component={EditEvent} onEnter={requireAdmin}></Route>
+
+      <Route path="manage_politicians" component={ManagePoliticians} onEnter={requireAdmin}></Route>
+      <Route path="new_politician" component={NewPolitician} onEnter={requireAdmin}></Route>
+      <Route path="edit_politicians/:politicianId" component={EditPolitician} onEnter={requireAdmin}></Route>
+
       <Route path="change_password" component={ChangePassword} onEnter={requireAuth}></Route>
       <Route path="contributions" component={Contributions} onEnter={requireAuth}></Route>
       <Route path="edit-card" component={SetCard} onEnter={requireAuth}></Route>

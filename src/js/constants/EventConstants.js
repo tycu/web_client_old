@@ -1,4 +1,6 @@
 
 // NOTE will need to update for prod
-export const EVENTS_URL   = 'http://localhost:5000/api/v1/events';
-export const EVENT_URL  = 'http://localhost:5000/api/v1/events/';
+export const GET_EVENTS    = 'http://localhost:5000/api/v1/events';
+export const GET_EVENT     = 'http://localhost:5000/api/v1/events/';
+export const UPDATE_EVENT  = 'http://localhost:5000/api/v1/events/';
+export const CREATE_EVENT  = 'http://localhost:5000/api/v1/events';

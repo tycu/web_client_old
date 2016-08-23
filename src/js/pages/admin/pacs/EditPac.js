@@ -52,13 +52,13 @@ export default class EditPac extends React.Component {
     PacActions.fetchPac(pacId);
   }
 
-  onUpdate(key, event) {
+  onUpdate(key, e) {
     let pac = this.state.pac;
 
     if (key === 'color') {
-      pac[key] = event;
+      pac[key] = e;
     } else {
-      var val = event.target.value;
+      var val = e.target.value;
       pac[key] = val;
     }
     this.setState(pac);

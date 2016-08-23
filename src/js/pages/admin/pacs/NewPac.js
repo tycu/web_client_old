@@ -7,7 +7,7 @@ import * as PacActions from "../../../actions/PacActions";
 import Messages from '../../../components/layout/Messages';
 import ColorField from './ColorField';
 
-export default class EditPac extends React.Component {
+export default class NewPac extends React.Component {
 
   constructor() {
     super();
@@ -32,13 +32,13 @@ export default class EditPac extends React.Component {
     })
   }
 
-  onUpdate(key, event) {
+  onUpdate(key, e) {
     let pac = this.state.pac;
 
     if (key === 'color') {
-      pac[key] = event;
+      pac[key] = e;
     } else {
-      var val = event.target.value;
+      var val = e.target.value;
       pac[key] = val;
     }
     this.setState(pac);

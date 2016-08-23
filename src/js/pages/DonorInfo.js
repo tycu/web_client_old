@@ -8,6 +8,18 @@ import { collections } from 'lodash';
 
 export default class DonorInfo extends React.Component {
 
+  constructor() {
+    super();
+    this.getDonorInfo = this.getDonorInfo.bind(this);
+
+    this.state = {
+      hideEmployerOccupation: false,
+      employed: true,
+      message: '',
+      error: ''
+    };
+  }
+
   static propTypes = {
     hideEmployerOccupation: React.PropTypes.bool,
     employed:  React.PropTypes.bool,
@@ -15,19 +27,12 @@ export default class DonorInfo extends React.Component {
     error:  React.PropTypes.string,
   }
 
-  state = {
-    hideEmployerOccupation: false,
-    employed: true,
-    message: '',
-    error: ''
-  }
-
   checkEmployed() {
     this.state.occupation !== 'NA' || this.state.employer !== 'NA'
   }
 
   componentWillMount() {
-    DonorInfoStore.on("change", () => {
+    DonorInfoStore.once("change", () => {
       this.setState({
         occupation: DonorInfoStore.getOccupation(),
         employer: DonorInfoStore.getEmployer(),

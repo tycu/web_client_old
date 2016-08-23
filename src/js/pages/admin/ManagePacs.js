@@ -59,6 +59,7 @@ export default class ManagePacs extends React.Component {
 
     return (
       <div style={style.container} className="jumbotron center-block">
+        <Link to='/admin'>Back to Admin</Link>
         <h2>Manage Pacs</h2>
         <Link to='/new_pac'>New Pac</Link>
         <ul ref="ul">{PacComponents}</ul>

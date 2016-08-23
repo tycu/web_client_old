@@ -67,7 +67,7 @@ class StateStore extends EventEmitter {
     { value: 'WY', label: 'Wyoming' },
     ];
   }
-  getAll() {
+  getStateFields() {
     return this.states;
   }
 

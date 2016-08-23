@@ -9,7 +9,7 @@ export default class StatesField extends React.Component {
     this.getStates = this.getStates.bind(this);
 
     this.state = {
-      availableStates: StateStore.getAll(),
+      availableStates: StateStore.getStateFields(),
       value: this.props.value
     }
   }
@@ -20,7 +20,7 @@ export default class StatesField extends React.Component {
 
   getStates() {
     this.setState({
-      availableStates: StateStore.getAll(),
+      availableStates: StateStore.getStateFields(),
     });
   }
 

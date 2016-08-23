@@ -90,7 +90,7 @@ class CardStore extends EventEmitter {
       return true;
     })
     .catch(function(response) {
-      if (response.status !== 200) {
+      if ((response.status !== 200) || response.status !== 304) {
         var alertText = JSON.parse(response.response).message;
         that.stripeError = true;
         that.message = '';
@@ -136,7 +136,7 @@ class CardStore extends EventEmitter {
       return true;
     })
     .catch(function(response) {
-      if (response.status !== 200) {
+      if ((response.status !== 200) || response.status !== 304) {
         var alertText = JSON.parse(response.response).message;
         that.stripeError = true;
         that.message = '';

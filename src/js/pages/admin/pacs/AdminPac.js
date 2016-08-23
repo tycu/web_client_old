@@ -3,8 +3,6 @@ import { Link } from "react-router";
 import { collections } from 'lodash';
 
 export default class AdminPac extends React.Component {
-  displayName = 'Event'
-
   static propTypes = {
     id: React.PropTypes.number,
     name: React.PropTypes.string,
