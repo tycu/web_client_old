@@ -14,6 +14,7 @@ import ManageEvents from './pages/admin/ManageEvents';
 import ManagePoliticians from './pages/admin/ManagePoliticians';
 import ManagePacs from './pages/admin/ManagePacs';
 import EditPac from './pages/admin/pacs/EditPac';
+import NewPac from './pages/admin/pacs/NewPac';
 import Contributions from "./pages/Contributions";
 import DonorInfo from "./pages/DonorInfo";
 import SignUp from "./components/auth/SignUp";
@@ -72,6 +73,7 @@ let routes = (
 
       <Route path="admin" component={Admin} onEnter={requireAdmin}></Route>
       <Route path="manage_pacs" component={ManagePacs} onEnter={requireAdmin}></Route>
+      <Route path="new_pac" component={NewPac} onEnter={requireAdmin}></Route>
       <Route path="edit_pacs/:pacId" component={EditPac} onEnter={requireAdmin}></Route>
       <Route path="change_password" component={ChangePassword} onEnter={requireAuth}></Route>
       <Route path="contributions" component={Contributions} onEnter={requireAuth}></Route>

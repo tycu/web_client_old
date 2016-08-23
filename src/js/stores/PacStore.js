@@ -12,23 +12,16 @@ class PacStore extends EventEmitter {
   }
 
   getPacs() {
-    return this.pacs;
+    return this.pacs || [];
   }
 
-  getName() {
-    return this.name;
-  }
-
-  getDescription() {
-    return this.description;
-  }
-
-  getColor() {
-    return this.color;
-  }
-
-  getTwitterUsername() {
-    return this.twitterUsername;
+  getPac() {
+    return this.pac || {
+      name: '',
+      description: '',
+      color: '',
+      twitterUsername: ''
+    };
   }
 
   getMessage() {
@@ -55,12 +48,15 @@ class PacStore extends EventEmitter {
     }))
     .then(function(response) {
       that.pacs = response || [];
+      that.error = '';
       that.emit('change');
     })
     .catch(function(response) {
       if (response.status !== 200) {
+        that.error = 'There is an error loading pacs';
         alert("There is an error loading pacs");
         console.log("Error loading pacs", response);
+        that.emit('change');
       }
     });
   }
@@ -80,10 +76,12 @@ class PacStore extends EventEmitter {
       }
     }))
     .then(function(response) {
-      that.name = response.name || '';
-      that.description = response.description || '';
-      that.color = response.color || '';
-      that.twitterUsername = response.twitterUsername || '';
+      var pac = {}
+      pac['name'] = response.name || '';
+      pac['description'] = response.description || '';
+      pac['twitterUsername'] = response.twitterUsername || '';
+      pac['color'] = response.color || '';
+      that.pac = pac;
       that.emit('change');
     })
     .catch(function(response) {
@@ -112,10 +110,6 @@ class PacStore extends EventEmitter {
         }
       })
     );
-    this.name = pacInfo.name
-    this.description = pacInfo.description
-    this.color = pacInfo.color
-    this.twitterUsername = pacInfo.twitterUsername
     this.emit('change');
   }
 
@@ -133,22 +127,18 @@ class PacStore extends EventEmitter {
           authorization: "Bearer " + tokenLocal
         },
         data: {
-          pacInfo: pacInfo
+          pac: pacInfo
         }
       })
     );
-    this.name = pacInfo.name
-    this.description = pacInfo.description
-    this.color = pacInfo.color
-    this.twitterUsername = pacInfo.twitterUsername
     this.emit('change');
   }
 
 
   handleActions(action) {
     // console.log("PacStore received an action", action);
-    switch(action.type) {
 
+    switch(action.type) {
       case "FETCH_PACS": {
         this.fetchPacs();
         break;
@@ -165,7 +155,6 @@ class PacStore extends EventEmitter {
         this.createPac(action.pacInfo);
         break;
       }
-
     }
   }
 }

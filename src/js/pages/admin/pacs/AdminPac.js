@@ -29,7 +29,7 @@ export default class AdminPac extends React.Component {
 
     return (
       <li>
-        <span>{name} <Link to={linkTo}>Edit</Link></span>
+        <span>{id}. {name} <Link to={linkTo}>Edit</Link></span>
       </li>
     );
   }

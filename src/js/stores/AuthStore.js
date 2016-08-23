@@ -153,6 +153,7 @@ class AuthStore extends EventEmitter {
     localStorage.removeItem('tallyUserEmail');
     localStorage.removeItem('tallyUserId');
     localStorage.removeItem('stripeCustomerId');
+    localStorage.removeItem('fullPerms');
     browserHistory.push('/');
 
     return this.handleSignOut(when(request({

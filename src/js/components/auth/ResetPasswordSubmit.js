@@ -16,7 +16,7 @@ export default class ResetPasswordSubmit extends React.Component {
       <div style={styles}>
         <h2>Your password has been updated.</h2>
         <p>Thank you for helpnig us keep Tally.us secure.</p>
-        <p><a href='/'>Done</a></p>
+        <p><a href='/signin'>Sign In</a></p>
       </div>
     );
   }

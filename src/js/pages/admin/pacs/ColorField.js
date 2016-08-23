@@ -9,8 +9,14 @@ export default class ColorField extends React.Component {
 
     this.state = {
       colors: [],
+      color: '',
       value: this.props.value
     }
+  }
+
+  static propTypes = {
+    colors: React.PropTypes.array,
+    color:  React.PropTypes.string
   }
 
   handleColorChange(event) {
@@ -35,12 +41,12 @@ export default class ColorField extends React.Component {
 
   render () {
     const { colors } = this.state;
-    const { color }  = this.state || '';
+    const { color }  = this.state;
 
     const colorList = colors.map((color, i) => {
       return  <option
                 value={color.value}
-                key={i}>{color.value}
+                key={i}>{color.name}
               </option>
     });
 

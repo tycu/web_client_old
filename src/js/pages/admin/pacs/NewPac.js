@@ -8,48 +8,28 @@ import Messages from '../../../components/layout/Messages';
 import ColorField from './ColorField';
 
 export default class EditPac extends React.Component {
+
   constructor() {
     super();
-    this.getPac = this.getPac.bind(this);
 
     this.state = {
-      pac: PacStore.getPac(),
+      pac: {
+        name: '',
+        description: '',
+        color: '',
+        twitterUsername: ''
+      },
       key: 1
     };
   }
 
   static propTypes = {
     pac: React.PropTypes.shape({
-      id: React.PropTypes.number,
       name: React.PropTypes.string,
       description: React.PropTypes.string,
       color: React.PropTypes.string,
       twitterUsername: React.PropTypes.string
     })
-  }
-
-  componentWillMount() {
-    PacStore.once("change", () => {
-      this.setState({
-        pac: PacStore.getPac(),
-        message: PacStore.getMessage(),
-        error: PacStore.getError(),
-        key: Math.random()
-      })
-    });
-  }
-
-  componentWillUnmount() {
-    PacStore.removeListener("change", this.getPac);
-  }
-
-  componentDidMount() {
-    this.getPac();
-  }
-
-  getPac() {
-    const pacId = this.props.params.pacId;
-    PacActions.fetchPac(pacId);
   }
 
   onUpdate(key, event) {
@@ -63,6 +43,7 @@ export default class EditPac extends React.Component {
     }
     this.setState(pac);
   }
+
 
   validPac() {
     var that = this;
@@ -78,7 +59,7 @@ export default class EditPac extends React.Component {
     return shouldContinue;
   }
 
-  updatePac(e) {
+  createPac(e) {
     e.preventDefault();
     var that = this;
 
@@ -87,9 +68,8 @@ export default class EditPac extends React.Component {
       return false;
     } else {
       that.setState({error: ""});
-      const pacId = that.props.params.pacId;
 
-      PacActions.updatePac(pacId, {
+      PacActions.createPac({
         name: this.state.pac.name,
         description: this.state.pac.description,
         color: this.state.pac.color,
@@ -119,10 +99,14 @@ export default class EditPac extends React.Component {
       }
     }
 
+    const { name, description, color, twitterUsername } = this.props;
+
+    // const linkTo = "edit_pacs/" + id;
+
     return (
       <div style={style.container}>
         <form role="form">
-          <h2>Edit Pac</h2>
+          <h2>New Pac</h2>
           <Messages {...this.state} />
 
           <div className="form-group" style={style.name}>
@@ -142,10 +126,10 @@ export default class EditPac extends React.Component {
             <ColorField value={this.state.pac.color} onChange={this.onUpdate.bind(this, 'color')} />
           </div>
           <div className='form-group'>
-            <button type="submit" className="btn btn-primary" onClick={this.updatePac.bind(this)}>Save Pac</button>
+            <button type="submit" className="btn btn-primary" onClick={this.createPac.bind(this)}>Create Pac</button>
           </div>
         </form>
-        <Link to='/manage_pacs'>Back To Pacs</Link>
+        <Link to='manage_pacs'>Back To Pacs</Link>
       </div>
     );
   }
