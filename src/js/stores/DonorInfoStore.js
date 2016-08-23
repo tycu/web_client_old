@@ -10,6 +10,29 @@ class DonorInfoStore extends EventEmitter {
   constructor() {
     super()
   }
+  getDonorInfo() {
+    return this.donorInfo || {
+      occupation: '',
+      employer: '',
+      name: '',
+      streetAddress: '',
+      city: '',
+      residenceState: '',
+      zip: ''
+    };
+  }
+
+  getMessage() {
+    return this.message;
+  }
+
+  getError() {
+    return this.error;
+  }
+
+  checkEmployed() {
+    return this.donorInfo.occupation !== 'NA' || this.donorInfo.employer !== 'NA';
+  }
 
   loadDonorInfo(userId) {
     var that = this;
@@ -26,77 +49,59 @@ class DonorInfoStore extends EventEmitter {
       }
     }))
     .then(function(response) {
-      that.occupation = response.occupation || '';
-      that.employer = response.employer || '';
-      that.name = response.name || '';
-      that.streetAddress = response.streetAddress || '';
-      that.city = response.city || '';
-      that.residenceState = response.residenceState || '';
-      that.zip = response.zip || '';
+      var donorInfo = {};
+      donorInfo['occupation'] = response.occupation || '';
+      donorInfo['employer'] = response.employer || '';
+      donorInfo['name'] = response.name || '';
+      donorInfo['streetAddress'] = response.streetAddress || '';
+      donorInfo['city'] = response.city || '';
+      donorInfo['residenceState'] = response.residenceState || '';
+      donorInfo['zip'] = response.zip || '';
+      that.donorInfo = donorInfo;
+      that.error = '';
       that.emit('change');
     })
     .catch(function(response) {
       if ((response.status !== 200) || response.status !== 304) {
         alert("There is an error loading donorInfo");
+        that.message = 'Error Updating Donor Info';
         console.log("Error loading events", response);
       }
     });
   }
 
-  getOccupation() {
-    return this.occupation;
-  };
-
-  getEmployer() {
-    return this.employer;
-  };
-
-  getName() {
-    return this.name;
-  };
-
-  getStreetAddress() {
-    return this.streetAddress;
-  };
-
-  getCity() {
-    return this.city;
-  };
-
-  getResidenceState() {
-    return this.residenceState;
-  };
-
-  getZip() {
-    return this.zip;
-  };
-
   updateDonorInfo(userId, donorInfo) {
     var tokenLocal = AuthStore.getAuthToken();
     var url = Constants.USER_URL;
+    var that = this;
 
-    var res = Promise.resolve(
-      request({
-        url: url + userId,
-        type: 'json',
-        crossOrigin: true,
-        method: 'PUT',
-        headers: {
-          authorization: "Bearer " + tokenLocal
-        },
-        data: {
-          donorInfo: donorInfo
-        }
-      })
-    );
-    this.occupation = donorInfo.occupation
-    this.employer = donorInfo.employer
-    this.name = donorInfo.name
-    this.streetAddress = donorInfo.streetAddress
-    this.city = donorInfo.city
-    this.residenceState = donorInfo.residenceState
-    this.zip = donorInfo.zip
-    this.emit('change');
+    return when(request({
+      url: url + userId,
+      method: 'PUT',
+      crossOrigin: true,
+      type: 'json',
+      headers: {
+        authorization: "Bearer " + tokenLocal
+      },
+      data: {
+        donorInfo: donorInfo
+      }
+    }))
+    .then(function(response) {
+      that.message = 'Donor Info Successfully Updated';
+      that.error = '';
+      that.donorInfo = donorInfo;
+      that.emit('change');
+    })
+    .catch(function(response) {
+      if ((response.status !== 200) || response.status !== 304) {
+        that.message = '';
+        that.error = 'Error Updating Donor Info';
+        console.log("Error loading events", response);
+        that.donorInfo = donorInfo;
+        that.emit('change');
+      }
+    })
   }
 
   handleActions(action) {

@@ -76,7 +76,7 @@ class PacStore extends EventEmitter {
       }
     }))
     .then(function(response) {
-      var pac = {}
+      var pac = {};
       pac['name'] = response.name || '';
       pac['description'] = response.description || '';
       pac['twitterUsername'] = response.twitterUsername || '';

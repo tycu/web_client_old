@@ -13,6 +13,7 @@ export default class DonorInfo extends React.Component {
     this.getDonorInfo = this.getDonorInfo.bind(this);
 
     this.state = {
+      donorInfo: DonorInfoStore.getDonorInfo(),
       hideEmployerOccupation: false,
       employed: true,
       message: '',
@@ -21,27 +22,28 @@ export default class DonorInfo extends React.Component {
   }
 
   static propTypes = {
+    donorInfo: React.PropTypes.shape({
+      occupation: React.PropTypes.string,
+      employer: React.PropTypes.string,
+      name: React.PropTypes.string,
+      streetAddress: React.PropTypes.string,
+      city: React.PropTypes.string,
+      residenceState: React.PropTypes.string,
+      zip: React.PropTypes.string,
+    }),
     hideEmployerOccupation: React.PropTypes.bool,
     employed:  React.PropTypes.bool,
     message: React.PropTypes.string,
     error:  React.PropTypes.string,
   }
 
-  checkEmployed() {
-    this.state.occupation !== 'NA' || this.state.employer !== 'NA'
-  }
-
   componentWillMount() {
-    DonorInfoStore.once("change", () => {
+    DonorInfoStore.on("change", () => {
       this.setState({
-        occupation: DonorInfoStore.getOccupation(),
-        employer: DonorInfoStore.getEmployer(),
-        name: DonorInfoStore.getName(),
-        streetAddress: DonorInfoStore.getStreetAddress(),
-        city: DonorInfoStore.getCity(),
-        residenceState: DonorInfoStore.getResidenceState(),
-        zip: DonorInfoStore.getZip(),
-        employed: this.checkEmployed()
+        donorInfo: DonorInfoStore.getDonorInfo(),
+        message: DonorInfoStore.getMessage(),
+        error: DonorInfoStore.getError(),
+        employed: DonorInfoStore.checkEmployed()
       })
     });
   }
@@ -65,7 +67,7 @@ export default class DonorInfo extends React.Component {
     var shouldContinue = true;
 
     _(requiredFields).forEach(function(value) {
-      if (_.isEmpty(that.state[value])) {
+      if (_.isEmpty(that.state.donorInfo[value])) {
         shouldContinue = false
         return false;
       }
@@ -85,39 +87,41 @@ export default class DonorInfo extends React.Component {
       var userId = AuthStore.currentUserId();
 
       DonorInfoActions.updateDonorInfo(userId, {
-        occupation: this.state.occupation,
-        employer: this.state.employer,
-        name: this.state.name,
-        streetAddress: this.state.streetAddress,
-        city: this.state.city,
-        residenceState: this.state.residenceState,
-        zip: this.state.zip
+        occupation: this.state.donorInfo.occupation,
+        employer: this.state.donorInfo.employer,
+        name: this.state.donorInfo.name,
+        streetAddress: this.state.donorInfo.streetAddress,
+        city: this.state.donorInfo.city,
+        residenceState: this.state.donorInfo.residenceState,
+        zip: this.state.donorInfo.zip
       });
     }
   }
 
-  onUpdate(field, event) {
-    if (field === 'residenceState') {
-      this.setState({residenceState: event});
-    } else if (field === 'employed') {
-      if (event.target.checked === true) {
+  onUpdate(key, e) {
+    let donorInfo = this.state.donorInfo;
+
+    if (key === 'residenceState') {
+      donorInfo[key] = e;
+    } else if (key === 'employed') {
+      if (e.target.checked === true) {
+        donorInfo['occupation'] = 'NA';
+        donorInfo['employer'] = 'NA';
         this.setState({
-          occupation: 'NA',
-          employer: 'NA',
           employed: false
         })
       } else {
+        donorInfo['occupation'] = '';
+        donorInfo['employer'] = '';
         this.setState({
-          occupation: '',
-          employer: '',
           employed: true
         })
       }
     } else {
-      var object = {};
-      object[field] = event.target.value;
-      this.setState(object);
+      var val = e.target.value;
+      donorInfo[key] = val;
     }
+    this.setState(donorInfo);
   }
 
   render() {
@@ -161,25 +165,25 @@ export default class DonorInfo extends React.Component {
           <Messages {...this.state} />
           <div className="form-group">
             <label htmlFor="name">Name</label>
-            <input type="text" value={this.state.name} onChange={this.onUpdate.bind(this, 'name')} className="form-control" id="name" ref="name" placeholder="Full Name" />
+            <input type="text" value={this.state.donorInfo.name} onChange={this.onUpdate.bind(this, 'name')} className="form-control" id="name" ref="name" placeholder="Full Name" />
           </div>
           <div className="form-group">
             <label htmlFor="streetAddress">Street Address</label>
-            <input type="text" value={this.state.streetAddress} onChange={this.onUpdate.bind(this, 'streetAddress')} className="form-control" id="streetAddress" ref="streetAddress" placeholder="Street Address" />
+            <input type="text" value={this.state.donorInfo.streetAddress} onChange={this.onUpdate.bind(this, 'streetAddress')} className="form-control" id="streetAddress" ref="streetAddress" placeholder="Street Address" />
           </div>
           <div className="form-group" style={style.city}>
             <label htmlFor="city">City</label>
-            <input type="text" value={this.state.city} onChange={this.onUpdate.bind(this, 'city')} className="form-control" id="city" ref="city" placeholder="City" />
+            <input type="text" value={this.state.donorInfo.city} onChange={this.onUpdate.bind(this, 'city')} className="form-control" id="city" ref="city" placeholder="City" />
           </div>
 
           <div className="form-group" style={style.residenceState}>
             <label htmlFor="name">State</label>
-            <StatesField value={this.state.residenceState} onChange={this.onUpdate.bind(this, 'residenceState')} />
+            <StatesField value={this.state.donorInfo.residenceState} onChange={this.onUpdate.bind(this, 'residenceState')} />
           </div>
 
           <div className="form-group" style={style.zip}>
             <label htmlFor="name">Zip</label>
-            <input type="text" value={this.state.zip} onChange={this.onUpdate.bind(this, 'zip')} className="form-control" id="zip" ref="zip" placeholder="Zip" />
+            <input type="text" value={this.state.donorInfo.zip} onChange={this.onUpdate.bind(this, 'zip')} className="form-control" id="zip" ref="zip" placeholder="Zip" />
           </div>
           <br/>
 
@@ -190,11 +194,11 @@ export default class DonorInfo extends React.Component {
 
           <div className='form-group'>
             <label htmlFor="occupation">Occupation</label>
-            <input type="text" value={this.state.occupation} onChange={this.onUpdate.bind(this, 'occupation')} className="form-control" id="occupation" ref="occupation" placeholder="occupation" />
+            <input type="text" value={this.state.donorInfo.occupation} onChange={this.onUpdate.bind(this, 'occupation')} className="form-control" id="occupation" ref="occupation" placeholder="occupation" />
           </div>
           <div className='form-group'>
             <label htmlFor="employer">Employer</label>
-            <input type="text" value={this.state.employer} onChange={this.onUpdate.bind(this, 'employer')} className="form-control" id="employer" ref="employer" placeholder="employer" />
+            <input type="text" value={this.state.donorInfo.employer} onChange={this.onUpdate.bind(this, 'employer')} className="form-control" id="employer" ref="employer" placeholder="employer" />
           </div>
 
           <div className='form-group'>
