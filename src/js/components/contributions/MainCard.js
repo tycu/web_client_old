@@ -31,7 +31,7 @@ export default class MainCard extends React.Component {
     Stripe.setPublishableKey(stripePublicKey);
     CardActions.getCustomerId(stripePublicKey);
 
-    CardStore.on("change", () => {
+    CardStore.once("change", () => {
       this.setState({
         last4: CardStore.getCCLast4(),
         brand: CardStore.getCCBrand(),

@@ -16,7 +16,7 @@ export default class EmailVerification extends React.Component {
 
   componentWillMount() {
     AuthActions.verifyEmail();
-    AuthStore.on("change", () => {
+    AuthStore.once("change", () => {
       this.setState({
         error: AuthStore.getError(),
         emailError: AuthStore.getEmailError(),

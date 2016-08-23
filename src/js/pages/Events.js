@@ -9,6 +9,16 @@ import EventStore from '../stores/EventStore';
 export default class Events extends React.Component {
   displayName = 'Events'
 
+  constructor() {
+    super();
+    this.getEvents = this.getEvents.bind(this);
+
+    this.state = {
+      collapseIn: false,
+      events: []
+    };
+  }
+
   static propTypes = {
     eventStyle:  React.PropTypes.object,
     contStyle:   React.PropTypes.object,
@@ -17,13 +27,8 @@ export default class Events extends React.Component {
     events:      React.PropTypes.array
   }
 
-  state = {
-    collapseIn: false,
-    events: []
-  }
-
   componentWillMount() {
-    EventStore.on("change", () => {
+    EventStore.once("change", () => {
       this.setState({
         events: EventStore.getAll(),
       });
@@ -34,32 +39,18 @@ export default class Events extends React.Component {
     EventStore.removeListener("change", this.getEvents);
   }
 
-  getEvents() {
-    this.setState({
-      events: EventStore.getAll()
-    });
+  componentDidMount() {
+    this.getEvents();
   }
 
-  componentDidMount() {
-    // can add ajax polling to this method if desired
+  getEvents() {
     var offset = 0;
     EventActions.getEvents(offset);
   }
 
-
-  // renderChildren = () => {
-  //   const {children} = this.props;
-  //   return React.Children.map(children, (child) => {
-  //     return React.cloneElement(child
-  //       // , { navbarToggle: this.navbarToggle, collapseIn: this.state.collapseIn}
-  //     );
-  //   });
-  // }
-  // {this.renderChildren()}
-
-  // navbarToggle = () => {
-  //   this.setState({collapseIn: !this.state.collapseIn});
-  // }
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.state.events !== nextState.events
+  }
 
   getStyles = () => {
     return {

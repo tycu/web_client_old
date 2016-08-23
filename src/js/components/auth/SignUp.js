@@ -34,7 +34,7 @@ export default class SignUp extends React.Component {
   }
 
   componentWillMount() {
-    AuthStore.on("change", () => {
+    AuthStore.once("change", () => {
       this.setState({
         loggedIn:   AuthStore.signedIn(),
         email:      AuthStore.currentUser(),
@@ -106,7 +106,7 @@ export default class SignUp extends React.Component {
     const style = {
       container: {
         width: '550px',
-        height: '450px',
+        height: '500px',
         background: '#fff',
       },
       account: {

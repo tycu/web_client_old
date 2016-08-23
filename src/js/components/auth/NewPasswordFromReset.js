@@ -29,7 +29,7 @@ export default class NewPasswordFromReset extends React.Component {
   }
 
   componentWillMount() {
-    AuthStore.on("change", () => {
+    AuthStore.once("change", () => {
       this.setState({
         loggedIn:   AuthStore.signedIn(),
         password:   '',
