@@ -7,8 +7,6 @@ import EventStore from '../stores/EventStore';
 
 @Radium
 export default class Events extends React.Component {
-  displayName = 'Events'
-
   constructor() {
     super();
     this.getEvents = this.getEvents.bind(this);
@@ -27,30 +25,23 @@ export default class Events extends React.Component {
     events:      React.PropTypes.array
   }
 
-  componentWillMount() {
-    EventStore.on("change", () => {
-      this.setState({
-        events: EventStore.getEvents(),
-      });
-    });
+
+  componentDidMount() {
+    var offset = 0;
+    EventActions.fetchEvents(offset);
+    EventStore.addChangeListener(this.getEvents);
   }
 
   componentWillUnmount() {
-    EventStore.removeListener("change", this.getEvents);
-  }
-
-  componentDidMount() {
-    this.getEvents();
+    EventStore.removeChangeListener(this.getEvents);
   }
 
   getEvents() {
-    var offset = 0;
-    EventActions.fetchEvents(offset);
+    this.setState({
+      events: EventStore.getEvents()
+    })
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return this.state.events !== nextState.events
-  }
 
   getStyles = () => {
     return {

@@ -21,24 +21,19 @@ export default class ManagePoliticians extends React.Component {
     politicians: React.PropTypes.array
   }
 
-  componentWillMount() {
-    PoliticianStore.once("change", () => {
-      this.setState({
-        politicians: PoliticianStore.getPoliticians()
-      })
-    });
+  componentDidMount() {
+    PoliticianActions.fetchPoliticians();
+    PoliticianStore.addChangeListener(this.getPoliticians);
   }
 
   componentWillUnmount() {
-    PoliticianStore.removeListener("change", this.getPoliticians);
-  }
-
-  componentDidMount() {
-    this.getPoliticians();
+    PoliticianStore.removeChangeListener(this.getPoliticians);
   }
 
   getPoliticians() {
-    PoliticianActions.fetchPoliticians();
+    this.setState({
+      politicians: PoliticianStore.getPoliticians()
+    })
   }
 
 

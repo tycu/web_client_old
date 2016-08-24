@@ -71,6 +71,14 @@ class StateStore extends EventEmitter {
     return this.states;
   }
 
+  addChangeListener(callback) {
+    this.on('change', callback);
+  }
+
+  removeChangeListener(callback) {
+    this.removeListener('change', callback);
+  }
+
   handleActions(action) {
     // console.log("StateStore received an action", action);
   }

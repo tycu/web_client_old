@@ -26,28 +26,23 @@ export default class EditPolitician extends React.Component {
     })
   }
 
-  componentWillMount() {
-    PoliticianStore.once("change", () => {
-      this.setState({
-        politician: PoliticianStore.getPolitician(),
-        message: PoliticianStore.getMessage(),
-        error: PoliticianStore.getError(),
-        key: Math.random()
-      })
-    });
+  componentDidMount() {
+    const politicianId = this.props.params.politicianId;
+    PoliticianActions.fetchPolitician(politicianId);
+    PoliticianStore.addChangeListener(this.getPolitician);
   }
 
   componentWillUnmount() {
-    PoliticianStore.removeListener("change", this.getPolitician);
-  }
-
-  componentDidMount() {
-    this.getPolitician();
+    PoliticianStore.removeChangeListener(this.getPolitician);
   }
 
   getPolitician() {
-    const politicianId = this.props.params.politicianId;
-    PoliticianActions.fetchPolitician(politicianId);
+    this.setState({
+      politician: PoliticianStore.getPolitician(),
+      message: PoliticianStore.getMessage(),
+      error: PoliticianStore.getError(),
+      key: Math.random()
+    })
   }
 
   onUpdate(key, e) {

@@ -104,6 +104,14 @@ class DonorInfoStore extends EventEmitter {
     })
   }
 
+  addChangeListener(callback) {
+    this.on('change', callback);
+  }
+
+  removeChangeListener(callback) {
+    this.removeListener('change', callback);
+  }
+
   handleActions(action) {
     // console.log("DonorInfoStore received an action", action);
     switch(action.type) {

@@ -28,28 +28,23 @@ export default class EditPac extends React.Component {
     })
   }
 
-  componentWillMount() {
-    PacStore.once("change", () => {
-      this.setState({
-        pac: PacStore.getPac(),
-        message: PacStore.getMessage(),
-        error: PacStore.getError(),
-        key: Math.random()
-      })
-    });
+  componentDidMount() {
+    const pacId = this.props.params.pacId;
+    PacActions.fetchPac(pacId);
+    PacStore.addChangeListener(this.getPac);
   }
 
   componentWillUnmount() {
-    PacStore.removeListener("change", this.getPac);
-  }
-
-  componentDidMount() {
-    this.getPac();
+    PacStore.removeChangeListener(this.getPac);
   }
 
   getPac() {
-    const pacId = this.props.params.pacId;
-    PacActions.fetchPac(pacId);
+    this.setState({
+      pac: PacStore.getPac(),
+      message: PacStore.getMessage(),
+      error: PacStore.getError(),
+      key: Math.random()
+    })
   }
 
   onUpdate(key, e) {

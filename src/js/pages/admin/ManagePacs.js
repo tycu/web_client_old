@@ -21,24 +21,20 @@ export default class ManagePacs extends React.Component {
     pacs: React.PropTypes.array
   }
 
-  componentWillMount() {
-    PacStore.once("change", () => {
-      this.setState({
-        pacs: PacStore.getPacs()
-      })
-    });
+  componentDidMount() {
+    PacActions.fetchPacs();
+    PacStore.addChangeListener(this.getPacs);
   }
 
   componentWillUnmount() {
-    PacStore.removeListener("change", this.getPacs);
+    PacStore.removeChangeListener(this.getPacs);
   }
 
-  componentDidMount() {
-    this.getPacs();
-  }
 
   getPacs() {
-    PacActions.fetchPacs();
+    this.setState({
+      pacs: PacStore.getPacs()
+    })
   }
 
 

@@ -21,24 +21,19 @@ export default class ManageEvents extends React.Component {
     events: React.PropTypes.array
   }
 
-  componentWillMount() {
-    EventStore.on("change", () => {
-      this.setState({
-        events: EventStore.getEvents()
-      })
-    });
+  componentDidMount() {
+    EventActions.fetchEvents(0);
+    EventStore.addChangeListener(this.getEvents);
   }
 
   componentWillUnmount() {
-    EventStore.removeListener("change", this.getEvents);
-  }
-
-  componentDidMount() {
-    this.getEvents();
+    EventStore.removeChangeListener(this.getEvents);
   }
 
   getEvents() {
-    EventActions.fetchEvents(0);
+    this.setState({
+      events: EventStore.getEvents()
+    })
   }
 
 

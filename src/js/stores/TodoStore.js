@@ -36,6 +36,14 @@ class TodoStore extends EventEmitter {
     return this.todos;
   }
 
+  addChangeListener(callback) {
+    this.on('change', callback);
+  }
+
+  removeChangeListener(callback) {
+    this.removeListener('change', callback);
+  }
+
   handleActions(action) {
     // console.log("TodoStore received an action", action);
 

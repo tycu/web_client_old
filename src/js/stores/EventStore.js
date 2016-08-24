@@ -65,7 +65,6 @@ class EventStore extends EventEmitter {
     })
     .catch(function(response) {
       if ((response.status !== 200) || response.status !== 304) {
-        alert("There is an error loading eventObjs");
         console.log("Error loading eventObjs", response);
       }
     })
@@ -98,8 +97,9 @@ class EventStore extends EventEmitter {
     })
     .catch(function(response) {
       if (((response.status !== 200) || response.status !== 304) || response.status !== 304) {
-        alert("There is an error loading event");
-        console.log("Error loading event", response);
+        alert("There is an error loading eventObj");
+        console.log("Error loading eventObj", response);
+        // that.emit('change');
       }
     });
   }
@@ -177,6 +177,13 @@ class EventStore extends EventEmitter {
     this.emit('change');
   }
 
+  addChangeListener(callback) {
+    this.on('change', callback);
+  }
+
+  removeChangeListener(callback) {
+    this.removeListener('change', callback);
+  }
 
   handleActions(action) {
     // console.log("EventStore received an action", action);

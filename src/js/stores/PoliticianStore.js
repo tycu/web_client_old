@@ -133,6 +133,14 @@ class PoliticianStore extends EventEmitter {
     this.emit('change');
   }
 
+  addChangeListener(callback) {
+    this.on('change', callback);
+  }
+
+  removeChangeListener(callback) {
+    this.removeListener('change', callback);
+  }
+
   handleActions(action) {
     // console.log("PoliticianStore received an action", action);
 

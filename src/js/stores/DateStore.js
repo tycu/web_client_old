@@ -46,6 +46,14 @@ class DateStore extends EventEmitter {
     return this.years;
   }
 
+  addChangeListener(callback) {
+    this.on('change', callback);
+  }
+
+  removeChangeListener(callback) {
+    this.removeListener('change', callback);
+  }
+
   handleActions(action) {
     // console.log("DateStore received an action", action);
   }

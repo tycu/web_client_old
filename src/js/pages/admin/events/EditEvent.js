@@ -27,28 +27,20 @@ export default class EditEvent extends React.Component {
     })
   }
 
-  componentWillMount() {
-    EventStore.once("change", () => {
-      this.setState({
-        event: EventStore.getEvent(),
-        message: EventStore.getMessage(),
-        error: EventStore.getError(),
-        key: Math.random()
-      })
-    });
+  componentDidMount() {
+    const eventId = this.props.params.eventId;
+    EventActions.fetchEvent(eventId);
+    EventStore.addChangeListener(this.getEvent);
   }
 
   componentWillUnmount() {
-    EventStore.removeListener("change", this.getEvent);
-  }
-
-  componentDidMount() {
-    this.getEvent();
+    EventStore.removeChangeListener(this.getEvent);
   }
 
   getEvent() {
-    const eventId = this.props.params.eventId;
-    EventActions.fetchEvent(eventId);
+    this.setState({
+      event: EventStore.getEvent()
+    })
   }
 
   onUpdate(key, e) {

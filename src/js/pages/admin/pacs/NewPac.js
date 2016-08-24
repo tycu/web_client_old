@@ -101,8 +101,6 @@ export default class NewPac extends React.Component {
 
     const { name, description, color, twitterUsername } = this.props;
 
-    // const linkTo = "edit_pacs/" + id;
-
     return (
       <div style={style.container}>
         <form role="form">
