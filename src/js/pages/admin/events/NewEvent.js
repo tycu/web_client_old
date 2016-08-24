@@ -4,6 +4,7 @@ import { collections } from 'lodash';
 import EventStore from "../../../stores/EventStore";
 import * as EventActions from "../../../actions/EventActions";
 import Messages from '../../../components/layout/Messages';
+import PoliticiansField from './PoliticiansField';
 
 export default class NewEvent extends React.Component {
 
@@ -103,7 +104,9 @@ export default class NewEvent extends React.Component {
 
       },
       summary: {
-
+        textArea: {
+          height: '300px'
+        }
       }
     }
 
@@ -122,8 +125,8 @@ export default class NewEvent extends React.Component {
             <input type="text" value={this.state.event.imageAttribution} onChange={this.onUpdate.bind(this, 'imageAttribution')} className="form-control" id="imageAttribution" ref="imageAttribution" placeholder="imageAttribution" />
           </div>
           <div className="form-group" style={style.politicianId}>
-            <label htmlFor="politicianId">politicianId</label>
-            <input type="text" value={this.state.event.politicianId} onChange={this.onUpdate.bind(this, 'politicianId')} className="form-control" id="politicianId" ref="politicianId" placeholder="politicianId" />
+            <label htmlFor="politicianId">Politician</label>
+            <PoliticiansField value={this.state.event.politicianId} onChange={this.onUpdate.bind(this, 'politicianId')} />
           </div>
           <div className="form-group" style={style.headline}>
             <label htmlFor="headline">headline</label>
@@ -131,7 +134,7 @@ export default class NewEvent extends React.Component {
           </div>
           <div className="form-group" style={style.summary}>
             <label htmlFor="summary">summary</label>
-            <input type="text" value={this.state.event.summary} onChange={this.onUpdate.bind(this, 'summary')} className="form-control" id="summary" ref="summary" placeholder="summary" />
+            <textarea style={style.summary.textArea} type="text" value={this.state.event.summary} onChange={this.onUpdate.bind(this, 'summary')} className="form-control" id="summary" ref="summary" placeholder="summary" />
           </div>
 
           <div className='form-group'>

@@ -29,7 +29,7 @@ export default class EditEvent extends React.Component {
 
   componentDidMount() {
     const eventId = this.props.params.eventId;
-    EventActions.fetchEvent(eventId);
+    EventActions.fetchAdminEvent(eventId);
     EventStore.addChangeListener(this.getEvent);
   }
 

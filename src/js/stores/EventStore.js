@@ -19,6 +19,7 @@ class EventStore extends EventEmitter {
   getEvent() {
     return this.eventObj || {
       isPinned: '',
+      isPublished: '',
       imageUrl: '',
       imageAttribution: '',
       politicianId: '',
@@ -36,7 +37,11 @@ class EventStore extends EventEmitter {
   };
 
   getPinnedId() {
-    return this.pinnedId
+    return this.pinnedId;
+  }
+
+  getPublishChangeId() {
+    return this.publishChangeId || '';
   }
 
   fetchEvents(offset) {
@@ -50,6 +55,41 @@ class EventStore extends EventEmitter {
       type: 'json',
       data: {
         offset: offset
+      }
+    }))
+    .then(function(response) {
+      that.eventObjs = response;
+      _(response).forEach(function(eventObj) {
+        if (eventObj.isPinned === true) {
+          that.pinnedId = eventObj.id;
+          that.emit('change');
+          return false;
+        }
+      });
+      that.emit('change');
+    })
+    .catch(function(response) {
+      if ((response.status !== 200) || response.status !== 304) {
+        console.log("Error loading eventObjs", response);
+      }
+    })
+  }
+
+  fetchAdminEvents(offset) {
+    var that = this;
+    var url = Constants.GET_ADMIN_EVENTS;
+    var tokenLocal = AuthStore.getAuthToken();
+
+    return when(request({
+      url: url,
+      method: 'GET',
+      crossOrigin: true,
+      type: 'json',
+      data: {
+        offset: offset
+      },
+      headers: {
+        authorization: "Bearer " + tokenLocal
       }
     }))
     .then(function(response) {
@@ -87,6 +127,42 @@ class EventStore extends EventEmitter {
     .then(function(response) {
       var eventObj = {}
       eventObj['isPinned'] = response.isPinned || '';
+      eventObj['isPublished'] = response.isPublished || '';
+      eventObj['imageUrl'] = response.imageUrl || '';
+      eventObj['imageAttribution'] = response.imageAttribution || '';
+      eventObj['politicianId'] = response.politicianId || '';
+      eventObj['headline'] = response.headline || '';
+      eventObj['summary'] = response.summary || '';
+      that.eventObj = eventObj;
+      that.emit('change');
+    })
+    .catch(function(response) {
+      if (((response.status !== 200) || response.status !== 304) || response.status !== 304) {
+        alert("There is an error loading eventObj");
+        console.log("Error loading eventObj", response);
+        // that.emit('change');
+      }
+    });
+  }
+
+  fetchAdminEvent(eventId) {
+    var that = this;
+    var url = Constants.GET_ADMIN_EVENT;
+    var tokenLocal = AuthStore.getAuthToken();
+
+    return when(request({
+      url: url + eventId,
+      method: 'GET',
+      crossOrigin: true,
+      type: 'json',
+      headers: {
+        authorization: "Bearer " + tokenLocal
+      }
+    }))
+    .then(function(response) {
+      var eventObj = {}
+      eventObj['isPinned'] = response.isPinned || '';
+      eventObj['isPublished'] = response.isPublished || '';
       eventObj['imageUrl'] = response.imageUrl || '';
       eventObj['imageAttribution'] = response.imageAttribution || '';
       eventObj['politicianId'] = response.politicianId || '';
@@ -155,6 +231,37 @@ class EventStore extends EventEmitter {
     });
   }
 
+  togglePublish(eventId) {
+    var tokenLocal = AuthStore.getAuthToken();
+    var url = Constants.TOGGLE_PUBLISH_EVENT;
+    var that = this;
+
+    return when(request({
+      url: url + eventId + '/toggle_publish',
+      method: 'PUT',
+      crossOrigin: true,
+      type: 'json',
+      headers: {
+        authorization: "Bearer " + tokenLocal
+      },
+      data: {
+        eventId: eventId
+      }
+    }))
+    .then(function(response) {
+      var publishText = response.isPublished ? 'Published' : 'Un-Published';
+      that.isPublished = response.isPublished;
+      that.publishChangeId = eventId;
+      that.message = 'Event ' + publishText + ' Successfully';
+      that.error = '';
+      that.emit('change');
+    })
+    .catch(function(response) {
+      if (response.status !== 200 || response.status !== 304) {
+        that.error = "Error changing publish status of Event";
+      }
+    });
+  }
 
   createEvent(eventInfo) {
     var tokenLocal = AuthStore.getAuthToken();
@@ -195,11 +302,24 @@ class EventStore extends EventEmitter {
       }
     }
     switch(action.type) {
+      case "FETCH_ADMIN_EVENTS": {
+        this.fetchAdminEvents(action.offset);
+        break;
+      }
+    }
+    switch(action.type) {
       case "FETCH_EVENT": {
         this.fetchEvent(action.eventId);
         break;
       }
     }
+    switch(action.type) {
+      case "FETCH_ADMIN_EVENT": {
+        this.fetchAdminEvent(action.eventId);
+        break;
+      }
+    }
+
     switch(action.type) {
       case "UPDATE_EVENT": {
         this.updateEvent(action.eventId, action.eventInfo);
@@ -209,6 +329,12 @@ class EventStore extends EventEmitter {
     switch(action.type) {
       case "PIN_EVENT": {
         this.pinEvent(action.eventId);
+        break;
+      }
+    }
+    switch(action.type) {
+      case "TOGGLE_PUBLISH_EVENT": {
+        this.togglePublish(action.eventId);
         break;
       }
     }

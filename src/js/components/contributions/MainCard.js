@@ -24,18 +24,7 @@ export default class MainCard extends React.Component {
     last4: React.PropTypes.string
   }
 
-  componentDidMount() {
-    var stripePublicKey;
-    if (process.env.NODE_ENV === "production") {
-      stripePublicKey = Constants.PUBLIC_KEY_LIVE;
-    } else {
-      stripePublicKey = Constants.PUBLIC_KEY_TEST;
-    }
-    Stripe.setPublishableKey(stripePublicKey);
-    CardActions.getCustomerId(stripePublicKey);
-
-    CardStore.addChangeListener(this.getCard);
-
+  componentWillMount() {
     // TODO is this right? throwing setState error
     this.setState({
       cardText: '<img class="alignnone" src="https://i0.wp.com/cdnjs.cloudflare.com/ajax/libs/galleriffic/2.0.1/css/loader.gif?resize=48%2C48" alt="" width="32" height="32"/>'
@@ -46,6 +35,18 @@ export default class MainCard extends React.Component {
         cardText: ' Card not set.'
       });
     }, 4000);
+  }
+
+  componentDidMount() {
+    var stripePublicKey;
+    if (process.env.NODE_ENV === "production") {
+      stripePublicKey = Constants.PUBLIC_KEY_LIVE;
+    } else {
+      stripePublicKey = Constants.PUBLIC_KEY_TEST;
+    }
+    Stripe.setPublishableKey(stripePublicKey);
+    CardActions.getCustomerId(stripePublicKey);
+    CardStore.addChangeListener(this.getCard);
   }
 
   getCard() {

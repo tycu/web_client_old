@@ -10,32 +10,55 @@ export default class ManageEvents extends React.Component {
   constructor() {
     super();
     this.getEvents = this.getEvents.bind(this);
+    this.getPinned = this.getPinned.bind(this);
+    this.getPublishChangeId = this.getPublishChangeId.bind(this);
 
     this.state = {
       events: EventStore.getEvents(),
+      pinnedId: EventStore.getPinnedId(),
+      publishChangeId: EventStore.getPublishChangeId(),
       key: 1
     };
   }
 
   static propTypes = {
-    events: React.PropTypes.array
+    events: React.PropTypes.array,
+    pinnedId: React.PropTypes.number,
+    publishChangeId: React.PropTypes.number
   }
 
   componentDidMount() {
-    EventActions.fetchEvents(0);
+    EventActions.fetchAdminEvents(0);
     EventStore.addChangeListener(this.getEvents);
+    EventStore.addChangeListener(this.getPinned);
+    EventStore.addChangeListener(this.getPublishChangeId);
   }
 
   componentWillUnmount() {
     EventStore.removeChangeListener(this.getEvents);
+    EventStore.removeChangeListener(this.getPinned);
+    EventStore.removeChangeListener(this.getPublishChangeId);
+  }
+
+  getPinned() {
+    this.setState({
+      pinnedId: EventStore.getPinnedId()
+    })
   }
 
   getEvents() {
     this.setState({
-      events: EventStore.getEvents()
+      events: EventStore.getEvents(),
+      message:  EventStore.getMessage(),
+      error:    EventStore.getError()
     })
   }
 
+  getPublishChangeId() {
+    this.setState({
+      publishChangeId: EventStore.getPublishChangeId()
+    })
+  }
 
   render() {
     const style = {
@@ -50,10 +73,9 @@ export default class ManageEvents extends React.Component {
         marginTop: '20px'
       }
     }
-
     const { events } = this.state;
     const EventComponents = events.map((event) => {
-      return <AdminEvent key={event.id} {...event}/>;
+      return <AdminEvent key={event.id} {...event} isPinned={this.state.pinnedId === event.id} publishChangeId={this.state.publishChangeId}/>;
     });
 
     return (
