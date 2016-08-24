@@ -5,7 +5,6 @@ Link = Radium(Link);
 
 @Radium
 export default class NavItem extends React.Component {
-  displayName = 'Navigation bar item'
 
   static propTypes = {
     link:  React.PropTypes.string,

@@ -5,7 +5,6 @@ Link = Radium(Link);
 
 @Radium
 export default class DropdownMenu extends React.Component {
-  displayName = 'Dropdown menu items'
 
   static propTypes = {
     menuItems: React.PropTypes.array,

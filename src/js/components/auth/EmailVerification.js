@@ -4,9 +4,20 @@ import Messages from '../layout/Messages';
 import AuthStore from '../../stores/AuthStore';
 
 export default class EmailVerification extends React.Component {
+  constructor() {
+    super();
+    this.getAuth = this.getAuth.bind(this);
+
+    this.state = {
+      error: AuthStore.getError(),
+      emailError: false,
+      key: 1
+    };
+  }
 
   static propTypes = {
-    error:  React.PropTypes.string
+    error:  React.PropTypes.string,
+    emailError: React.PropTypes.bool
   }
 
   state = {
@@ -14,14 +25,20 @@ export default class EmailVerification extends React.Component {
     emailError: false
   }
 
-  componentWillMount() {
+  componentDidMount() {
     AuthActions.verifyEmail();
-    AuthStore.on("change", () => {
-      this.setState({
-        error: AuthStore.getError(),
-        emailError: AuthStore.getEmailError(),
-        key: Math.random()
-      });
+    AuthStore.addChangeListener(this.getAuth);
+  }
+
+  componentWillUnmount() {
+    EventStore.removeChangeListener(this.getAuth);
+  }
+
+  getAuth() {
+    this.setState({
+      error: AuthStore.getError(),
+      emailError: AuthStore.getEmailError(),
+      key: Math.random()
     });
   }
 

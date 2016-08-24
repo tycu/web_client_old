@@ -1,10 +1,8 @@
-
 import React from 'react';
 import Radium from 'radium';
 
 @Radium
 export default class NavbarItems extends React.Component {
-  displayName = 'Navigation list of items'
 
   static propTypes = {
     style: React.PropTypes.object,

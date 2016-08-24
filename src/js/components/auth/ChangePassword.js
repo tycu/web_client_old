@@ -10,15 +10,19 @@ import PasswordMatch from './PasswordMatch';
 import Messages from '../layout/Messages';
 
 export default class ChangePassword extends React.Component {
-
+  constructor() {
+    super();
+    this.getAuthState = this.getAuthState.bind(this);
+  }
   static propTypes = {
+    loggedIn: React.PropTypes.bool,
     oldPassword: React.PropTypes.string,
     password:  React.PropTypes.string,
-    message:  React.PropTypes.string,
     passwordMatch: React.PropTypes.string,
+    message:  React.PropTypes.string,
     error:  React.PropTypes.string,
-    oldPasswordError: React.PropTypes.bool,
-    pwError: React.PropTypes.bool
+    pwError: React.PropTypes.bool,
+    oldPasswordError: React.PropTypes.bool
   }
 
   state = {
@@ -28,38 +32,30 @@ export default class ChangePassword extends React.Component {
     passwordMatch: '',
     message: '',
     error: '',
-    key: 1,
+    pwError: false,
     oldPasswordError: false,
-    pwError: false
+    key: 1
   }
 
-  componentWillMount() {
-    AuthStore.on("change", () => {
-      this.setState({
-        loggedIn:   AuthStore.signedIn(),
-        message:    AuthStore.getMessage(),
-        error:      AuthStore.getError(),
-        oldPassword: '',
-        password:   AuthStore.getPassword(),
-        passwordMatch: '',
-        oldPasswordError: AuthStore.oldPasswordError(),
-        pwError:    AuthStore.getPasswordError(),
-        key:        Math.random()
-      });
-    });
+  componentDidMount() {
+    AuthStore.addChangeListener(this.getAuthState);
   }
 
   componentWillUnmount() {
-    AuthStore.removeListener("change", this.getAuthState);
+    AuthStore.removeChangeListener(this.getAuthState);
   }
 
   getAuthState() {
     this.setState({
-      loggedIn: AuthStore.signedIn(),
-      email:    AuthStore.currentUser(),
-      message:  AuthStore.getMessage(),
-      error:    AuthStore.getError(),
-      password: AuthStore.getPassword()
+      loggedIn:   AuthStore.signedIn(),
+      message:    AuthStore.getMessage(),
+      error:      AuthStore.getError(),
+      oldPassword: '',
+      password:   AuthStore.getPassword(),
+      passwordMatch: '',
+      oldPasswordError: AuthStore.oldPasswordError(),
+      pwError:    AuthStore.getPasswordError(),
+      key:        Math.random()
     });
   }
 

@@ -2,7 +2,6 @@ import React from 'react';
 import { m } from "../../utils/StyleUtil";
 
 export default class PasswordMatch extends React.Component {
-
   static propTypes = {
     passwordMatch:  React.PropTypes.string,
     pwError: React.PropTypes.bool

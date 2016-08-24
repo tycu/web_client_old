@@ -9,8 +9,24 @@ import Password from './Password';
 import Messages from '../layout/Messages';
 
 export default class SignIn extends React.Component {
+  constructor() {
+    super();
+    this.getAuthState = this.getAuthState.bind(this);
+
+    this.state = {
+      loggedIn: false,
+      email: '',
+      password: '',
+      message: '',
+      error: '',
+      emailError: false,
+      pwError: false,
+      key: 1
+    };
+  }
 
   static propTypes = {
+    loggedIn: React.PropTypes.bool,
     email:  React.PropTypes.string,
     password:  React.PropTypes.string,
     message:  React.PropTypes.string,
@@ -19,43 +35,24 @@ export default class SignIn extends React.Component {
     pwError: React.PropTypes.bool
   }
 
-  state = {
-    loggedIn: false,
-    email: '',
-    password: '',
-    message: '',
-    error: '',
-    key: 1,
-    emailError: false,
-    pwError: false
-  }
-
-  componentWillMount() {
-    AuthStore.on("change", () => {
-      this.setState({
-        loggedIn:   AuthStore.signedIn(),
-        email:      AuthStore.currentUser(),
-        message:    AuthStore.getMessage(),
-        error:      AuthStore.getError(),
-        password:   AuthStore.getPassword(),
-        emailError: AuthStore.getEmailError(),
-        pwError:    AuthStore.getPasswordError(),
-        key:        Math.random()
-      });
-    });
+  componentDidMount() {
+    AuthStore.addChangeListener(this.getAuthState);
   }
 
   componentWillUnmount() {
-    AuthStore.removeListener("change", this.getAuthState);
+    AuthStore.removeChangeListener(this.getAuthState);
   }
 
   getAuthState() {
     this.setState({
-      loggedIn: AuthStore.signedIn(),
-      email:    AuthStore.currentUser(),
-      message:  AuthStore.getMessage(),
-      error:    AuthStore.getError(),
-      password: AuthStore.getPassword()
+      loggedIn:   AuthStore.signedIn(),
+      email:      AuthStore.currentUser(),
+      password:   AuthStore.getPassword(),
+      message:    AuthStore.getMessage(),
+      error:      AuthStore.getError(),
+      emailError: AuthStore.getEmailError(),
+      pwError:    AuthStore.getPasswordError(),
+      key:        Math.random()
     });
   }
 

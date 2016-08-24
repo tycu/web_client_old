@@ -6,8 +6,6 @@ import NavbarItems from '../nav/NavbarItems';
 import NavbarDropdown from '../nav/NavbarDropdown';
 import DropdownMenu from '../nav/DropdownMenu';
 import { collections } from 'lodash';
-// import { IndexLink, Link } from "react-router";
-// import Logout from '../Logout';
 
 export default class TallyNav extends React.Component {
   constructor(props) {

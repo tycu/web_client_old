@@ -37,28 +37,24 @@ export default class DonorInfo extends React.Component {
     error:  React.PropTypes.string,
   }
 
-  componentWillMount() {
-    DonorInfoStore.on("change", () => {
-      this.setState({
-        donorInfo: DonorInfoStore.getDonorInfo(),
-        message: DonorInfoStore.getMessage(),
-        error: DonorInfoStore.getError(),
-        employed: DonorInfoStore.checkEmployed()
-      })
-    });
+
+  componentDidMount() {
+    var userId = AuthStore.currentUserId();
+    DonorInfoActions.fetchDonorInfo(userId);
+    DonorInfoStore.addChangeListener(this.getDonorInfo);
   }
 
   componentWillUnmount() {
-    DonorInfoStore.removeListener("change", this.getDonorInfo);
-  }
-
-  componentDidMount() {
-    this.getDonorInfo();
+    DonorInfoStore.removeChangeListener(this.getDonorInfo);
   }
 
   getDonorInfo() {
-    var userId = AuthStore.currentUserId();
-    DonorInfoActions.fetchDonorInfo(userId);
+    this.setState({
+      donorInfo: DonorInfoStore.getDonorInfo(),
+      message: DonorInfoStore.getMessage(),
+      error: DonorInfoStore.getError(),
+      employed: DonorInfoStore.checkEmployed()
+    })
   }
 
   donorInfoComplete() {

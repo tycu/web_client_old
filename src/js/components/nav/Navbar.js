@@ -3,8 +3,6 @@ import Radium from 'radium';
 
 @Radium
 export default class Navbar extends React.Component {
-  displayName = 'Navigation bar'
-
   static propTypes = {
     navStyle:  React.PropTypes.object,
     contStyle: React.PropTypes.object,

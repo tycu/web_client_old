@@ -1,5 +1,4 @@
 import React from "react";
-import ChangePassword from '../components/auth/ChangePassword';
 import { Link } from "react-router";
 export default class Settings extends React.Component {
 

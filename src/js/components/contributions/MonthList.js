@@ -3,7 +3,6 @@ import React, { Component, PropTypes } from 'react'
 import DateStore from "../../stores/DateStore";
 
 export default class MonthList extends React.Component {
-
   state = {
     availableMonths: DateStore.getMonths(),
     value: this.props.value
@@ -26,6 +25,7 @@ export default class MonthList extends React.Component {
       }
     });
   }
+
 
   render () {
     const { availableMonths } = this.state;

@@ -4,6 +4,18 @@ import * as Constants from '../../constants/CardConstants';
 import CardStore from '../../stores/CardStore';
 
 export default class MainCard extends React.Component {
+  constructor() {
+    super();
+    this.getCard = this.getCard.bind(this);
+
+    this.state = {
+      hasCard: true,
+      cardText: '',
+      brand: '',
+      last4: '',
+      key: 1
+    };
+  }
 
   static propTypes = {
     hasCard: React.PropTypes.bool,
@@ -12,16 +24,7 @@ export default class MainCard extends React.Component {
     last4: React.PropTypes.string
   }
 
-  state = {
-    hasCard: true,
-    cardText: '',
-    brand: '',
-    last4: '',
-    key: 1
-  }
-
-  // NOTE will fire only once upon initial render
-  componentWillMount() {
+  componentDidMount() {
     var stripePublicKey;
     if (process.env.NODE_ENV === "production") {
       stripePublicKey = Constants.PUBLIC_KEY_LIVE;
@@ -31,21 +34,9 @@ export default class MainCard extends React.Component {
     Stripe.setPublishableKey(stripePublicKey);
     CardActions.getCustomerId(stripePublicKey);
 
-    CardStore.on("change", () => {
-      this.setState({
-        last4: CardStore.getCCLast4(),
-        brand: CardStore.getCCBrand(),
-        hasCard: CardStore.getCustomerId(),
-        key:   Math.random()
-      });
-    });
-  }
+    CardStore.addChangeListener(this.getCard);
 
-  componentWillUnmount() {
-    CardStore.removeListener('change', this.getCustomerId);
-  }
-
-  componentDidMount() {
+    // TODO is this right? throwing setState error
     this.setState({
       cardText: '<img class="alignnone" src="https://i0.wp.com/cdnjs.cloudflare.com/ajax/libs/galleriffic/2.0.1/css/loader.gif?resize=48%2C48" alt="" width="32" height="32"/>'
     });
@@ -55,6 +46,19 @@ export default class MainCard extends React.Component {
         cardText: ' Card not set.'
       });
     }, 4000);
+  }
+
+  getCard() {
+    this.setState({
+      last4: CardStore.getCCLast4(),
+      brand: CardStore.getCCBrand(),
+      hasCard: CardStore.getCustomerId(),
+      key:   Math.random()
+    });
+  }
+
+  componentWillUnmount() {
+    CardStore.removeChangeListener(this.getCard);
   }
 
   deleteCard(e) {

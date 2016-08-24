@@ -15,17 +15,12 @@ export default class Todos extends React.Component {
     };
   }
 
-  // NOTE will fire only once upon initial render
-  componentWillMount() {
-    TodoStore.on("change", () => {
-      this.setState({
-        todos: TodoStore.getAll()
-      });
-    });
+  componentDidMount() {
+    TodoStore.addChangeListener(this.getTodos);
   }
 
   componentWillUnmount() {
-    TodoStore.removeListener("change", this.getTodos);
+    TodoStore.removeChangeListener(this.getTodos);
   }
 
   getTodos() {

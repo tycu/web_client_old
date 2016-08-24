@@ -13,6 +13,27 @@ import Cvc from "./Cvc";
 import Messages from '../layout/Messages';
 
 export default class SetCard extends React.Component {
+  constructor() {
+    super();
+    this.getCard = this.getCard.bind(this);
+
+    this.state = {
+      card: {
+        number: '',
+        cvc: '',
+        exp_month: '',
+        exp_year: ''
+        // address_zip
+      },
+      customerId: '',
+      stripeError: false,
+      error: '',
+      message: '',
+      email: '',
+      customer: {},
+      key: 1
+    };
+  }
 
   static propTypes = {
     card: React.PropTypes.shape({
@@ -31,54 +52,6 @@ export default class SetCard extends React.Component {
     customer:  React.PropTypes.object
   }
 
-  // should send card info to stripe
-  // get user token back
-  // send this to api
-
-  state = {
-    card: {
-      number: '',
-      cvc: '',
-      exp_month: '',
-      exp_year: ''
-      // address_zip
-    },
-    customerId: '',
-    stripeError: false,
-    error: '',
-    message: '',
-    email: '',
-    customer: {},
-    key: 1
-  }
-
-  // NOTE will fire only once upon initial render
-  componentWillMount() {
-    CardStore.on("change", () => {
-      this.setState({
-        email:       AuthStore.currentUser(),
-        customerId:  CardStore.getCustomerId(),
-        message:     CardStore.getMessage(),
-        exp_month:   this.state.exp_month,
-        exp_year:    this.state.exp_year,
-        error:       CardStore.getError(),
-        customer:    CardStore.getCustomer(),
-        stripeError: CardStore.getStripeError(),
-        key:         Math.random()
-      });
-    });
-  }
-
-  componentWillUnmount() {
-    CardStore.removeListener('change', this.getCustomerId);
-  }
-
-  getCustomerId() {
-    this.setState({
-      customerId: CardActions.fetchCustomerId(AuthStore.currentUser())
-    });
-  }
-
   componentDidMount() {
     var stripePublicKey;
     if (process.env.NODE_ENV === "production") {
@@ -88,6 +61,26 @@ export default class SetCard extends React.Component {
     }
     Stripe.setPublishableKey(stripePublicKey);
     CardActions.getCustomerId(stripePublicKey);
+    CardActions.getCustomerId(AuthStore.currentUser());
+    CardStore.addChangeListener(this.getCard);
+
+  }
+  componentWillUnmount() {
+    CardStore.removeChangeListener(this.getCard);
+  }
+
+  getCard() {
+    this.setState({
+      email:       AuthStore.currentUser(),
+      customerId:  CardStore.getCustomerId(),
+      message:     CardStore.getMessage(),
+      exp_month:   this.state.exp_month,
+      exp_year:    this.state.exp_year,
+      error:       CardStore.getError(),
+      customer:    CardStore.getCustomer(),
+      stripeError: CardStore.getStripeError(),
+      key:         Math.random()
+    });
   }
 
   cardInfoComplete() {

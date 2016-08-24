@@ -9,6 +9,20 @@ import PasswordMatch from './PasswordMatch';
 import Messages from '../layout/Messages';
 
 export default class NewPasswordFromReset extends React.Component {
+  constructor() {
+    super();
+    this.getAuthState = this.getAuthState.bind(this);
+
+    this.state = {
+      loggedIn: false,
+      passwordMatch: '',
+      password: '',
+      message: '',
+      error: '',
+      pwError: false,
+      key: 1
+    };
+  }
 
   static propTypes = {
     password:  React.PropTypes.string,
@@ -18,39 +32,23 @@ export default class NewPasswordFromReset extends React.Component {
     pwError: React.PropTypes.bool
   }
 
-  state = {
-    loggedIn: false,
-    passwordMatch: '',
-    password: '',
-    message: '',
-    error: '',
-    key: 1,
-    pwError: false
-  }
-
-  componentWillMount() {
-    AuthStore.on("change", () => {
-      this.setState({
-        loggedIn:   AuthStore.signedIn(),
-        password:   '',
-        passwordMatch: '',
-        message:    AuthStore.getMessage(),
-        error:      AuthStore.getError(),
-        pwError:    AuthStore.getPasswordError(),
-        key:        Math.random()
-      });
-    });
+  componentDidMount() {
+    AuthStore.addChangeListener(this.getAuthState);
   }
 
   componentWillUnmount() {
-    AuthStore.removeListener("change", this.getAuthState);
+    AuthStore.removeChangeListener(this.getAuthState);
   }
 
   getAuthState() {
     this.setState({
-      loggedIn: AuthStore.signedIn(),
-      message:  AuthStore.getMessage(),
-      error:    AuthStore.getError()
+      loggedIn:   AuthStore.signedIn(),
+      password:   '',
+      passwordMatch: '',
+      message:    AuthStore.getMessage(),
+      error:      AuthStore.getError(),
+      pwError:    AuthStore.getPasswordError(),
+      key:        Math.random()
     });
   }
 

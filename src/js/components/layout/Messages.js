@@ -3,7 +3,6 @@ import { Link } from "react-router";
 import AuthStore from '../../stores/AuthStore';
 
 export default class Messages extends React.Component {
-
   static propTypes = {
     error:  React.PropTypes.string,
     message:  React.PropTypes.string

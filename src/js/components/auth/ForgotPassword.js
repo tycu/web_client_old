@@ -7,31 +7,41 @@ import Messages from '../layout/Messages';
 import Email from './Email';
 
 export default class ForgotPassword extends React.Component {
+  constructor() {
+    super();
+    this.forgotPassword = this.forgotPassword.bind(this);
+
+    this.state = {
+      email: '',
+      error: '',
+      emailError: false,
+      key: 1
+    };
+  }
+
   static propTypes = {
     email:  React.PropTypes.string,
     emailError: React.PropTypes.bool,
     error:  React.PropTypes.string
   }
 
-  state = {
-    email: '',
-    error: '',
-    emailError: false,
-    key: 1
+  componentDidMount() {
+    AuthStore.addChangeListener(this.forgotPassword);
   }
 
-  componentWillMount() {
-    AuthStore.on("change", () => {
-      this.setState({
-        loggedIn:   AuthStore.signedIn(),
-        email:      AuthStore.currentUser(),
-        message:    AuthStore.getMessage(),
-        error:      AuthStore.getError(),
-        key:        Math.random()
-      });
+  componentWillUnmount() {
+    AuthStore.removeChangeListener(this.forgotPassword);
+  }
+
+  forgotPassword() {
+    this.setState({
+      loggedIn:   AuthStore.signedIn(),
+      email:      AuthStore.currentUser(),
+      message:    AuthStore.getMessage(),
+      error:      AuthStore.getError(),
+      key:        Math.random()
     });
   }
-
 
   resetPassword(e) {
     e.preventDefault();

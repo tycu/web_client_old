@@ -2,7 +2,6 @@ import ReactDOM from 'react-dom'
 import React, { Component, PropTypes } from 'react'
 
 export default class CardNumber extends React.Component {
-
   state = {
     value: this.props.value,
     number: ''

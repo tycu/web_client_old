@@ -5,8 +5,6 @@ Link = Radium(Link);
 
 @Radium
 export default class NavbarHeader extends React.Component {
-  displayName = 'Navigation bar header'
-
   static propTypes = {
     href:        React.PropTypes.string,
     name:        React.PropTypes.string,

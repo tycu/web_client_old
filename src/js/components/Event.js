@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Radium from 'radium';
 
@@ -8,7 +7,6 @@ var marked = require('marked');
 
 @Radium
 export default class Event extends React.Component {
-  displayName = 'Event'
 
   static propTypes = {
     id: React.PropTypes.number,

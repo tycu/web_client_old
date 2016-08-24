@@ -3,7 +3,6 @@ import React, { Component, PropTypes } from 'react'
 import DateStore from "../../stores/DateStore";
 
 export default class YearList extends React.Component {
-
   state = {
     availableYears: DateStore.getYears(),
     value: this.props.value

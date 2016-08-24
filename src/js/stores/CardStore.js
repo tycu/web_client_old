@@ -157,7 +157,7 @@ class CardStore extends EventEmitter {
   }
 
   handleActions(action) {
-    console.log("CardStore received an action", action);
+    // console.log("CardStore received an action", action);
 
     switch(action.type) {
       case "GET_CUSTOMER_ID": {
@@ -171,8 +171,6 @@ class CardStore extends EventEmitter {
         break;
       }
     }
-
-
 
 
     // switch(action.type) {
