@@ -22,6 +22,13 @@ export function updateEvent(eventId, eventInfo) {
   })
 }
 
+export function pinEvent(eventId) {
+  dispatcher.dispatch({
+    type: "PIN_EVENT",
+    eventId
+  })
+}
+
 export function createEvent(eventInfo) {
   dispatcher.dispatch({
     type: "CREATE_EVENT",

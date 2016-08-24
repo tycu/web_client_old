@@ -22,7 +22,7 @@ export default class ManageEvents extends React.Component {
   }
 
   componentWillMount() {
-    EventStore.once("change", () => {
+    EventStore.on("change", () => {
       this.setState({
         events: EventStore.getEvents()
       })
@@ -47,8 +47,12 @@ export default class ManageEvents extends React.Component {
       container: {
         padding: '20px',
         background: 'white',
-        width: '490px',
+        width: '800px',
         borderRadius: '2px'
+      },
+      ul: {
+        listStyle: 'none',
+        marginTop: '20px'
       }
     }
 
@@ -61,8 +65,10 @@ export default class ManageEvents extends React.Component {
       <div style={style.container} className="jumbotron center-block">
         <Link to='/admin'>Back to Admin</Link>
         <h2>Manage Events</h2>
+        <Messages {...this.state} />
         <Link to='/new_event'>New Event</Link>
-        <ul ref="ul">{EventComponents}</ul>
+        <br/>
+        <ul style={style.ul} ref="ul">{EventComponents}</ul>
       </div>
     );
   }

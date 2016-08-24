@@ -54,7 +54,7 @@ export default class SetCard extends React.Component {
 
   // NOTE will fire only once upon initial render
   componentWillMount() {
-    CardStore.once("change", () => {
+    CardStore.on("change", () => {
       this.setState({
         email:       AuthStore.currentUser(),
         customerId:  CardStore.getCustomerId(),

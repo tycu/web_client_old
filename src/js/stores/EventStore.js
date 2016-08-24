@@ -1,6 +1,7 @@
 import { EventEmitter } from "events";
 import dispatcher from "../dispatcher";
 import AuthStore from './AuthStore';
+import { collections } from 'lodash';
 import request from 'reqwest';
 import when from 'when';
 import * as Constants from '../constants/EventConstants';
@@ -12,11 +13,11 @@ class EventStore extends EventEmitter {
   }
 
   getEvents() {
-    return this.events || [];
+    return this.eventObjs || [];
   }
 
   getEvent() {
-    return this.event || {
+    return this.eventObj || {
       isPinned: '',
       imageUrl: '',
       imageAttribution: '',
@@ -34,6 +35,10 @@ class EventStore extends EventEmitter {
     return this.error;
   };
 
+  getPinnedId() {
+    return this.pinnedId
+  }
+
   fetchEvents(offset) {
     var that = this;
     var url = Constants.GET_EVENTS;
@@ -48,13 +53,20 @@ class EventStore extends EventEmitter {
       }
     }))
     .then(function(response) {
-      that.events = response
+      that.eventObjs = response;
+      _(response).forEach(function(eventObj) {
+        if (eventObj.isPinned === true) {
+          that.pinnedId = eventObj.id;
+          that.emit('change');
+          return false;
+        }
+      });
       that.emit('change');
     })
     .catch(function(response) {
       if ((response.status !== 200) || response.status !== 304) {
-        alert("There is an error loading events");
-        console.log("Error loading events", response);
+        alert("There is an error loading eventObjs");
+        console.log("Error loading eventObjs", response);
       }
     })
   }
@@ -74,14 +86,14 @@ class EventStore extends EventEmitter {
       }
     }))
     .then(function(response) {
-      var event = {}
-      event['isPinned'] = response.isPinned || '';
-      event['imageUrl'] = response.imageUrl || '';
-      event['imageAttribution'] = response.imageAttribution || '';
-      event['politicianId'] = response.politicianId || '';
-      event['headline'] = response.headline || '';
-      event['summary'] = response.summary || '';
-      that.event = event;
+      var eventObj = {}
+      eventObj['isPinned'] = response.isPinned || '';
+      eventObj['imageUrl'] = response.imageUrl || '';
+      eventObj['imageAttribution'] = response.imageAttribution || '';
+      eventObj['politicianId'] = response.politicianId || '';
+      eventObj['headline'] = response.headline || '';
+      eventObj['summary'] = response.summary || '';
+      that.eventObj = eventObj;
       that.emit('change');
     })
     .catch(function(response) {
@@ -112,6 +124,37 @@ class EventStore extends EventEmitter {
     );
     this.emit('change');
   }
+
+  pinEvent(eventId) {
+    var tokenLocal = AuthStore.getAuthToken();
+    var url = Constants.PIN_EVENT;
+    var that = this;
+
+    return when(request({
+      url: url + eventId + '/pin',
+      method: 'PUT',
+      crossOrigin: true,
+      type: 'json',
+      headers: {
+        authorization: "Bearer " + tokenLocal
+      },
+      data: {
+        eventId: eventId
+      }
+    }))
+    .then(function(response) {
+      that.message = "Event Pinned Successfully";
+      that.error = '';
+      that.pinnedId = eventId;
+      that.emit('change');
+    })
+    .catch(function(response) {
+      if (response.status !== 200 || response.status !== 304) {
+        that.error = "Error Pinning Event";
+      }
+    });
+  }
+
 
   createEvent(eventInfo) {
     var tokenLocal = AuthStore.getAuthToken();
@@ -150,9 +193,15 @@ class EventStore extends EventEmitter {
         break;
       }
     }
-    switch(action.type)     {
+    switch(action.type) {
       case "UPDATE_EVENT": {
         this.updateEvent(action.eventId, action.eventInfo);
+        break;
+      }
+    }
+    switch(action.type) {
+      case "PIN_EVENT": {
+        this.pinEvent(action.eventId);
         break;
       }
     }

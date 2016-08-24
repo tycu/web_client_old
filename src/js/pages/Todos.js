@@ -17,7 +17,7 @@ export default class Todos extends React.Component {
 
   // NOTE will fire only once upon initial render
   componentWillMount() {
-    TodoStore.once("change", () => {
+    TodoStore.on("change", () => {
       this.setState({
         todos: TodoStore.getAll()
       });

@@ -76,9 +76,15 @@ export default class Event extends React.Component {
     const { id, isPinned, imageUrl, imageAttribution, politicianId, headline, summary, createdAt, updatedAt, style, itemStyle, link } = this.props;
 
     // <a ref="link" href={link} style={[defStyle.link, itemStyle && itemStyle]}>{headline}</a>
+    var sanitizedSummary = '';
+    if (summary) {
+      sanitizedSummary     = marked(summary);
+    }
+    var sanitizedAttribution = '';
+    if (imageAttribution) {
+      marked(imageAttribution);
+    }
 
-    var sanitizedSummary     = marked(summary);
-    var sanitizedAttribution = marked(imageAttribution);
 
     return (
       <li>

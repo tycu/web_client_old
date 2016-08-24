@@ -31,7 +31,7 @@ export default class SignIn extends React.Component {
   }
 
   componentWillMount() {
-    AuthStore.once("change", () => {
+    AuthStore.on("change", () => {
       this.setState({
         loggedIn:   AuthStore.signedIn(),
         email:      AuthStore.currentUser(),

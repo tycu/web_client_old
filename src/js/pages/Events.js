@@ -28,7 +28,7 @@ export default class Events extends React.Component {
   }
 
   componentWillMount() {
-    EventStore.once("change", () => {
+    EventStore.on("change", () => {
       this.setState({
         events: EventStore.getEvents(),
       });

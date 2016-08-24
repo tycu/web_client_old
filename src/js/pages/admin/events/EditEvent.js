@@ -54,19 +54,14 @@ export default class EditEvent extends React.Component {
   onUpdate(key, e) {
     let event = this.state.event;
 
-    // TODO Fix
-    if (key === 'color') {
-      event[key] = e;
-    } else {
-      var val = e.target.value;
-      event[key] = val;
-    }
+    var val = e.target.value;
+    event[key] = val;
     this.setState(event);
   }
 
   validEvent() {
     var that = this;
-    var requiredFields = ['isPinned', 'imageUrl', 'imageAttribution', 'politicianId', 'headline', 'summary'];
+    var requiredFields = ['imageUrl', 'imageAttribution', 'politicianId', 'headline', 'summary'];
     var shouldContinue = true;
 
     _(requiredFields).forEach(function(value) {
@@ -90,7 +85,6 @@ export default class EditEvent extends React.Component {
       const eventId = that.props.params.eventId;
 
       EventActions.updateEvent(eventId, {
-        isPinned: this.state.event.isPinned,
         imageUrl: this.state.event.imageUrl,
         imageAttribution: this.state.event.imageAttribution,
         politicianId: this.state.event.politicianId,
@@ -107,10 +101,6 @@ export default class EditEvent extends React.Component {
       container: {
 
       },
-
-      isPinned: {
-
-      },
       imageUrl: {
 
       },
@@ -124,7 +114,9 @@ export default class EditEvent extends React.Component {
 
       },
       summary: {
-
+        textArea: {
+          height: '300px'
+        }
       }
     }
 
@@ -134,11 +126,6 @@ export default class EditEvent extends React.Component {
           <h2>Edit Event</h2>
           <Messages {...this.state} />
 
-
-          <div className="form-group" style={style.isPinned}>
-            <label htmlFor="isPinned">isPinned</label>
-            <input type="text" value={this.state.event.isPinned} onChange={this.onUpdate.bind(this, 'isPinned')} className="form-control" id="isPinned" ref="isPinned" placeholder="isPinned" />
-          </div>
           <div className="form-group" style={style.imageUrl}>
             <label htmlFor="imageUrl">imageUrl</label>
             <input type="text" value={this.state.event.imageUrl} onChange={this.onUpdate.bind(this, 'imageUrl')} className="form-control" id="imageUrl" ref="imageUrl" placeholder="imageUrl" />
@@ -157,7 +144,7 @@ export default class EditEvent extends React.Component {
           </div>
           <div className="form-group" style={style.summary}>
             <label htmlFor="summary">summary</label>
-            <input type="text" value={this.state.event.summary} onChange={this.onUpdate.bind(this, 'summary')} className="form-control" id="summary" ref="summary" placeholder="summary" />
+            <textarea style={style.summary.textArea} type="text" value={this.state.event.summary} onChange={this.onUpdate.bind(this, 'summary')} className="form-control" id="summary" ref="summary" placeholder="summary" />
           </div>
 
 

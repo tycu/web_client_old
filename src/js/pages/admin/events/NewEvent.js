@@ -12,7 +12,7 @@ export default class NewEvent extends React.Component {
 
     this.state = {
       event: {
-        isPinned: '',
+        isPinned: false,
         imageUrl: '',
         imageAttribution: '',
         politicianId: '',
@@ -50,7 +50,7 @@ export default class NewEvent extends React.Component {
 
   validEvent() {
     var that = this;
-    var requiredFields = ['isPinned', 'imageUrl', 'imageAttribution', 'politicianId', 'headline', 'summary'];
+    var requiredFields = ['imageUrl', 'imageAttribution', 'politicianId', 'headline', 'summary'];
     var shouldContinue = true;
 
     _(requiredFields).forEach(function(value) {
@@ -73,7 +73,7 @@ export default class NewEvent extends React.Component {
       that.setState({error: ""});
 
       EventActions.createEvent({
-        isPinned: this.state.event.isPinned,
+        isPinned: false,
         imageUrl: this.state.event.imageUrl,
         imageAttribution: this.state.event.imageAttribution,
         politicianId: this.state.event.politicianId,
@@ -88,10 +88,6 @@ export default class NewEvent extends React.Component {
   render() {
     const style = {
       container: {
-
-      },
-
-      isPinned: {
 
       },
       imageUrl: {
@@ -117,10 +113,6 @@ export default class NewEvent extends React.Component {
           <h2>New Event</h2>
           <Messages {...this.state} />
 
-          <div className="form-group" style={style.isPinned}>
-            <label htmlFor="isPinned">isPinned</label>
-            <input type="text" value={this.state.event.isPinned} onChange={this.onUpdate.bind(this, 'isPinned')} className="form-control" id="isPinned" ref="isPinned" placeholder="isPinned" />
-          </div>
           <div className="form-group" style={style.imageUrl}>
             <label htmlFor="imageUrl">imageUrl</label>
             <input type="text" value={this.state.event.imageUrl} onChange={this.onUpdate.bind(this, 'imageUrl')} className="form-control" id="imageUrl" ref="imageUrl" placeholder="imageUrl" />

@@ -54,7 +54,7 @@ export default class Layout extends React.Component {
       this.setState({isAdmin: false})
     }
 
-    AuthStore.once("change", () => {
+    AuthStore.on("change", () => {
       this.setState({
         loggedIn: AuthStore.signedIn(),
         isAdmin:  AuthStore.isAdmin(),
