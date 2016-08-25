@@ -2,9 +2,13 @@ import React from 'react';
 import { Link, browserHistory } from "react-router";
 import { collections } from 'lodash';
 import EventStore from "../../../stores/EventStore";
+import ImageStore from "../../../stores/ImageStore";
+import AuthStore from "../../../stores/AuthStore";
 import * as EventActions from "../../../actions/EventActions";
+import * as ImageActions from "../../../actions/ImageActions";
 import Messages from '../../../components/layout/Messages';
 import PoliticiansField from './PoliticiansField';
+import * as Constants from '../../../constants/ImageConstants';
 
 export default class NewEvent extends React.Component {
 
@@ -48,7 +52,6 @@ export default class NewEvent extends React.Component {
     this.setState(event);
   }
 
-
   validEvent() {
     var that = this;
     var requiredFields = ['imageUrl', 'imageAttribution', 'politicianId', 'headline', 'summary'];
@@ -61,6 +64,56 @@ export default class NewEvent extends React.Component {
       }
     });
     return shouldContinue;
+  }
+
+  clickToAddFile(e) {
+    e.preventDefault();
+    fileInput.click();
+  }
+
+  upLoadFile(e) {
+    e.preventDefault();
+    if (!e.target.files) {
+      return;
+    }
+
+    const file = e.target.files[0]
+    if (!file) {
+      return;
+    }
+
+    // NOTE not using standard flux action patter so we can get progress %
+    // NOTE hack
+    // ImageActions.uploadImage()
+
+
+    image.src = '';
+    const url = Constants.UPLOAD_IMAGE + '?fileType=' + encodeURIComponent(file.type),
+          xhr = new XMLHttpRequest(),
+          imgixConfig = '?w=828&h=440&fit=crop';
+
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader('Accept', 'application/json');
+    xhr.setRequestHeader('Authorization', 'Bearer ' + AuthStore.getAuthToken());
+    xhr.upload.onprogress = function(e) {
+      const percent = Math.floor((e.loaded / e.total) * 100);
+      progress.textContent = percent + '%';
+    }
+    xhr.onload = function(e) {
+      progress.textContent = 'Image Uploaded Successfully.';
+      const response = JSON.parse(e.target.responseText);
+      event.imageUrl = response.imageUrl;
+      const dbUrl = event.imageUrl + imgixConfig;
+      image.src = dbUrl;
+
+      this.setState({
+        imageUrl: dbUrl
+      });
+    }
+    xhr.onerror = function() {
+      progress.textContent = 'Error uploading image.';
+    }
+    xhr.send(file)
   }
 
   createEvent(e) {
@@ -91,6 +144,20 @@ export default class NewEvent extends React.Component {
       container: {
 
       },
+      img: {
+        position: 'relative',
+        width: '414px',
+        height: '220px',
+        progress: {
+          position: 'absolute',
+          top: '0',
+          bottom: '0',
+          left: '0',
+          right: '0',
+          textAlign: 'center',
+          // display: 'none'
+        }
+      },
       imageUrl: {
 
       },
@@ -107,6 +174,9 @@ export default class NewEvent extends React.Component {
         textArea: {
           height: '300px'
         }
+      },
+      file: {
+        display: 'none'
       }
     }
 
@@ -115,6 +185,11 @@ export default class NewEvent extends React.Component {
         <form role="form">
           <h2>New Event</h2>
           <Messages {...this.state} />
+
+          <div style={style.img} onClick={this.clickToAddFile.bind(this)}>
+            <img id="image" class="pointer" height="100%" width="100%" />
+            <div id="progress" style={style.img.progress}></div>
+          </div>
 
           <div className="form-group" style={style.imageUrl}>
             <label htmlFor="imageUrl">imageUrl</label>
@@ -140,6 +215,8 @@ export default class NewEvent extends React.Component {
           <div className='form-group'>
             <button type="submit" className="btn btn-primary" onClick={this.createEvent.bind(this)}>Create Event</button>
           </div>
+
+          <input type="file" id="fileInput" accept="image/jpeg, image/png" style={style.file} onChange={this.upLoadFile.bind(this)}/>
         </form>
         <Link to='manage_events'>Back To Events</Link>
       </div>

@@ -63,9 +63,10 @@ export default class ManageEvents extends React.Component {
   render() {
     const style = {
       container: {
-        padding: '20px',
+        padding: '30px',
         background: 'white',
         width: '800px',
+        minHeight: '600px',
         borderRadius: '2px'
       },
       ul: {
