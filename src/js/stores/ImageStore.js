@@ -19,40 +19,46 @@ class ImageStore extends EventEmitter {
     return this.error;
   };
 
-  // getPinnedId() {
-  //   return this.pinnedId;
-  // }
+  getUploadStatus() {
+    return this.uploadStatus;
+  };
 
-  uploadImage(eventId) {
+  getImageUrl() {
+    return this.imageUrl;
+  }
+
+  uploadImage(file) {
     var tokenLocal = AuthStore.getAuthToken();
-    var url = Constants.UPLOAD_IMAGE;
     var that = this;
 
-    return when(request({
-      url: url + eventId + '/toggle_publish',
-      method: 'PUT',
-      crossOrigin: true,
-      type: 'json',
-      headers: {
-        authorization: "Bearer " + tokenLocal
-      },
-      data: {
-        eventId: eventId
-      }
-    }))
-    .then(function(response) {
-      var publishText = response.isPublished ? 'Published' : 'Un-Published';
-      that.isPublished = response.isPublished;
-      that.publishChangeId = eventId;
-      that.message = 'Event ' + publishText + ' Successfully';
-      that.error = '';
+    const url = Constants.UPLOAD_IMAGE + '?fileType=' + encodeURIComponent(file.type),
+          xhr = new XMLHttpRequest(),
+          imgixConfig = '?w=828&h=440&fit=crop';
+
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader('Accept', 'application/json');
+    xhr.setRequestHeader('Authorization', 'Bearer ' + tokenLocal);
+
+    xhr.upload.onprogress = function(e) {
+      const percent = Math.floor((e.loaded / e.total) * 100);
+      that.uploadStatus = percent + '%';
       that.emit('change');
-    })
-    .catch(function(response) {
-      if (response.status !== 200 || response.status !== 304) {
-        that.error = "Error changing publish status of Event";
-      }
-    });
+    }
+    xhr.onload = function(e) {
+      that.message = 'Image Uploaded Successfully.';
+      that.error   = '';
+      const response = JSON.parse(e.target.responseText);
+
+      event.imageUrl = response.imageUrl;
+      const dbUrl = event.imageUrl + imgixConfig;
+      that.imageUrl = dbUrl;
+      that.emit('change');
+    }
+    xhr.onerror = function() {
+      that.error = 'Error uploading image.';
+      that.message = '';
+    }
+    xhr.send(file)
   }
 
   addChangeListener(callback) {
@@ -67,7 +73,7 @@ class ImageStore extends EventEmitter {
     // console.log("EventStore received an action", action);
     switch(action.type) {
       case "UPLOAD_IMAGE": {
-        this.uploadImage(action.eventInfo);
+        this.uploadImage(action.file, );
         break;
       }
     }

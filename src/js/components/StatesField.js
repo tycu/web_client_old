@@ -5,7 +5,6 @@ import StateStore from "../stores/StateStore";
 export default class StatesField extends React.Component {
   constructor(props) {
     super(props)
-
     this.getStates = this.getStates.bind(this);
 
     this.state = {

@@ -1,8 +1,8 @@
 import dispatcher from "../dispatcher";
 
-export function uploadImage(offset) {
+export function uploadImage(file) {
   dispatcher.dispatch({
     type: "UPLOAD_IMAGE",
-    offset,
+    file,
   });
 }

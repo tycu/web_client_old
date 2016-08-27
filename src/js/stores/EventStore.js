@@ -264,23 +264,33 @@ class EventStore extends EventEmitter {
   }
 
   createEvent(eventInfo) {
-    var tokenLocal = AuthStore.getAuthToken();
     var url = Constants.CREATE_EVENT;
+    var tokenLocal = AuthStore.getAuthToken();
+    var that = this;
 
-    var res = Promise.resolve(
-      request({
-        url: url,
-        type: 'json',
-        crossOrigin: true,
-        method: 'POST',
-        headers: {
-          authorization: "Bearer " + tokenLocal
-        },
-        data: {
-          event: eventInfo
-        }
-      })
-    );
+    return when(request({
+      url: url,
+      method: 'POST',
+      crossOrigin: true,
+      type: 'json',
+      headers: {
+        authorization: "Bearer " + tokenLocal
+      },
+      data: {
+        event: eventInfo
+      }
+    }))
+    .then(function(response) {
+      that.message = 'Event created successfully';
+      that.error = '';
+      // that.emit('change');
+    })
+    .catch(function(response) {
+      if (response.status !== 200 || response.status !== 304) {
+        that.message = '';
+        that.error = "Error creating Event";
+      }
+    });
     this.emit('change');
   }
 

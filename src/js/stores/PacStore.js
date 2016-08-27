@@ -49,14 +49,14 @@ class PacStore extends EventEmitter {
     .then(function(response) {
       that.pacs = response || [];
       that.error = '';
-      that.emit('change');
+      that.emitEvent();
     })
     .catch(function(response) {
-      if ((response.status !== 200) || response.status !== 304) {
+      if (response.status !== 200 || response.status !== 304) {
         that.error = 'There is an error loading pacs';
         alert("There is an error loading pacs");
         console.log("Error loading pacs", response);
-        that.emit('change');
+        that.emitEvent();
       }
     });
   }
@@ -82,7 +82,7 @@ class PacStore extends EventEmitter {
       pac['twitterUsername'] = response.twitterUsername || '';
       pac['color'] = response.color || '';
       that.pac = pac;
-      that.emit('change');
+      that.emitEvent();
     })
     .catch(function(response) {
       if (response.status !== 200 || response.status !== 304) {
@@ -110,7 +110,7 @@ class PacStore extends EventEmitter {
         }
       })
     );
-    this.emit('change');
+    this.emitEvent();
   }
 
   createPac(pacInfo) {
@@ -131,15 +131,19 @@ class PacStore extends EventEmitter {
         }
       })
     );
-    this.emit('change');
+    emitEvent();
   }
 
   addChangeListener(callback) {
-    this.on('change', callback);
+    this.on('pacChange', callback);
   }
 
   removeChangeListener(callback) {
-    this.removeListener('change', callback);
+    this.removeListener('pacChange', callback);
+  }
+
+  emitEvent() {
+    this.emit('pacChange');
   }
 
   handleActions(action) {

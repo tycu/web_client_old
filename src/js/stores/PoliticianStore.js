@@ -49,7 +49,7 @@ class PoliticianStore extends EventEmitter {
     }))
     .then(function(response) {
       that.politicians = response
-      that.emit('change');
+      that.emitEvent();
     })
     .catch(function(response) {
       if ((response.status !== 200) || response.status !== 304) {
@@ -81,7 +81,7 @@ class PoliticianStore extends EventEmitter {
       politician['jobTitle'] = response.jobTitle || '';
       politician['twitterUsername'] = response.twitterUsername || '';
       that.politician = politician;
-      that.emit('change');
+      that.emitEvent();
     })
     .catch(function(response) {
       if (response.status !== 200 || response.status !== 304) {
@@ -109,7 +109,7 @@ class PoliticianStore extends EventEmitter {
         }
       })
     );
-    this.emit('change');
+    this.emitEvent();
   }
 
   createPolitician(politicianInfo) {
@@ -130,15 +130,19 @@ class PoliticianStore extends EventEmitter {
         }
       })
     );
-    this.emit('change');
+    this.emitEvent();
   }
 
   addChangeListener(callback) {
-    this.on('change', callback);
+    this.on('politicianChange', callback);
   }
 
   removeChangeListener(callback) {
-    this.removeListener('change', callback);
+    this.removeListener('politicianChange', callback);
+  }
+
+  emitEvent() {
+    this.emit('politicianChange');
   }
 
   handleActions(action) {
