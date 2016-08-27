@@ -30,6 +30,7 @@ export default class EditEvent extends React.Component {
 
   static propTypes = {
     event: React.PropTypes.shape({
+      eventId: React.PropTypes.number,
       isPinned: React.PropTypes.bool,
       imageUrl: React.PropTypes.string,
       imageAttribution: React.PropTypes.string,
@@ -120,25 +121,20 @@ export default class EditEvent extends React.Component {
     e.preventDefault();
     const isSupport = key === 'supportPacs';
 
-    // Note need to create event first, get id from it and then add it to the paclist
-    // or just add to edit only where it is already present
-
-
-    // move pac load to this from pacsfield
-    //
-
-    const newPac = {eventId: null, support: isSupport, availablePacs: this.state.availablePacs};
+    const newPac = {eventId: this.state.event.eventId, support: isSupport, availablePacs: this.state.availablePacs};
 
     this.setState({
       [key]: this.state[key].concat(newPac)
     });
   }
 
-  setPacId(key, e) {
-    this.setState({
-      [key]: this.state[key].concat(newPac)
-    });
+  setPacId(support, pacIndex, pacId) {
+    let pacs = this.state[support];
+    pacs[pacIndex]['pacId'] = parseInt(pacId, 10);
 
+    this.setState({
+      [support]: pacs
+    });
   }
 
   render() {
@@ -146,11 +142,14 @@ export default class EditEvent extends React.Component {
     const supportPacs = this.state.supportPacs || [];
     const opposePacs  = this.state.opposePacs  || [];
 
+    const supportIndex = supportPacs.length - 1;
+    const opposeIndex = opposePacs.length - 1;
+
     const supportPacList = supportPacs.map((pac) => {
-      return <PacsField key={pac.id + Math.random()} {...pac} setPacId={this.setPacId.bind(this, 'pacId')} />
+      return <PacsField key={Math.random()} {...pac} setPacId={this.setPacId.bind(this, 'supportPacs', supportIndex)} />
     });
     const opposePacList  = opposePacs.map((pac) => {
-      return <PacsField key={pac.id + Math.random()} {...pac} setPacId={this.setPacId.bind(this, 'pacId')} />
+      return <PacsField key={Math.random()} {...pac} setPacId={this.setPacId.bind(this, 'opposePacs', opposeIndex)} />
     });
 
 
@@ -225,6 +224,7 @@ export default class EditEvent extends React.Component {
               <label htmlFor="summary">Support Pacs</label>
               <br/>
               <button onClick={this.addPac.bind(this, 'supportPacs')}>Add Support Pac</button>
+              <br/>
               {supportPacList}
           </div>
 
@@ -232,6 +232,7 @@ export default class EditEvent extends React.Component {
             <label htmlFor="summary">Oppose Pacs</label>
             <br/>
             <button onClick={this.addPac.bind(this, 'opposePacs')}>Add Oppose Pac</button>
+            <br/>
             {opposePacList}
           </div>
 

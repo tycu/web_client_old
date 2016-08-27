@@ -18,6 +18,7 @@ class EventStore extends EventEmitter {
 
   getEvent() {
     return this.eventObj || {
+      eventId: '',
       isPinned: '',
       isPublished: '',
       imageUrl: '',
@@ -126,6 +127,7 @@ class EventStore extends EventEmitter {
     }))
     .then(function(response) {
       var eventObj = {}
+      eventObj['eventId'] = response.id || '';
       eventObj['isPinned'] = response.isPinned || '';
       eventObj['isPublished'] = response.isPublished || '';
       eventObj['imageUrl'] = response.imageUrl || '';
@@ -161,6 +163,7 @@ class EventStore extends EventEmitter {
     }))
     .then(function(response) {
       var eventObj = {}
+      eventObj['eventId'] = response.id || '';
       eventObj['isPinned'] = response.isPinned || '';
       eventObj['isPublished'] = response.isPublished || '';
       eventObj['imageUrl'] = response.imageUrl || '';

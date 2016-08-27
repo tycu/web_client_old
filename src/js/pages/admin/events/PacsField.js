@@ -24,7 +24,7 @@ export default class PacsField extends React.Component {
   }
 
   handlePacChange(event) {
-    this.props.setPacId(event.target.value, this.props.support);
+    this.props.setPacId(event.target.value); // , this.props.support
   }
 
   componentWillReceiveProps(nextProps) {
@@ -56,11 +56,20 @@ export default class PacsField extends React.Component {
 
   render () {
     const availablePacs = this.props.availablePacs || [];
-    const { pacId }  = this.state;
-
+    const { pacId }  = this.props;
+    const { pacType } = this.props;
     const style = {
       container: {
-        width: '300px'
+        width: '300px',
+        display: 'inline'
+      },
+      select: {
+        width: '300px',
+        display: 'inline'
+      },
+      delete: {
+        marginLeft: '20px',
+        width: '60px'
       }
     }
 
@@ -76,10 +85,12 @@ export default class PacsField extends React.Component {
           class="form-control pacList"
           type="select"
           value={pacId}
-          onChange={this.handlePacChange.bind(this)}>
+          onChange={this.handlePacChange.bind(this)}
+          style={style.select}>
+          <option value='' key='0'>Select a Pac</option>
           {pacList}
         </select>
-        <button onClick={this.deletePac.bind(this, 'supportPacs')}>Add Support Pac</button>
+        <button style={style.delete} onClick={this.deletePac.bind(this, 'supportPacs')}>Delete</button>
       </div>
     )
   }
