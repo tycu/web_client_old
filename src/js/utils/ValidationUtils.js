@@ -13,3 +13,19 @@ export function validEvent(state) {
   });
   return shouldContinue;
 }
+
+
+
+function hasDuplicates(a) {
+  return _.uniq(a).length !== a.length;
+}
+
+export function validPacGroup(state) {
+  const supportPacIds = _.map(state.supportPacs, function(v, i) {
+    return v.pacId
+  });
+  const opposePacIds = _.map(state.opposePacs, function(v, i) {
+    return v.pacId
+  });
+  return !hasDuplicates(supportPacIds.concat(opposePacIds))
+}

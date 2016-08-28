@@ -131,7 +131,7 @@ class PacStore extends EventEmitter {
         }
       })
     );
-    emitEvent();
+    this.emitEvent();
   }
 
   addChangeListener(callback) {

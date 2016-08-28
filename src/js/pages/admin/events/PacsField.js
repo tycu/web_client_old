@@ -1,30 +1,32 @@
 import ReactDOM from 'react-dom'
 import React, { Component, PropTypes } from 'react'
 import PacStore from "../../../stores/PacStore";
-import * as PacActions from "../../../actions/PacActions";
+import * as PacEventActions from "../../../actions/PacEventActions";
 
 export default class PacsField extends React.Component {
   constructor(props) {
     super(props)
-    // this.getPacs = this.getPacs.bind(this);
 
     this.state = {
-      // availablePacs: PacStore.getPacs(),
-      // eventId: '',
+      eventId: '',
+      pacEventId: '',
       pacId: '',
       support: true,
+      newPacField: true,
       value: this.props.value
     }
   }
 
   static propTypes = {
-    // availablePacs: React.PropTypes.array,
+    eventId: React.PropTypes.string,
+    pacEventId: React.PropTypes.number,
     pacId:  React.PropTypes.number,
-    support:  React.PropTypes.bool
+    support:  React.PropTypes.bool,
+    newPacField: React.PropTypes.bool
   }
 
   handlePacChange(event) {
-    this.props.setPacId(event.target.value); // , this.props.support
+    this.props.setPacId(event.target.value);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -33,30 +35,16 @@ export default class PacsField extends React.Component {
     });
   }
 
-  // componentDidMount() {
-  //   PacActions.fetchPacs();
-  //   PacStore.addChangeListener(this.getPacs);
-  // }
-
-  // componentWillUnmount() {
-  //   PacStore.removeChangeListener(this.getPacs);
-  // }
-
-  // getPacs() {
-  //   this.setState({
-  //     availablePacs: PacStore.getPacs()
-  //   })
-  // }
-
-  deletePac(key, e) {
+  deletePacEvent(key, e) {
     e.preventDefault();
-
-    debugger;
+    PacEventActions.deletePacEvent(this.props.eventId, key)
+    this.handlePacChange(e);
   }
 
   render () {
     const availablePacs = this.props.availablePacs || [];
     const { pacId }  = this.props;
+    const { id } = this.props;
     const { pacType } = this.props;
     const style = {
       container: {
@@ -90,7 +78,8 @@ export default class PacsField extends React.Component {
           <option value='' key='0'>Select a Pac</option>
           {pacList}
         </select>
-        <button style={style.delete} onClick={this.deletePac.bind(this, 'supportPacs')}>Delete</button>
+        <button style={style.delete} onClick={this.deletePacEvent.bind(this, id)}>Delete</button>
+        <br/>
       </div>
     )
   }

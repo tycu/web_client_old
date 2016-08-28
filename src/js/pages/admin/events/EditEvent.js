@@ -4,9 +4,11 @@ import { collections } from 'lodash';
 import EventStore from "../../../stores/EventStore";
 import ImageStore from "../../../stores/ImageStore";
 import * as EventActions from "../../../actions/EventActions";
+import * as PacEventActions from "../../../actions/PacEventActions";
 import Messages from '../../../components/layout/Messages';
 import PacsField from './PacsField';
 import PacStore from "../../../stores/PacStore";
+import PacEventStore from "../../../stores/PacEventStore";
 import * as PacActions from "../../../actions/PacActions";
 import * as FileUtils from "../../../utils/FileUtils";
 import * as Validators from "../../../utils/ValidationUtils";
@@ -17,6 +19,7 @@ export default class EditEvent extends React.Component {
     this.getEvent = this.getEvent.bind(this);
     this.getPacs = this.getPacs.bind(this);
     this.setImage = this.setImage.bind(this);
+    this.getPacEvents = this.getPacEvents.bind(this);
 
     this.state = {
       event: EventStore.getEvent(),
@@ -24,24 +27,26 @@ export default class EditEvent extends React.Component {
       supportPacs: [],
       opposePacs: [],
       uploadStatus: '',
+      pacEvents: PacEventStore.getPacEvents(),
       key: 1
     };
   }
 
   static propTypes = {
     event: React.PropTypes.shape({
-      eventId: React.PropTypes.number,
-      isPinned: React.PropTypes.bool,
-      imageUrl: React.PropTypes.string,
+      eventId:     React.PropTypes.number,
+      isPinned:    React.PropTypes.bool,
+      imageUrl:    React.PropTypes.string,
       imageAttribution: React.PropTypes.string,
       politicianId: React.PropTypes.number,
-      headline: React.PropTypes.string,
-      summary: React.PropTypes.string
+      headline:    React.PropTypes.string,
+      summary:     React.PropTypes.string
     }),
     availablePacs: React.PropTypes.array,
-    supportPacs:  React.PropTypes.array,
-    opposePacs:  React.PropTypes.array,
-    uploadStatus: React.PropTypes.string
+    supportPacs:   React.PropTypes.array,
+    opposePacs:    React.PropTypes.array,
+    pacEvents:     React.PropTypes.array,
+    uploadStatus:  React.PropTypes.string
   }
 
   componentDidMount() {
@@ -51,14 +56,16 @@ export default class EditEvent extends React.Component {
 
     PacActions.fetchPacs();
     PacStore.addChangeListener(this.getPacs);
-
     ImageStore.addChangeListener(this.setImage);
+    PacEventActions.fetchPacEvents(eventId);
+    PacEventStore.addChangeListener(this.getPacEvents);
   }
 
   componentWillUnmount() {
     EventStore.removeChangeListener(this.getEvent);
     PacStore.removeChangeListener(this.getPacs);
     ImageStore.removeChangeListener(this.setImage);
+    PacEventStore.removeChangeListener(this.getPacEvents);
   }
 
   getEvent() {
@@ -70,6 +77,16 @@ export default class EditEvent extends React.Component {
   getPacs() {
     this.setState({
       availablePacs: PacStore.getPacs()
+    })
+  }
+
+  getPacEvents() {
+    const pacEvents = PacEventStore.getPacEvents();
+
+    this.setState({
+      pacEvents: PacEventStore.getPacEvents(),
+      supportPacs: PacEventStore.getSupportPacEvents(),
+      opposePacs:  PacEventStore.getOpposePacEvents()
     })
   }
 
@@ -97,14 +114,19 @@ export default class EditEvent extends React.Component {
     e.preventDefault();
     var that = this;
 
-    // PacActions.createPacs // todo add this, pass event id, pac ids, and support/oppose
-
     if (!Validators.validEvent(that.state)) {
       that.setState({error: "You must complete all Fields"});
       return false;
-    } else {
+    }
+    else if (!Validators.validPacGroup(that.state)) {
+      that.setState({error: "You cannot have the same pac both supporting and opposing the event."});
+      return false;
+    }
+    else {
       that.setState({error: ""});
       const eventId = that.props.params.eventId;
+      const supportPacs = that.state.supportPacs;
+      const opposePacs  = that.state.opposePacs;
 
       EventActions.updateEvent(eventId, {
         imageUrl: this.state.event.imageUrl,
@@ -112,6 +134,23 @@ export default class EditEvent extends React.Component {
         // politicianId: this.state.event.politicianId,
         headline: this.state.event.headline,
         summary: this.state.event.summary
+      });
+
+      // NOTE if has Id, means is saved, so update
+      _(supportPacs).forEach(function(value) {
+        if (value.id) {
+          PacEventActions.updatePacEvent(eventId, value.id, value);
+        } else {
+          PacEventActions.createPacEvent(eventId, value);
+        }
+      });
+
+      _(opposePacs).forEach(function(value) {
+        if (value.id) {
+          PacEventActions.updatePacEvent(eventId, value.id, value);
+        } else {
+          PacEventActions.createPacEvent(eventId, value);
+        }
       });
       browserHistory.replace('/manage_events');
     }
@@ -121,7 +160,7 @@ export default class EditEvent extends React.Component {
     e.preventDefault();
     const isSupport = key === 'supportPacs';
 
-    const newPac = {eventId: this.state.event.eventId, support: isSupport, availablePacs: this.state.availablePacs};
+    const newPac = {eventId: this.state.event.eventId, support: isSupport, availablePacs: this.state.availablePacs, newPacField: true};
 
     this.setState({
       [key]: this.state[key].concat(newPac)
@@ -130,6 +169,7 @@ export default class EditEvent extends React.Component {
 
   setPacId(support, pacIndex, pacId) {
     let pacs = this.state[support];
+
     pacs[pacIndex]['pacId'] = parseInt(pacId, 10);
 
     this.setState({
@@ -138,21 +178,19 @@ export default class EditEvent extends React.Component {
   }
 
   render() {
-
     const supportPacs = this.state.supportPacs || [];
     const opposePacs  = this.state.opposePacs  || [];
+    const eventId = this.props.params.eventId;
 
     const supportIndex = supportPacs.length - 1;
     const opposeIndex = opposePacs.length - 1;
 
     const supportPacList = supportPacs.map((pac) => {
-      return <PacsField key={Math.random()} {...pac} setPacId={this.setPacId.bind(this, 'supportPacs', supportIndex)} />
+      return <PacsField key={Math.random()} {...pac} setPacId={this.setPacId.bind(this, 'supportPacs', supportIndex)} availablePacs={this.state.availablePacs} pacEventId={pac.id} eventId={eventId} />
     });
     const opposePacList  = opposePacs.map((pac) => {
-      return <PacsField key={Math.random()} {...pac} setPacId={this.setPacId.bind(this, 'opposePacs', opposeIndex)} />
+      return <PacsField key={Math.random()} {...pac} setPacId={this.setPacId.bind(this, 'opposePacs', opposeIndex)} availablePacs={this.state.availablePacs} pacEventId={pac.id} eventId={eventId} />
     });
-
-
 
     const style = {
       container: {
@@ -201,7 +239,6 @@ export default class EditEvent extends React.Component {
         <form role="form">
           <h2>Edit Event</h2>
           <Messages {...this.state} />
-
 
           <div style={style.img} onClick={FileUtils.clickToAddFile.bind(this)}>
             <img id="image" class="pointer" height="100%" width="100%" src={this.state.event.imageUrl}/>
