@@ -75,6 +75,7 @@ class PoliticianStore extends EventEmitter {
     }))
     .then(function(response) {
       var politician = {}
+      politician['politicianId'] = response.id || '';
       politician['thumbnail'] = response.thumbnail || '';
       politician['firstName'] = response.firstName || '';
       politician['lastName'] = response.lastName || '';

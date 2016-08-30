@@ -1,5 +1,5 @@
 export function validEvent(state) {
-  var requiredFields = ['imageUrl', 'imageAttribution', 'politicianId', 'headline', 'summary'];
+  const requiredFields = ['imageUrl', 'imageAttribution', 'politicianId', 'headline', 'summary'];
   var shouldContinue = true,
       key;
 
@@ -28,4 +28,17 @@ export function validPacGroup(state) {
     return v.pacId
   });
   return !hasDuplicates(supportPacIds.concat(opposePacIds))
+}
+
+export function validPolitician(state) {
+  const requiredFields = ['firstName', 'lastName', 'jobTitle', 'twitterUsername'];
+  var shouldContinue = true;
+
+  _(requiredFields).forEach(function(value) {
+    if (_.isEmpty(state.politician[value])) {
+      shouldContinue = false
+      return false;
+    }
+  });
+  return shouldContinue;
 }

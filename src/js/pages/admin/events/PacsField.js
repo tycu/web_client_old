@@ -1,6 +1,5 @@
 import ReactDOM from 'react-dom'
 import React, { Component, PropTypes } from 'react'
-import PacStore from "../../../stores/PacStore";
 import * as PacEventActions from "../../../actions/PacEventActions";
 
 export default class PacsField extends React.Component {

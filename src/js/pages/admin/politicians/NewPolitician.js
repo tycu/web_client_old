@@ -4,6 +4,7 @@ import { collections } from 'lodash';
 import PoliticianStore from "../../../stores/PoliticianStore";
 import * as PoliticianActions from "../../../actions/PoliticianActions";
 import Messages from '../../../components/layout/Messages';
+import * as Validators from "../../../utils/ValidationUtils";
 
 export default class NewPolitician extends React.Component {
 
@@ -12,7 +13,6 @@ export default class NewPolitician extends React.Component {
 
     this.state = {
       politician: {
-        thumbnail: '',
         firstName: '',
         lastName: '',
         jobTitle: '',
@@ -24,7 +24,6 @@ export default class NewPolitician extends React.Component {
 
   static propTypes = {
     politician: React.PropTypes.shape({
-      thumbnail: React.PropTypes.string,
       firstName: React.PropTypes.string,
       lastName: React.PropTypes.string,
       jobTitle: React.PropTypes.string,
@@ -44,33 +43,17 @@ export default class NewPolitician extends React.Component {
     this.setState(politician);
   }
 
-
-  validPolitician() {
-    var that = this;
-    var requiredFields = ['thumbnail', 'firstName', 'lastName', 'jobTitle', 'twitterUsername'];
-    var shouldContinue = true;
-
-    _(requiredFields).forEach(function(value) {
-      if (_.isEmpty(that.state.politician[value])) {
-        shouldContinue = false
-        return false;
-      }
-    });
-    return shouldContinue;
-  }
-
   createPolitician(e) {
     e.preventDefault();
     var that = this;
 
-    if (!that.validPolitician()) {
+    if (!Validators.validPolitician(that.state)) {
       that.setState({error: "You must complete all Fields"});
       return false;
     } else {
       that.setState({error: ""});
 
       PoliticianActions.createPolitician({
-        thumbnail: this.state.politician.thumbnail,
         firstName: this.state.politician.firstName,
         lastName: this.state.politician.lastName,
         jobTitle: this.state.politician.jobTitle,
@@ -109,10 +92,6 @@ export default class NewPolitician extends React.Component {
           <h2>New Politician</h2>
           <Messages {...this.state} />
 
-          <div className="form-group" style={style.thumbnail}>
-            <label htmlFor="thumbnail">thumbnail</label>
-            <input type="text" value={this.state.politician.thumbnail} onChange={this.onUpdate.bind(this, 'thumbnail')} className="form-control" id="thumbnail" ref="thumbnail" placeholder="thumbnail" />
-          </div>
           <div className="form-group" style={style.firstName}>
             <label htmlFor="firstName">firstName</label>
             <input type="text" value={this.state.politician.firstName} onChange={this.onUpdate.bind(this, 'firstName')} className="form-control" id="firstName" ref="firstName" placeholder="firstName" />
@@ -128,6 +107,9 @@ export default class NewPolitician extends React.Component {
           <div className="form-group" style={style.twitterUsername}>
             <label htmlFor="twitterUsername">twitterUsername</label>
             <input type="text" value={this.state.politician.twitterUsername} onChange={this.onUpdate.bind(this, 'twitterUsername')} className="form-control" id="twitterUsername" ref="twitterUsername" placeholder="twitterUsername" />
+          </div>
+          <div className="form-group" style={style.thumbnail} id='supportPacField'>
+            <label htmlFor="pacId">Politician Images (can only be added after politician is created/during edit)</label>
           </div>
 
           <div className='form-group'>
