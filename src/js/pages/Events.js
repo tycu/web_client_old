@@ -19,6 +19,7 @@ export default class Events extends React.Component {
   static propTypes = {
     eventStyle:  React.PropTypes.object,
     contStyle:   React.PropTypes.object,
+    ulStyle:     React.PropTypes.object,
     children:    React.PropTypes.node,
     collapseIn:  React.PropTypes.bool,
     events:      React.PropTypes.array
@@ -95,7 +96,7 @@ export default class Events extends React.Component {
     const { events } = this.state;
 
     const EventComponents = events.map((event) => {
-      return <Event key={event.id} {...event}/>;
+      return <Event eventId={event.id} key={event.id} {...event}/>;
     });
 
     const defStyle = this.getStyles();

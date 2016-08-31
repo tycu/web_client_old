@@ -6,6 +6,7 @@ import AuthStore from '../stores/AuthStore';
 import Messages from '../components/layout/Messages';
 import { collections } from 'lodash';
 
+import DonorCity from './donorInfo/DonorCity';
 export default class DonorInfo extends React.Component {
 
   constructor() {
@@ -17,7 +18,14 @@ export default class DonorInfo extends React.Component {
       hideEmployerOccupation: false,
       employed: true,
       message: '',
-      error: ''
+      error: '',
+      cityError: false,
+      occupationError: false,
+      employerError: false,
+      nameError: false,
+      streetAddressError: false,
+      residenceStateError: false,
+      zipError: false
     };
   }
 
@@ -35,6 +43,13 @@ export default class DonorInfo extends React.Component {
     employed:  React.PropTypes.bool,
     message: React.PropTypes.string,
     error:  React.PropTypes.string,
+    cityError: React.PropTypes.bool,
+    occupationError: React.PropTypes.bool,
+    employerError: React.PropTypes.bool,
+    nameError: React.PropTypes.bool,
+    streetAddressError: React.PropTypes.bool,
+    residenceStateError: React.PropTypes.bool,
+    zipError: React.PropTypes.bool
   }
 
 

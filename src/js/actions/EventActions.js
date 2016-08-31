@@ -43,6 +43,25 @@ export function pinEvent(eventId) {
   })
 }
 
+export function setBreakingNews(eventId) {
+  dispatcher.dispatch({
+    type: "SET_BREAKING_NEWS_EVENT",
+    eventId
+  })
+}
+
+export function unsetBreakingNews() {
+  dispatcher.dispatch({
+    type: "UNSET_BREAKING_NEWS_EVENT"
+  })
+}
+
+export function fetchBreakingEvent() {
+  dispatcher.dispatch({
+    type: "FETCH_BREAKING_EVENT"
+  })
+}
+
 export function togglePublish(eventId) {
   dispatcher.dispatch({
     type: "TOGGLE_PUBLISH_EVENT",

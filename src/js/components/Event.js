@@ -82,10 +82,10 @@ export default class Event extends React.Component {
     if (imageAttribution) {
       marked(imageAttribution);
     }
-
+    const eventId = this.props.eventId;
 
     return (
-      <li>
+      <li id={eventId}>
         <img src={imageUrl} alt={headline} title={headline} height="407" width="750" />
         <div ref="list" style={[defStyle.base, style && style]}>
         <span dangerouslySetInnerHTML={{__html: sanitizedAttribution}}></span>

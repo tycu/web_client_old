@@ -9,19 +9,29 @@ import Faq from "./pages/static/Faq";
 import Layout from "./pages/Layout";
 import Settings from "./pages/Settings";
 
+// ADMIN
 import Admin from './pages/Admin';
+
+// ADMIN EVENTS
 import ManageEvents from './pages/admin/ManageEvents';
 import EditEvent from './pages/admin/events/EditEvent';
 import NewEvent from './pages/admin/events/NewEvent';
 import AdminEventShow from './pages/admin/events/AdminEventShow';
 
+// ADMIN Politicians
 import ManagePoliticians from './pages/admin/ManagePoliticians';
 import EditPolitician from './pages/admin/politicians/EditPolitician';
 import NewPolitician from './pages/admin/politicians/NewPolitician';
+
+// ADMIN Pacs
 import ManagePacs from './pages/admin/ManagePacs';
 import EditPac from './pages/admin/pacs/EditPac';
 import NewPac from './pages/admin/pacs/NewPac';
 
+// ADMIN TOOLS
+import SetBreakingNews from './pages/admin/events/SetBreakingNews';
+
+// ADMIN REPORTS
 import ContributionReport from './pages/admin/ContributionReport';
 
 import Contributions from "./pages/Contributions";
@@ -90,6 +100,7 @@ let routes = (
       <Route path="new_event" component={NewEvent} onEnter={requireAdmin}></Route>
       <Route path="edit_events/:eventId" component={EditEvent} onEnter={requireAdmin}></Route>
       <Route path="manage_events/:eventId" component={AdminEventShow} onEnter={requireAdmin}></Route>
+      <Route path="breaking_news_alert" component={SetBreakingNews} onEnter={requireAdmin}></Route>
 
       <Route path="manage_politicians" component={ManagePoliticians} onEnter={requireAdmin}></Route>
       <Route path="new_politician" component={NewPolitician} onEnter={requireAdmin}></Route>

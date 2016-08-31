@@ -8,12 +8,11 @@ export default class Admin extends React.Component {
       container: {
         padding: '20px',
         background: 'white',
-        width: '490px',
+        width: '820px',
         borderRadius: '2px'
       }
     }
-    // NOTE https://github.com/tallyus/admin/blob/develop/endpoints.js
-    // https://admin.tally.us/
+
     return (
       <div style={style.container} className="jumbotron center-block">
         <h2>Tally Admin</h2>
@@ -26,7 +25,9 @@ export default class Admin extends React.Component {
         <br/>
         <div>
           <b>Tools</b><br/>
-          <span>Set Breaking News Alert (disabled)</span>
+          <Link to='breaking_news_alert'>Set Breaking News Header</Link><br/>
+          <div>Send Chrome Notification of Breaking News Alert (need to build)</div>
+
         </div>
         <br/>
         <div>

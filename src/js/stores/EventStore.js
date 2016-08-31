@@ -16,10 +16,15 @@ class EventStore extends EventEmitter {
     return this.eventObjs || [];
   }
 
+  getBreakingId() {
+    return this.breakingId || '';
+  }
+
   getEvent() {
     return this.eventObj || {
       eventId: '',
       isPinned: '',
+      breakingId: '',
       isPublished: '',
       imageUrl: '',
       imageAttribution: '',
@@ -68,7 +73,10 @@ class EventStore extends EventEmitter {
         if (eventObj.isPinned === true) {
           that.pinnedId = eventObj.id;
           that.emit('change');
-          return false;
+        }
+        if (eventObj.breakingId === true) {
+          that.breakingId = eventObj.id;
+          that.emit('change');
         }
       });
       that.emit('change');
@@ -103,7 +111,10 @@ class EventStore extends EventEmitter {
         if (eventObj.isPinned === true) {
           that.pinnedId = eventObj.id;
           that.emit('change');
-          return false;
+        }
+        if (eventObj.breakingId === true) {
+          that.breakingId = eventObj.id;
+          that.emit('change');
         }
       });
       that.emit('change');
@@ -133,6 +144,7 @@ class EventStore extends EventEmitter {
       var eventObj = {}
       eventObj['eventId'] = response.id || '';
       eventObj['isPinned'] = response.isPinned || '';
+      eventObj['breakingId'] = response.breakingId || '';
       eventObj['isPublished'] = response.isPublished || '';
       eventObj['imageUrl'] = response.imageUrl || '';
       eventObj['imageAttribution'] = response.imageAttribution || '';
@@ -169,6 +181,7 @@ class EventStore extends EventEmitter {
       var eventObj = {}
       eventObj['eventId'] = response.id || '';
       eventObj['isPinned'] = response.isPinned || '';
+      eventObj['breakingId'] = response.breakingId || '';
       eventObj['isPublished'] = response.isPublished || '';
       eventObj['imageUrl'] = response.imageUrl || '';
       eventObj['imageAttribution'] = response.imageAttribution || '';
@@ -234,6 +247,101 @@ class EventStore extends EventEmitter {
     .catch(function(response) {
       if (response.status !== 200 || response.status !== 304) {
         that.error = "Error Pinning Event";
+      }
+    });
+  }
+
+  setBreaking(eventId) {
+    var tokenLocal = AuthStore.getAuthToken();
+    var url = Constants.SET_BREAKING;
+    var that = this;
+
+    return when(request({
+      url: url + eventId + '/setBreaking',
+      method: 'PUT',
+      crossOrigin: true,
+      type: 'json',
+      headers: {
+        authorization: "Bearer " + tokenLocal
+      },
+      data: {
+        eventId: eventId
+      }
+    }))
+    .then(function(response) {
+      that.message = "Breaking event set Successfully";
+      that.error = '';
+
+      var eventObj = {}
+      eventObj['eventId'] = response.id || '';
+      eventObj['breakingId'] = response.id || '';
+      eventObj['headline'] = response.headline || '';
+      eventObj['createdAt'] = response.createdAt || '';
+      that.breakingId = eventId;
+      that.eventObj = eventObj;
+      that.emit('change');
+
+    })
+    .catch(function(response) {
+      if (response.status !== 200 || response.status !== 304) {
+        that.error = "Error setting breaking Event";
+      }
+    });
+  }
+
+  unSetBreaking() {
+    var tokenLocal = AuthStore.getAuthToken();
+    var url = Constants.UNSET_BREAKING;
+    var that = this;
+
+    return when(request({
+      url: url,
+      method: 'PUT',
+      crossOrigin: true,
+      type: 'json',
+      headers: {
+        authorization: "Bearer " + tokenLocal
+      }
+    }))
+    .then(function(response) {
+      var eventObj = {}
+      that.message = "Breaking event unset Successfully";
+      that.breakingId = '';
+      that.error = '';
+      that.eventObj = eventObj;
+      that.emit('change');
+    })
+    .catch(function(response) {
+      if (response.status !== 200 || response.status !== 304) {
+        that.error = "Error unsetting breaking Event";
+      }
+    });
+  }
+
+  fetchBreaking() {
+    var url = Constants.FETCH_BREAKING_EVENT;
+    var that = this;
+
+    return when(request({
+      url: url,
+      method: 'GET',
+      crossOrigin: true,
+      type: 'json'
+    }))
+    .then(function(response) {
+      // that.eventObj = response;
+      var eventObj = {}
+      eventObj['eventId'] = response.id || '';
+      eventObj['breakingId'] = response.id || '';
+      eventObj['headline'] = response.headline || '';
+      eventObj['createdAt'] = response.createdAt || '';
+      that.breakingId = response.id || '';
+      that.eventObj = eventObj;
+      that.emit('change');
+    })
+    .catch(function(response) {
+      if (response.status !== 200 || response.status !== 304) {
+        console.log("Error fetching breaking Event");
       }
     });
   }
@@ -347,6 +455,24 @@ class EventStore extends EventEmitter {
       case "PIN_EVENT": {
         this.pinEvent(action.eventId);
         break;
+      }
+    }
+    switch(action.type) {
+      case "SET_BREAKING_NEWS_EVENT": {
+        this.setBreaking(action.eventId);
+        break
+      }
+    }
+    switch(action.type) {
+      case "UNSET_BREAKING_NEWS_EVENT": {
+        this.unSetBreaking();
+        break
+      }
+    }
+    switch(action.type) {
+      case "FETCH_BREAKING_EVENT": {
+        this.fetchBreaking();
+        break
       }
     }
     switch(action.type) {
