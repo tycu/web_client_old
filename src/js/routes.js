@@ -20,6 +20,8 @@ import ManagePacs from './pages/admin/ManagePacs';
 import EditPac from './pages/admin/pacs/EditPac';
 import NewPac from './pages/admin/pacs/NewPac';
 
+import ContributionReport from './pages/admin/ContributionReport';
+
 import Contributions from "./pages/Contributions";
 import DonorInfo from "./pages/DonorInfo";
 import SignUp from "./components/auth/SignUp";
@@ -89,6 +91,8 @@ let routes = (
       <Route path="manage_politicians" component={ManagePoliticians} onEnter={requireAdmin}></Route>
       <Route path="new_politician" component={NewPolitician} onEnter={requireAdmin}></Route>
       <Route path="edit_politicians/:politicianId" component={EditPolitician} onEnter={requireAdmin}></Route>
+
+      <Route path="contribution_report" component={ContributionReport} onEnter={requireAdmin}></Route>
 
       <Route path="change_password" component={ChangePassword} onEnter={requireAuth}></Route>
       <Route path="contributions" component={Contributions} onEnter={requireAuth}></Route>

@@ -26,12 +26,12 @@ export default class Admin extends React.Component {
         <br/>
         <div>
           <b>Tools</b><br/>
-          <span>Send push notification (disabled)</span>
+          <span>Set Breaking News Alert (disabled)</span>
         </div>
         <br/>
         <div>
           <b>Reports</b><br/>
-          <Link to='contributions'>Contributions</Link>
+          <Link to='contribution_report'>Contribution Report</Link>
         </div>
       </div>
     );

@@ -4,7 +4,6 @@ import Event from "../components/Event";
 import * as EventActions from "../actions/EventActions";
 import EventStore from '../stores/EventStore';
 
-
 @Radium
 export default class Events extends React.Component {
   constructor() {
@@ -24,7 +23,6 @@ export default class Events extends React.Component {
     collapseIn:  React.PropTypes.bool,
     events:      React.PropTypes.array
   }
-
 
   componentDidMount() {
     var offset = 0;
