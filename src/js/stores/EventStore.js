@@ -48,6 +48,7 @@ class EventStore extends EventEmitter {
   fetchEvents(offset) {
     var that = this;
     var url = Constants.GET_EVENTS;
+    var tokenLocal = AuthStore.getAuthToken() || {};
 
     return when(request({
       url: url,
@@ -56,6 +57,9 @@ class EventStore extends EventEmitter {
       type: 'json',
       data: {
         offset: offset
+      },
+      headers: {
+        authorization: "Bearer " + tokenLocal
       }
     }))
     .then(function(response) {
