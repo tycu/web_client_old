@@ -16,6 +16,10 @@ class AdminContributionStore extends EventEmitter {
     return this.contributions || [];
   }
 
+  getEventContributionSum() {
+    return this.eventContributionSum;
+  }
+
   getMessage() {
     return this.message;
   };
@@ -23,7 +27,6 @@ class AdminContributionStore extends EventEmitter {
   getError() {
     return this.error;
   };
-
 
   fetchAdminContributions(offset) {
     var that = this;
@@ -53,6 +56,32 @@ class AdminContributionStore extends EventEmitter {
     })
   }
 
+  fetchEventContributionSum(eventId) {
+    var that = this;
+    var url = Constants.FETCH_EVENT_CONTRIBUTION_SUM;
+    var tokenLocal = AuthStore.getAuthToken();
+
+    return when(request({
+      url: url + eventId + '/contributions',
+      method: 'GET',
+      crossOrigin: true,
+      type: 'json',
+      headers: {
+        authorization: "Bearer " + tokenLocal
+      }
+    }))
+    .then(function(response) {
+      that.eventContributionSum = response.total;
+      that.emit('change');
+    })
+    .catch(function(response) {
+      if ((response.status !== 200) || response.status !== 304) {
+        console.log("Error loading eventContributionSum", response);
+      }
+    })
+  }
+
+
   addChangeListener(callback) {
     this.on('change', callback);
   }
@@ -70,6 +99,13 @@ class AdminContributionStore extends EventEmitter {
         break;
       }
     }
+    switch(action.type) {
+      case "FETCH_EVENT_CONTRIBUTION_SUM": {
+        this.fetchEventContributionSum(action.eventId);
+        break;
+      }
+    }
+
   }
 }
 

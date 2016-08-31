@@ -62,7 +62,8 @@ export default class AdminEvent extends React.Component {
 
   render() {
     const { id, isPublished, publishChange, isPinned, imageUrl, imageAttribution, politicianId, headline, summary } = this.props;
-    const linkTo = "edit_events/" + id;
+    const linkToEdit = "edit_events/" + id;
+    const linkToShow = "manage_events/" + id;
     const headlineMax = 75;
 
     const style = {
@@ -82,6 +83,8 @@ export default class AdminEvent extends React.Component {
       }
     }
 
+
+
     var trimmedHeadline = headline.length < headlineMax ? headline : headline.substring(0, headlineMax) + '...';
 
     var publishLink = (this.state.isPublished ? 'Publish' : 'UnPublish')
@@ -92,10 +95,10 @@ export default class AdminEvent extends React.Component {
         {(isPinned ?
           (<span class="glyphicon glyphicon-pushpin" aria-hidden="true"> </span>) :
           (<span></span>))}
-        {id}. {trimmedHeadline}
+        {id}. <Link to={linkToShow}>{trimmedHeadline}</Link>
         </span>
         <span style={style.editLinks}>
-          <Link to={linkTo}>Edit </Link>
+          <Link to={linkToEdit}>Edit </Link>
           {(isPinned ?
             <span></span> :
             <span>| <a href='' onClick={this.pinEvent.bind(this)}>Pin </a></span>)}

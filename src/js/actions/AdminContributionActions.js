@@ -6,3 +6,10 @@ export function fetchAdminContributions(offset) {
     offset
   });
 }
+
+export function fetchEventContributionSum(eventId) {
+  dispatcher.dispatch({
+    type: "FETCH_EVENT_CONTRIBUTION_SUM",
+    eventId
+  });
+}

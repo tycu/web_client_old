@@ -13,6 +13,8 @@ import Admin from './pages/Admin';
 import ManageEvents from './pages/admin/ManageEvents';
 import EditEvent from './pages/admin/events/EditEvent';
 import NewEvent from './pages/admin/events/NewEvent';
+import AdminEventShow from './pages/admin/events/AdminEventShow';
+
 import ManagePoliticians from './pages/admin/ManagePoliticians';
 import EditPolitician from './pages/admin/politicians/EditPolitician';
 import NewPolitician from './pages/admin/politicians/NewPolitician';
@@ -87,6 +89,7 @@ let routes = (
       <Route path="manage_events" component={ManageEvents} onEnter={requireAdmin}></Route>
       <Route path="new_event" component={NewEvent} onEnter={requireAdmin}></Route>
       <Route path="edit_events/:eventId" component={EditEvent} onEnter={requireAdmin}></Route>
+      <Route path="manage_events/:eventId" component={AdminEventShow} onEnter={requireAdmin}></Route>
 
       <Route path="manage_politicians" component={ManagePoliticians} onEnter={requireAdmin}></Route>
       <Route path="new_politician" component={NewPolitician} onEnter={requireAdmin}></Route>
