@@ -8,11 +8,34 @@
     <meta name="author" content="">
     <title>Tally.us</title>
     <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+
+    <!-- export const fbAppId = process.env.NODE_ENV === 'production' ? '1627624840901548' : '1627626620901370'; -->
+
+
+
   </head>
 
   <body style="background-color: #eee">
     <div id="app"></div>
     <script src="routes.min.js"></script>
+    <script>
+      window.fbAsyncInit = function(){
+        FB.init({
+          appId: '1627626620901370',
+          status: true,
+          cookie: true,
+          version: 'v2.7',
+          xfbml: true
+        });
+      };
+      (function(d, s, id){
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement(s); js.id = id;
+         js.src = "//connect.facebook.net/en_US/sdk.js";
+         fjs.parentNode.insertBefore(js, fjs);
+       }(document, 'script', 'facebook-jssdk'));
+    </script>
   </body>
 
 </html>

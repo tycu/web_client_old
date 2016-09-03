@@ -16,6 +16,13 @@ export function signUpUser(email, password) {
   });
 }
 
+export function signInFacebook(fbResponse) {
+  dispatcher.dispatch({
+    type: "AUTH_FACEBOOK",
+    fbResponse
+  });
+}
+
 export function signOutUser(token) {
   dispatcher.dispatch({
     type: "SIGN_OUT_USER",

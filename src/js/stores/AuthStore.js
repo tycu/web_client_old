@@ -308,6 +308,22 @@ class AuthStore extends EventEmitter {
     });
   }
 
+  authFacebook(fbResponse) {
+    this.loggedIn = true
+    this.email = email
+    var url = Constants.AUTH_FACEBOOK;
+
+    return this.handleAuth(when(request({
+      url: url,
+      method: 'POST',
+      crossOrigin: true,
+      type: 'json',
+      data: {
+        fbResponse: fbResponse
+      }
+    })));
+  }
+
   addChangeListener(callback) {
     this.on('change', callback);
   }
@@ -326,7 +342,11 @@ class AuthStore extends EventEmitter {
       }
       case "SIGN_UP_USER": {
         this.signup(action.email, action.password);
-        break
+        break;
+      }
+      case "AUTH_FACEBOOK": {
+        this.authFacebook(action.fbResponse);
+        break;
       }
       case "SIGN_OUT_USER": {
         this.signout()
