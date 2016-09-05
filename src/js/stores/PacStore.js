@@ -1,6 +1,6 @@
 import { EventEmitter } from "events";
 import dispatcher from "../dispatcher";
-var Promise = require("bluebird");
+import Promise from 'bluebird';
 import AuthStore from './AuthStore';
 import * as Constants from '../constants/PacConstants';
 import request from 'reqwest';
@@ -34,8 +34,8 @@ class PacStore extends EventEmitter {
 
   fetchPacs() {
     var that = this;
-    var url = Constants.GET_PACS;
-    var tokenLocal = AuthStore.getAuthToken();
+    const url = Constants.GET_PACS;
+    const tokenLocal = AuthStore.getAuthToken();
 
     return when(request({
       url: url,
@@ -63,8 +63,8 @@ class PacStore extends EventEmitter {
 
   fetchPac(pacId) {
     var that = this;
-    var url = Constants.GET_PAC;
-    var tokenLocal = AuthStore.getAuthToken();
+    const url = Constants.GET_PAC;
+    const tokenLocal = AuthStore.getAuthToken();
 
     return when(request({
       url: url + pacId,
@@ -93,8 +93,8 @@ class PacStore extends EventEmitter {
   }
 
   updatePac(pacId, pacInfo) {
-    var tokenLocal = AuthStore.getAuthToken();
-    var url = Constants.UPDATE_PAC;
+    const tokenLocal = AuthStore.getAuthToken();
+    const url = Constants.UPDATE_PAC;
 
     var res = Promise.resolve(
       request({
@@ -114,8 +114,8 @@ class PacStore extends EventEmitter {
   }
 
   createPac(pacInfo) {
-    var tokenLocal = AuthStore.getAuthToken();
-    var url = Constants.CREATE_PAC;
+    const tokenLocal = AuthStore.getAuthToken();
+    const url = Constants.CREATE_PAC;
 
     var res = Promise.resolve(
       request({

@@ -68,7 +68,7 @@ class AuthStore extends EventEmitter {
   signin(email, password) {
     this.loggedIn = true
     this.email = email
-    var url = Constants.SIGNIN_URL
+    const url = Constants.SIGNIN_URL
 
     return this.handleAuth(when(request({
       url: url,
@@ -82,10 +82,10 @@ class AuthStore extends EventEmitter {
     })));
   }
 
-  signup(email, password, url) {
+  signup(email, password) {
     this.loggedIn = true
     this.email = email
-    var url = Constants.SIGNUP_URL;
+    const url = Constants.SIGNUP_URL;
 
     return this.handleAuth(when(request({
       url: url,
@@ -102,7 +102,8 @@ class AuthStore extends EventEmitter {
   handleAuth(signInPromise) {
     var that = this;
 
-    return signInPromise.then(function(response) {
+    return signInPromise
+    .then(function(response) {
       var savedToken = localStorage.getItem('tallyToken');
       localStorage.setItem('tallyUserEmail', response.email);
       // localStorage.setItem('tallyEndureToken', response.refreshToken);
@@ -112,10 +113,11 @@ class AuthStore extends EventEmitter {
         localStorage.setItem('fullPerms', 'true');
       }
       if (savedToken !== response.token) {
-        browserHistory.push('/');
         localStorage.setItem('tallyToken', response.token);
       }
       that.emit("change");
+      // AuthActions.startJwtPoll();
+      browserHistory.push('/');
     })
     .catch(function (response) {
       // NOTE Model validation errors
@@ -126,7 +128,6 @@ class AuthStore extends EventEmitter {
         that.error = alertText;
         that.emailError = true;
         that.pwError = true;
-
         that.emit("change");
       } else if ((response.status !== 200) || response.status !== 304) {
         var alertText = JSON.parse(response.response).message;
@@ -135,7 +136,6 @@ class AuthStore extends EventEmitter {
         that.error = alertText;
         that.emailError = true;
         that.pwError = true;
-
         that.emit("change");
       }
     });
@@ -145,8 +145,8 @@ class AuthStore extends EventEmitter {
     this.loggedIn = false
     this.email = null
 
-    var tokenLocal = this.getAuthToken();
-    var url = Constants.SIGNOUT_URL;
+    const tokenLocal = this.getAuthToken();
+    const url = Constants.SIGNOUT_URL;
 
     localStorage.removeItem('tallyToken');
     localStorage.removeItem('tallyEndureToken');
@@ -188,7 +188,7 @@ class AuthStore extends EventEmitter {
 
   verifyEmail() {
     var that = this;
-    var url = Constants.EMAIL_VERIFICATION;
+    const url = Constants.EMAIL_VERIFICATION;
     var emailConfirmToken = window.location.search.split('?single_use_token=')[1];
 
     return this.handleEmailVerify(when(request({
@@ -221,7 +221,7 @@ class AuthStore extends EventEmitter {
 
   resetPassword(email) {
     var that = this;
-    var url = Constants.EMAIL_RESET;
+    const url = Constants.EMAIL_RESET;
     browserHistory.push('/reset_password_submit');
 
     // NOTE dont report on if email address is found, always suggest sent
@@ -238,7 +238,7 @@ class AuthStore extends EventEmitter {
 
   updatePwFromReset(newPassword) {
     var that = this;
-    var url = Constants.UPDATE_PW;
+    const url = Constants.UPDATE_PW;
 
     var emailConfirmToken = window.location.search.split('?single_use_token=')[1];
     browserHistory.push('/password_update_submit')
@@ -256,8 +256,8 @@ class AuthStore extends EventEmitter {
 
   changePassword(oldPassword, newPassword) {
     var that = this;
-    var url = Constants.CHANGE_PASSWORD;
-    var tokenLocal = this.getAuthToken();
+    const url = Constants.CHANGE_PASSWORD;
+    const tokenLocal = this.getAuthToken();
     var email = this.currentUser();
 
     return this.handlePasswordChange(when(request({
@@ -311,7 +311,7 @@ class AuthStore extends EventEmitter {
   authFacebook(fbResponse) {
     this.loggedIn = true
     this.email = email
-    var url = Constants.AUTH_FACEBOOK;
+    const url = Constants.AUTH_FACEBOOK;
 
     return this.handleAuth(when(request({
       url: url,
@@ -322,6 +322,42 @@ class AuthStore extends EventEmitter {
         fbResponse: fbResponse
       }
     })));
+  }
+
+  startJwtPoll() {
+    const url = Constants.JWT_POLL;
+    var that = this;
+
+    (function poll(){
+      setTimeout(function() {
+        var tokenLocal = that.getAuthToken();
+
+        if (tokenLocal !== undefined) {
+          Promise.resolve(
+            request({
+              url: url,
+              type: 'json',
+              crossOrigin: true,
+              method: 'GET',
+              headers: {
+                authorization: "Bearer " + tokenLocal
+              }
+            })
+          ).catch(function(response) {
+            // NOTE jwt error, take back to sign in
+            that.signout();
+            browserHistory.push('/signin');
+            that.emit('change');
+          })
+          .then(function(response) {
+            if (tokenLocal !== response.token) {
+              localStorage.setItem('tallyToken', response.token);
+            }
+          });
+        }
+        poll();
+      }, Constants.JWT_POLL_INTERVAL_MS);
+    })();
   }
 
   addChangeListener(callback) {
@@ -367,6 +403,10 @@ class AuthStore extends EventEmitter {
       }
       case "UPDATE_PW_FROM_RESET": {
         this.updatePwFromReset(action.password);
+        break;
+      }
+      case "START_JWT_POLL": {
+        this.startJwtPoll();
         break;
       }
     }

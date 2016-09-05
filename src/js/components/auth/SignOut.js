@@ -4,14 +4,21 @@ import * as AuthActions from "../../actions/AuthActions";
 export default class SignOut extends React.Component {
 
   componentWillMount() {
-    if (FB !== undefined) {
-      FB.getLoginStatus(function(response) {
-        if (response.status === 'connected') {
-          FB.logout();
-        }
-       });
+    try {
+      if (FB !== undefined) {
+        FB.getLoginStatus(function(response) {
+          if (response.status === 'connected') {
+            FB.logout();
+          }
+         });
+      }
     }
-    AuthActions.signOutUser();
+    catch(err) {
+      alert('Trouble loading Facbook SDK. Please check your internet connection');
+    }
+    finally {
+      AuthActions.signOutUser();
+    }
   }
 
   render() {

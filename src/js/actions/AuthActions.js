@@ -57,3 +57,9 @@ export function updatePasswordFromReset(password) {
     password
   })
 }
+
+export function startJwtPoll() {
+  dispatcher.dispatch({
+    type: "START_JWT_POLL"
+  })
+}

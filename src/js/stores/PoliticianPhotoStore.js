@@ -1,6 +1,6 @@
 import { EventEmitter } from "events";
 import dispatcher from "../dispatcher";
-var Promise = require("bluebird");
+import Promise from 'bluebird';
 import AuthStore from './AuthStore';
 import * as Constants from '../constants/PoliticianPhotoConstants';
 import request from 'reqwest';
@@ -33,8 +33,8 @@ class PoliticianPhotoStore extends EventEmitter {
 
   fetchPoliticianPhotos(politicianId) {
     var that = this;
-    var url = Constants.GET_POLITICIAN_PHOTOS;
-    var tokenLocal = AuthStore.getAuthToken();
+    const url = Constants.GET_POLITICIAN_PHOTOS;
+    const tokenLocal = AuthStore.getAuthToken();
 
     return when(request({
       url: url + politicianId + '/politician_photos',
@@ -62,8 +62,8 @@ class PoliticianPhotoStore extends EventEmitter {
 
   fetchPoliticianPhoto(politicianId, politicianPhotoId) {
     var that = this;
-    var url = Constants.GET_POLITICIAN_PHOTO;
-    var tokenLocal = AuthStore.getAuthToken();
+    const url = Constants.GET_POLITICIAN_PHOTO;
+    const tokenLocal = AuthStore.getAuthToken();
 
     return when(request({
       url: url + politicianId + '/politician_photos/' + politicianPhotoId,
@@ -92,8 +92,8 @@ class PoliticianPhotoStore extends EventEmitter {
   }
 
   updatePoliticianPhoto(politicianId, politicianPhotoId, politicianPhotoInfo) {
-    var tokenLocal = AuthStore.getAuthToken();
-    var url = Constants.UPDATE_POLITICIAN_PHOTO;
+    const tokenLocal = AuthStore.getAuthToken();
+    const url = Constants.UPDATE_POLITICIAN_PHOTO;
 
     var res = Promise.resolve(
       request({
@@ -113,8 +113,8 @@ class PoliticianPhotoStore extends EventEmitter {
   }
 
   createPoliticianPhoto(politicianId, politicianPhotoInfo) {
-    var tokenLocal = AuthStore.getAuthToken();
-    var url = Constants.CREATE_POLITICIAN_PHOTO;
+    const tokenLocal = AuthStore.getAuthToken();
+    const url = Constants.CREATE_POLITICIAN_PHOTO;
 
     var res = Promise.resolve(
       request({
@@ -134,8 +134,8 @@ class PoliticianPhotoStore extends EventEmitter {
   }
 
   deletePoliticianPhoto(politicianId, politicianPhotoId) {
-    var tokenLocal = AuthStore.getAuthToken();
-    var url = Constants.DELETE_POLITICIAN_PHOTO;
+    const tokenLocal = AuthStore.getAuthToken();
+    const url = Constants.DELETE_POLITICIAN_PHOTO;
 
     var res = Promise.resolve(
       request({

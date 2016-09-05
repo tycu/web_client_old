@@ -1,6 +1,5 @@
 import { EventEmitter } from "events";
 import dispatcher from "../dispatcher";
-var Promise = require("bluebird");
 import AuthStore from './AuthStore';
 import * as Constants from '../constants/UserConstants';
 import request from 'reqwest';
@@ -14,6 +13,7 @@ class DonorInfoStore extends EventEmitter {
     return this.donorInfo || {
       occupation: '',
       employer: '',
+      picSquare: '',
       name: '',
       streetAddress: '',
       city: '',
@@ -36,8 +36,8 @@ class DonorInfoStore extends EventEmitter {
 
   loadDonorInfo(userId) {
     var that = this;
-    var url = Constants.USER_URL;
-    var tokenLocal = AuthStore.getAuthToken();
+    const url = Constants.USER_URL;
+    const tokenLocal = AuthStore.getAuthToken();
 
     return when(request({
       url: url + userId,
@@ -54,6 +54,7 @@ class DonorInfoStore extends EventEmitter {
       donorInfo['employer'] = response.employer || '';
       donorInfo['name'] = response.name || '';
       donorInfo['streetAddress'] = response.streetAddress || '';
+      donorInfo['picSquare'] = response.picSquare || '';
       donorInfo['city'] = response.city || '';
       donorInfo['residenceState'] = response.residenceState || '';
       donorInfo['zip'] = response.zip || '';
@@ -71,8 +72,8 @@ class DonorInfoStore extends EventEmitter {
   }
 
   updateDonorInfo(userId, donorInfo) {
-    var tokenLocal = AuthStore.getAuthToken();
-    var url = Constants.USER_URL;
+    const tokenLocal = AuthStore.getAuthToken();
+    const url = Constants.USER_URL;
     var that = this;
 
     return when(request({

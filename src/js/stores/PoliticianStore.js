@@ -1,6 +1,6 @@
 import { EventEmitter } from "events";
 import dispatcher from "../dispatcher";
-var Promise = require("bluebird");
+import Promise from 'bluebird';
 import AuthStore from './AuthStore';
 import request from 'reqwest';
 import when from 'when';
@@ -35,8 +35,8 @@ class PoliticianStore extends EventEmitter {
 
   fetchPoliticians() {
     var that = this;
-    var url = Constants.GET_POLITICIANS;
-    var tokenLocal = AuthStore.getAuthToken();
+    const url = Constants.GET_POLITICIANS;
+    const tokenLocal = AuthStore.getAuthToken();
 
     return when(request({
       url: url,
@@ -61,8 +61,8 @@ class PoliticianStore extends EventEmitter {
 
   fetchPolitician(politicianId) {
     var that = this;
-    var url = Constants.GET_POLITICIAN;
-    var tokenLocal = AuthStore.getAuthToken();
+    const url = Constants.GET_POLITICIAN;
+    const tokenLocal = AuthStore.getAuthToken();
 
     return when(request({
       url: url + politicianId,
@@ -93,8 +93,8 @@ class PoliticianStore extends EventEmitter {
   }
 
   updatePolitician(politicianId, politicianInfo) {
-    var tokenLocal = AuthStore.getAuthToken();
-    var url = Constants.UPDATE_POLITICIAN;
+    const tokenLocal = AuthStore.getAuthToken();
+    const url = Constants.UPDATE_POLITICIAN;
 
     var res = Promise.resolve(
       request({
@@ -114,8 +114,8 @@ class PoliticianStore extends EventEmitter {
   }
 
   createPolitician(politicianInfo) {
-    var tokenLocal = AuthStore.getAuthToken();
-    var url = Constants.CREATE_POLITICIAN;
+    const tokenLocal = AuthStore.getAuthToken();
+    const url = Constants.CREATE_POLITICIAN;
 
     var res = Promise.resolve(
       request({

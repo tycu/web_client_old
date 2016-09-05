@@ -5,6 +5,7 @@ import AuthStore from '../stores/AuthStore';
 import Footer from "../components/layout/Footer";
 import TallyNav from "../components/layout/TallyNav";
 import * as EventActions from '../actions/EventActions';
+import * as AuthActions from '../actions/AuthActions';
 import EventStore from '../stores/EventStore';
 import BreakingNews from '../components/layout/BreakingNews';
 
@@ -31,6 +32,7 @@ export default class Layout extends React.Component {
     AuthStore.addChangeListener(this.getAuthState);
     EventActions.fetchBreakingEvent();
     EventStore.addChangeListener(this.getBreakingEvent);
+    AuthActions.startJwtPoll();
   }
 
   componentWillUnmount() {

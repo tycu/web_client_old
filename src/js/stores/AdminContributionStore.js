@@ -30,8 +30,8 @@ class AdminContributionStore extends EventEmitter {
 
   fetchAdminContributions(offset) {
     var that = this;
-    var url = Constants.GET_ADMIN_CONTRIBUTIONS;
-    var tokenLocal = AuthStore.getAuthToken();
+    const url = Constants.GET_ADMIN_CONTRIBUTIONS;
+    const tokenLocal = AuthStore.getAuthToken();
 
     return when(request({
       url: url,
@@ -58,8 +58,8 @@ class AdminContributionStore extends EventEmitter {
 
   fetchEventContributionSum(eventId) {
     var that = this;
-    var url = Constants.FETCH_EVENT_CONTRIBUTION_SUM;
-    var tokenLocal = AuthStore.getAuthToken();
+    const url = Constants.FETCH_EVENT_CONTRIBUTION_SUM;
+    const tokenLocal = AuthStore.getAuthToken();
 
     return when(request({
       url: url + eventId + '/contributions',

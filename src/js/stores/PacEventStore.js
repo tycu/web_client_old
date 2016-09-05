@@ -1,6 +1,6 @@
 import { EventEmitter } from "events";
 import dispatcher from "../dispatcher";
-var Promise = require("bluebird");
+import Promise from 'bluebird';
 import AuthStore from './AuthStore';
 import * as Constants from '../constants/PacEventConstants';
 import request from 'reqwest';
@@ -42,8 +42,8 @@ class PacEventStore extends EventEmitter {
 
   fetchPacEvents(eventId) {
     var that = this;
-    var url = Constants.GET_PAC_EVENTS;
-    var tokenLocal = AuthStore.getAuthToken();
+    const url = Constants.GET_PAC_EVENTS;
+    const tokenLocal = AuthStore.getAuthToken();
 
     return when(request({
       url: url + eventId + '/pac_events',
@@ -78,8 +78,8 @@ class PacEventStore extends EventEmitter {
 
   fetchPacEvent(eventId, pacEventId) {
     var that = this;
-    var url = Constants.GET_PAC_EVENT;
-    var tokenLocal = AuthStore.getAuthToken();
+    const url = Constants.GET_PAC_EVENT;
+    const tokenLocal = AuthStore.getAuthToken();
 
     return when(request({
       url: url + eventId + '/pac_events/' + pacEventId,
@@ -108,8 +108,8 @@ class PacEventStore extends EventEmitter {
   }
 
   updatePacEvent(eventId, pacEventId, pacEventInfo) {
-    var tokenLocal = AuthStore.getAuthToken();
-    var url = Constants.UPDATE_PAC_EVENT;
+    const tokenLocal = AuthStore.getAuthToken();
+    const url = Constants.UPDATE_PAC_EVENT;
 
     var res = Promise.resolve(
       request({
@@ -129,8 +129,8 @@ class PacEventStore extends EventEmitter {
   }
 
   createPacEvent(eventId, pacInfo) {
-    var tokenLocal = AuthStore.getAuthToken();
-    var url = Constants.CREATE_PAC_EVENT;
+    const tokenLocal = AuthStore.getAuthToken();
+    const url = Constants.CREATE_PAC_EVENT;
 
     var res = Promise.resolve(
       request({
@@ -150,8 +150,8 @@ class PacEventStore extends EventEmitter {
   }
 
   deletePacEvent(eventId, pacEventId) {
-    var tokenLocal = AuthStore.getAuthToken();
-    var url = Constants.DELETE_PAC_EVENT;
+    const tokenLocal = AuthStore.getAuthToken();
+    const url = Constants.DELETE_PAC_EVENT;
 
     var res = Promise.resolve(
       request({

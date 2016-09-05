@@ -44,6 +44,8 @@ import ForgotPasswordSubmit from './components/auth/ForgotPasswordSubmit';
 import ResetPasswordSubmit from './components/auth/ResetPasswordSubmit';
 import EmailVerification from "./components/auth/EmailVerification";
 import ChangePassword from './components/auth/ChangePassword';
+import UserProfile from './components/user/UserProfile';
+
 import NewPasswordFromReset from './components/auth/NewPasswordFromReset';
 import SetCard from './components/contributions/SetCard';
 import FourOhFour from './pages/static/FourOhFour';
@@ -109,6 +111,8 @@ let routes = (
       <Route path="contribution_report" component={ContributionReport} onEnter={requireAdmin}></Route>
 
       <Route path="change_password" component={ChangePassword} onEnter={requireAuth}></Route>
+      <Route path="user_profile" component={UserProfile} onEnter={requireAuth}></Route>
+
       <Route path="contributions" component={Contributions} onEnter={requireAuth}></Route>
       <Route path="edit-card" component={SetCard} onEnter={requireAuth}></Route>
       <Route path="donor-info" component={DonorInfo} onEnter={requireAuth}></Route>

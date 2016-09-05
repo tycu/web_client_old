@@ -52,8 +52,12 @@ class EventStore extends EventEmitter {
 
   fetchEvents(offset) {
     var that = this;
-    var url = Constants.GET_EVENTS;
-    var tokenLocal = AuthStore.getAuthToken() || {};
+    const url = Constants.GET_EVENTS;
+    const tokenLocal = AuthStore.getAuthToken() || '';
+
+    if (tokenLocal === '') {
+      return;
+    }
 
     return when(request({
       url: url,
@@ -90,8 +94,8 @@ class EventStore extends EventEmitter {
 
   fetchAdminEvents(offset) {
     var that = this;
-    var url = Constants.GET_ADMIN_EVENTS;
-    var tokenLocal = AuthStore.getAuthToken();
+    const url = Constants.GET_ADMIN_EVENTS;
+    const tokenLocal = AuthStore.getAuthToken();
 
     return when(request({
       url: url,
@@ -128,8 +132,8 @@ class EventStore extends EventEmitter {
 
   fetchEvent(eventId) {
     var that = this;
-    var url = Constants.GET_EVENT;
-    var tokenLocal = AuthStore.getAuthToken();
+    const url = Constants.GET_EVENT;
+    const tokenLocal = AuthStore.getAuthToken();
 
     return when(request({
       url: url + eventId,
@@ -165,8 +169,8 @@ class EventStore extends EventEmitter {
 
   fetchAdminEvent(eventId) {
     var that = this;
-    var url = Constants.GET_ADMIN_EVENT;
-    var tokenLocal = AuthStore.getAuthToken();
+    const url = Constants.GET_ADMIN_EVENT;
+    const tokenLocal = AuthStore.getAuthToken();
 
     return when(request({
       url: url + eventId,
@@ -201,8 +205,8 @@ class EventStore extends EventEmitter {
   }
 
   updateEvent(eventId, eventInfo) {
-    var tokenLocal = AuthStore.getAuthToken();
-    var url = Constants.UPDATE_EVENT;
+    const tokenLocal = AuthStore.getAuthToken();
+    const url = Constants.UPDATE_EVENT;
 
     var res = Promise.resolve(
       request({
@@ -222,8 +226,8 @@ class EventStore extends EventEmitter {
   }
 
   pinEvent(eventId) {
-    var tokenLocal = AuthStore.getAuthToken();
-    var url = Constants.PIN_EVENT;
+    const tokenLocal = AuthStore.getAuthToken();
+    const url = Constants.PIN_EVENT;
     var that = this;
 
     return when(request({
@@ -252,8 +256,8 @@ class EventStore extends EventEmitter {
   }
 
   setBreaking(eventId) {
-    var tokenLocal = AuthStore.getAuthToken();
-    var url = Constants.SET_BREAKING;
+    const tokenLocal = AuthStore.getAuthToken();
+    const url = Constants.SET_BREAKING;
     var that = this;
 
     return when(request({
@@ -290,8 +294,8 @@ class EventStore extends EventEmitter {
   }
 
   unSetBreaking() {
-    var tokenLocal = AuthStore.getAuthToken();
-    var url = Constants.UNSET_BREAKING;
+    const tokenLocal = AuthStore.getAuthToken();
+    const url = Constants.UNSET_BREAKING;
     var that = this;
 
     return when(request({
@@ -319,7 +323,7 @@ class EventStore extends EventEmitter {
   }
 
   fetchBreaking() {
-    var url = Constants.FETCH_BREAKING_EVENT;
+    const url = Constants.FETCH_BREAKING_EVENT;
     var that = this;
 
     return when(request({
@@ -347,8 +351,8 @@ class EventStore extends EventEmitter {
   }
 
   togglePublish(eventId) {
-    var tokenLocal = AuthStore.getAuthToken();
-    var url = Constants.TOGGLE_PUBLISH_EVENT;
+    const tokenLocal = AuthStore.getAuthToken();
+    const url = Constants.TOGGLE_PUBLISH_EVENT;
     var that = this;
 
     return when(request({
@@ -379,8 +383,8 @@ class EventStore extends EventEmitter {
   }
 
   createEvent(eventInfo) {
-    var url = Constants.CREATE_EVENT;
-    var tokenLocal = AuthStore.getAuthToken();
+    const url = Constants.CREATE_EVENT;
+    const tokenLocal = AuthStore.getAuthToken();
     var that = this;
 
     return when(request({

@@ -28,7 +28,7 @@ class ImageStore extends EventEmitter {
   }
 
   uploadImage(file) {
-    var tokenLocal = AuthStore.getAuthToken();
+    const tokenLocal = AuthStore.getAuthToken();
     var that = this;
 
     const url = Constants.UPLOAD_IMAGE + '?fileType=' + encodeURIComponent(file.type),
