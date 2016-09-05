@@ -45,49 +45,19 @@ export default class Events extends React.Component {
   getStyles = () => {
     return {
       events: {
-        // margin: '0 auto',
-        // backgroundColor: '#fff',
-        // border: '1px solid #e7e7e7',
-        // borderRadius: '0px',
-        position: 'relative',
-        top: '0px',
-        minHeight: '150px',
-        marginBottom: '20px',
-        display: 'block',
-        boxSizing: 'border-box',
-        maxWidth: '960px'
+          minHeight: '150px',
+          marginBottom: '20px',
+          display: 'block',
         },
         container: {
-          float: 'right',
-          paddingRight: '15px',
-          paddingLeft: '15px',
-          marginRight: 'auto',
-          marginLeft: 'auto',
-          boxSizing: 'border-box',
-
-          '@media (min-width: 768px)': {
-            width: '720px'
-          },
-          '@media (min-width: 992px)': {
-            width: '820px'
-          },
-          '@media (min-width: 1200px)': {
-            width: '820px'
-          }
         },
         ul: {
           listStyle: 'none'
         },
         pseudoBefore: {
-          display: 'table',
-          // content: ' ',
-          boxSizing: 'border-box'
         },
         pseudoAfter: {
           clear: 'both',
-          display: 'table',
-          // content: ' ',
-          boxSizing: 'border-box'
         }
       };
   }

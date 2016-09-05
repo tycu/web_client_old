@@ -16,39 +16,28 @@ export default class Navbar extends React.Component {
   getStyles = () => {
     return {
       navbar: {
-        backgroundColor: '#333',
+        backgroundColor: '#333'
+      },
+      container: {
+        margin: '0 auto',
+        maxWidth: '800px',
+        minWidth: '480px',
         position: 'relative',
-        top: '0px',
-        minHeight: '50px',
-        display: 'block',
-        boxSizing: 'border-box'
+        '@media (min-width: 990px)': {
+          left: '-75px'
         },
-        container: {
-          boxSizing: 'border-box',
-          margin: '0 auto',
-
-          '@media (min-width: 768px)': {
-            width: '750px'
-          },
-          '@media (min-width: 992px)': {
-            width: '860px'
-          },
-          '@media (min-width: 1200px)': {
-            width: '860px'
-          }
-        },
-        pseudoBefore: {
-          display: 'table',
-          // content: ' ',
-          boxSizing: 'border-box'
-        },
-        pseudoAfter: {
-          clear: 'both',
-          display: 'table',
-          // content: ' ',
-          boxSizing: 'border-box'
+        '@media (min-width: 1200px)': {
+          left: '-125px'
         }
-      };
+      },
+      pseudoBefore: {
+        display: 'table',
+      },
+      pseudoAfter: {
+        clear: 'both',
+        display: 'table',
+      }
+    };
   }
 
   renderChildren = () => {

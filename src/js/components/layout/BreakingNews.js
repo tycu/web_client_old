@@ -17,29 +17,23 @@ export default class BreakingNews extends React.Component {
   getStyles = () => {
     return {
       breakingNews: {
-        margin: '0 auto',
-        position: 'relative',
-        top: '0px',
         height: '50px',
-        display: 'block',
-        boxSizing: 'border-box',
-        maxWidth: '720px'
+        backgroundColor: '#fff'
         },
         container: {
-          backgroundColor: '#fff',
+          margin: '0 auto',
+          maxWidth: '750px',
+          minWidth: '480px',
+          position: 'relative',
           padding: '20px',
-          // marginRight: 'auto',
-          // marginLeft: 'auto',
-          boxSizing: 'border-box',
-
           '@media (min-width: 768px)': {
-            width: '720px'
+            left: '-15px'
           },
-          '@media (min-width: 992px)': {
-            width: '820px'
+          '@media (min-width: 990px)': {
+            left: '-75px'
           },
           '@media (min-width: 1200px)': {
-            width: '820px'
+            left: '-175px'
           }
         },
         breakingHeader: {
@@ -55,15 +49,9 @@ export default class BreakingNews extends React.Component {
           color: '#C14242'
         },
         pseudoBefore: {
-          display: 'table',
-          // content: ' ',
-          boxSizing: 'border-box'
         },
         pseudoAfter: {
           clear: 'both',
-          display: 'table',
-          // content: ' ',
-          boxSizing: 'border-box'
         }
       };
   }

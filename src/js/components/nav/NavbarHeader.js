@@ -15,10 +15,6 @@ export default class NavbarHeader extends React.Component {
   getStyles = () => {
     return {
       header: {
-        // marginRight: '-15px',
-        // marginLeft: '-15px',
-        boxSizing: 'border-box',
-
         '@media (min-width: 768px)': {
           float: 'left',
           marginRight: '0',
@@ -32,20 +28,15 @@ export default class NavbarHeader extends React.Component {
         lineHeight: '30px',
         textDecoration: 'none',
         backgroundColor: 'transparent',
-        boxSizing: 'border-box',
-
         fontSize: '26px',
         color: '#eee',
         fontFamily: '"Helvetica Neue",Helvetica,Arial,sans-serif',
-
         ':hover': {
           color: '#999'
         },
-
         ':focus': {
           color: '#999'
         },
-
         '@media (min-width: 768px)': {
           marginLeft: '-15px'
         }
@@ -64,12 +55,9 @@ export default class NavbarHeader extends React.Component {
         borderRadius: '4px',
         borderColor: '#888',
         cursor: 'pointer',
-        boxSizing: 'border-box',
-
         ':hover': {
           backgroundColor: '#aaa'
         },
-
         ':focus': {
           outline: '0',
           backgroundColor: '#aaa'
@@ -88,7 +76,6 @@ export default class NavbarHeader extends React.Component {
         clip: 'rect(0, 0, 0, 0)',
         borderWidth: '0',
         borderStyle: 'none',
-        boxSizing: 'border-box'
         },
       iconBar: {
         display: 'block',
@@ -96,21 +83,16 @@ export default class NavbarHeader extends React.Component {
         height: '2px',
         borderRadius: '1px',
         backgroundColor: '#888',
-        boxSizing: 'border-box'
       },
       burger: {
         marginTop: '4px'
       },
       pseudoBefore: {
         display: 'table',
-        // content: ' ',
-        boxSizing: 'border-box'
       },
       pseudoAfter: {
         clear: 'both',
         display: 'table',
-        // content: ' ',
-        boxSizing: 'border-box'
       }
     };
   }

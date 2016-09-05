@@ -15,7 +15,6 @@ export default class NavbarItems extends React.Component {
         margin: '7.5px -15px',
         listStyle: 'outside none none',
         paddingLeft: '0',
-        boxSizing: 'border-box',
 
         fontFamily: '"Helvetica Neue",Helvetica,Arial,sans-serif',
         fontSize: '16px',
@@ -36,7 +35,6 @@ export default class NavbarItems extends React.Component {
         marginRight: '-15px',
         marginLeft: '-15px',
         maxHeight: '340px',
-        boxSizing: 'border-box',
         display: 'none',
 
         '@media (min-width: 768px)': {
@@ -56,15 +54,11 @@ export default class NavbarItems extends React.Component {
         }
       },
       pseudoBefore: {
-        display: 'table',
-        // content: ' ',
-        boxSizing: 'border-box'
+        display: 'table'
       },
       pseudoAfter: {
         clear: 'both',
-        display: 'table',
-        // content: ' ',
-        boxSizing: 'border-box'
+        display: 'table'
       }
     };
     if (this.props.collapseIn) {

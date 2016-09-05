@@ -34,8 +34,6 @@ export default class DropdownMenu extends React.Component {
         borderBottomLeftRadius: '2px',
         borderBottomRightRadius: '2px',
         boxShadow: '0 6px 12px #C9C9C9',
-        boxSizing: 'border-box',
-
         '@media (max-width: 767px)': {
           position: 'static',
           float: 'none',
@@ -55,8 +53,6 @@ export default class DropdownMenu extends React.Component {
           color: '#333',
           whiteSpace: 'nowrap',
           textDecoration: 'none',
-          boxSizing: 'border-box',
-
           ':hover': {
             color: '#262626',
             backgroundColor: '#f5f5f5'

@@ -8,17 +8,21 @@
     <meta name="author" content="">
     <title>Tally.us</title>
     <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
-
-    <!-- export const fbAppId = process.env.NODE_ENV === 'production' ? '1627624840901548' : '1627626620901370'; -->
-
-
-
+    <style type="text/css">
+      html {
+        box-sizing: border-box;
+      }
+      *, *:before, *:after {
+        box-sizing: inherit;
+      }
+    </style>
   </head>
 
   <body style="background-color: #eee">
     <div id="app"></div>
     <script src="routes.min.js"></script>
     <script>
+      // export const fbAppId = process.env.NODE_ENV === 'production' ? '1627624840901548' : '1627626620901370';
       window.fbAsyncInit = function(){
         FB.init({
           appId: '1627626620901370',

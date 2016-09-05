@@ -18,8 +18,6 @@ export default class NavItem extends React.Component {
       base: {
         position: 'relative',
         display: 'block',
-        boxSizing: 'border-box',
-
         '@media (min-width: 768px)': {
           float: 'left'
         }
@@ -32,21 +30,17 @@ export default class NavItem extends React.Component {
         lineHeight: '30px',
         position: 'relative',
         display: 'block',
-        boxSizing: 'border-box',
         textDecoration: 'none',
         backgroundColor: 'transparent',
         color: '#ccc',
-
         ':hover': {
           color: '#111',
           backgroundColor: '#eee'
         },
-
         ':focus': {
           color: '#111',
           backgroundColor: 'transparent'
         },
-
         '@media (min-width: 768px)': {
           paddingTop: '15px',
           paddingBottom: '15px'

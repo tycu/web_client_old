@@ -21,8 +21,6 @@ export default class NavbarDropdown extends React.Component {
       dropdown: {
         position: 'relative',
         display: 'block',
-        boxSizing: 'border-box',
-
         '@media (min-width: 768px)': {
           float: 'left'
         }
@@ -46,7 +44,6 @@ export default class NavbarDropdown extends React.Component {
         lineHeight: '30px',
         position: 'relative',
         display: 'block',
-        boxSizing: 'border-box',
         textDecoration: 'none',
         backgroundColor: 'transparent',
         color: '#ccc',
