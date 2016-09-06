@@ -1,4 +1,5 @@
 import { EventEmitter } from "events";
+import { Router, Route, IndexRoute, browserHistory } from "react-router";
 import dispatcher from "../dispatcher";
 import AuthStore from './AuthStore';
 import { collections } from 'lodash';
@@ -55,6 +56,10 @@ class EventStore extends EventEmitter {
     const tokenLocal = AuthStore.getAuthToken() || '';
 
     if (tokenLocal === '') {
+      AuthStore.signout();
+      // that.message = 'You need to sign back in';
+      browserHistory.push('/signin');
+      that.emit('change');
       return;
     }
 
@@ -88,6 +93,10 @@ class EventStore extends EventEmitter {
     .catch(function(response) {
       if ((response.status !== 200) || response.status !== 304) {
         console.log("Error loading eventObjs", response);
+        // that.message = 'You need to sign back in'
+        AuthStore.signout();
+        browserHistory.push('/signin');
+        that.emit('change');
       }
     })
   }

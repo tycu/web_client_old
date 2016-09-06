@@ -74,6 +74,7 @@ export default class SignIn extends React.Component {
         error: AuthUtils.invalidEmail(),
         emailError: true
       });
+      return false;
     }
 
     if (!AuthUtils.validEmail(this.state.email)) {
@@ -126,7 +127,7 @@ export default class SignIn extends React.Component {
     };
 
     return (
-      <div className="signin jumbotron center-block" style={style.container}>
+      <div className="jumbotron center-block" style={style.container}>
         <h2>Login</h2>
         <div style={style.emailSignup}>
           <p style={style.p}>Sign in with email</p>
@@ -155,7 +156,7 @@ export default class SignIn extends React.Component {
               <FacebookLogin
                 appId={Constants.fbAppId}
                 autoLoad={true}
-                size='metro'
+                size='medium'
                 version='2.7'
                 language='en_US'
                 fields="name,email,picture.width(200).height(200)"

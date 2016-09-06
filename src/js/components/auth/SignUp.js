@@ -142,7 +142,7 @@ export default class SignUp extends React.Component {
     };
 
     return (
-      <div style={style.container}>
+      <div className="jumbotron center-block" style={style.container}>
         <h2>Sign up For Tally</h2>
         <br/>
         <div style={style.emailSignup}>
@@ -165,7 +165,7 @@ export default class SignUp extends React.Component {
               <FacebookLogin
                 appId={Constants.fbAppId}
                 autoLoad={true}
-                size='metro'
+                size='medium'
                 version='2.7'
                 language='en_US'
                 fields="name,email,picture.width(200).height(200)"
@@ -173,7 +173,7 @@ export default class SignUp extends React.Component {
                 textButton='Login With Facebook'
                 icon="fa-facebook"
               />
-              <br/><br/><br/>
+              <br/><br/><br/><br/><br/>
               <span>Already have an Account? | </span>
               <Link to="/signin"> Log In</Link>
             </div>
