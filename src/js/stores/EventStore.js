@@ -6,7 +6,6 @@ import request from 'reqwest';
 import when from 'when';
 import * as Constants from '../constants/EventConstants';
 
-
 class EventStore extends EventEmitter {
   constructor() {
     super()
@@ -72,7 +71,8 @@ class EventStore extends EventEmitter {
       }
     }))
     .then(function(response) {
-      that.eventObjs = response;
+      var events = that.eventObjs || [];
+      that.eventObjs = events.concat(response);
       _(response).forEach(function(eventObj) {
         if (eventObj.isPinned === true) {
           that.pinnedId = eventObj.id;
