@@ -40,13 +40,17 @@ class PacEventStore extends EventEmitter {
     return this.error;
   };
 
-  fetchPacEvents(eventId) {
+  fetchPacEvents(eventId, support) {
     var that = this;
-    const url = Constants.GET_PAC_EVENTS;
+    const urlBase = Constants.GET_PAC_EVENTS;
     const tokenLocal = AuthStore.getAuthToken();
+    var url = urlBase + eventId + '/pac_events';
 
+    if (support !== undefined) {
+      url = url + '?include_pacs=true&support=' + support;
+    }
     return when(request({
-      url: url + eventId + '/pac_events',
+      url: url,
       method: 'GET',
       crossOrigin: true,
       type: 'json',
@@ -184,7 +188,7 @@ class PacEventStore extends EventEmitter {
 
     switch(action.type) {
       case "FETCH_PAC_EVENTS": {
-        this.fetchPacEvents(action.eventId);
+        this.fetchPacEvents(action.eventId, action.support);
         break;
       }
       case "FETCH_PAC_EVENT": {

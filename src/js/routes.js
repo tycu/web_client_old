@@ -4,6 +4,7 @@ import { Router, Route, IndexRoute, browserHistory } from "react-router";
 import AuthStore from './stores/AuthStore';
 
 import Events from "./pages/Events";
+import EventShow from './components/contributions/EventShow';
 import About from "./pages/static/About";
 import Faq from "./pages/static/Faq";
 import Layout from "./pages/Layout";
@@ -88,6 +89,8 @@ let routes = (
       <IndexRoute component={Events}></IndexRoute>
       <Route path="email_verification" component={EmailVerification}></Route>
       <Route path="events" component={Events}></Route>
+      <Route path="events/:eventId" component={EventShow} onEnter={requireAuth}></Route>
+
       <Route path="about" component={About}></Route>
       <Route path="faq" component={Faq}></Route>
       <Route path="settings" component={Settings} onEnter={requireAuth}></Route>
