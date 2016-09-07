@@ -44,11 +44,12 @@ export default class SignIn extends React.Component {
     AuthStore.removeChangeListener(this.getAuthState);
   }
 
-  responseFacebook(response) {
-    if (response.status == 'unknown') {
+  responseFacebook(facebookResponse) {
+    console.log('facebookResponse', facebookResponse);
+    if (facebookResponse.status == 'unknown') {
       return;
     } else {
-      AuthActions.signInFacebook(response)
+      AuthActions.signInFacebook(facebookResponse)
     }
   }
 

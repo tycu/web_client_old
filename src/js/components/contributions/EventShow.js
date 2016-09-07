@@ -23,6 +23,7 @@ export default class  extends React.Component {
 
     this.state = {
       donationAmount: '0.00',
+      selectedPac: 0,
       // support: false,
       event: EventStore.getEvent(),
       // availablePacs: PacStore.getPacs(),
@@ -37,6 +38,7 @@ export default class  extends React.Component {
   static propTypes = {
     donationAmount: React.PropTypes.string,
     support: React.PropTypes.bool,
+    selectedPac: React.PropTypes.number,
     event: React.PropTypes.shape({
       eventId:     React.PropTypes.number,
       isPinned:    React.PropTypes.bool,
@@ -284,9 +286,9 @@ export default class  extends React.Component {
         <div class="radio">
           <input class='btn btn-default' type="radio" name={pacEventWithPac.Pac.name}
                  value={pacEventWithPac.id} // pacEvent.id
-                 checked={i === 0}
+                 checked={pacEventWithPac.pacId === this.state.selectedPac}
                  onChange={this.selectTargetPac.bind(this, pacEventWithPac.pacId)} />
-           <label>{pacEventWithPac.Pac.name}</label>
+           <span>{pacEventWithPac.Pac.name}</span>
         </div>
       );
     }, this);

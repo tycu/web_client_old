@@ -169,7 +169,6 @@ class EventStore extends EventEmitter {
     })
     .catch(function(response) {
       if (((response.status !== 200) || response.status !== 304) || response.status !== 304) {
-        alert("There is an error loading eventObj");
         console.log("Error loading eventObj", response);
         // that.emit('change');
       }
@@ -206,7 +205,6 @@ class EventStore extends EventEmitter {
     })
     .catch(function(response) {
       if (((response.status !== 200) || response.status !== 304) || response.status !== 304) {
-        alert("There is an error loading eventObj");
         console.log("Error loading eventObj", response);
         // that.emit('change');
       }

@@ -1,5 +1,6 @@
 import React from 'react';
 import Radium from 'radium';
+import { Router, Route, IndexRoute, browserHistory } from "react-router";
 var Link = require('react-router').Link;
 Link = Radium(Link);
 
@@ -50,11 +51,13 @@ export default class NavItem extends React.Component {
   }
 
   clickLink(e) {
-
-    // TODO get react router passed in context to components
     // e.preventDefault();
+    // TODO get react router passed in context to components
     // context.router.push(e.target.href)
 
+    // if ((/events/).test(location.pathname)) {
+    //   browserHistory.goBack();
+    // }
     // browserHistory.push(e.target.href);
   }
 

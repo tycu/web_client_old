@@ -73,7 +73,6 @@ class PacEventStore extends EventEmitter {
     .catch(function(response) {
       if (response.status !== 200 || response.status !== 304) {
         that.error = 'There is an error loading pacs';
-        alert("There is an error loading pacs");
         console.log("Error loading pacs", response);
         that.emitEvent();
       }
@@ -105,7 +104,6 @@ class PacEventStore extends EventEmitter {
     })
     .catch(function(response) {
       if (response.status !== 200 || response.status !== 304) {
-        alert("There is an error loading pac");
         console.log("Error loading pac", response);
       }
     });

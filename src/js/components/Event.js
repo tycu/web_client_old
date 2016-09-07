@@ -90,7 +90,12 @@ export default class Event extends React.Component {
       },
       politicianImg: {
         margin: '10px 30px 30px 0px',
-        clear: 'both'
+        clear: 'both',
+        maxHeight: '170px',
+        maxWidth:  '170px',
+        '@media (max-width: 480px)': {
+          display: 'none'
+        }
       },
       hr: {
         border: '0',
@@ -134,7 +139,7 @@ export default class Event extends React.Component {
             {attribution}
           </div>
           <hr style={[defStyle.hr]}/>
-          <img src={politicanPhotoUrl} style={[defStyle.politicianImg]} class='img-circle pull-left'  alt={politicianName} title={politicianName}  width='150' height='150' />
+          <img src={politicanPhotoUrl} style={[defStyle.politicianImg]} class='img-circle pull-left' alt={politicianName} title={politicianName} />
           <div style={[defStyle.summary, style && style]} dangerouslySetInnerHTML={{__html: sanitizedSummary}}>
           </div>
 

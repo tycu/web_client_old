@@ -53,7 +53,6 @@ class PoliticianStore extends EventEmitter {
     })
     .catch(function(response) {
       if ((response.status !== 200) || response.status !== 304) {
-        alert("There is an error loading politicians");
         console.log("Error loading politicians", response);
       }
     })
@@ -86,7 +85,6 @@ class PoliticianStore extends EventEmitter {
     })
     .catch(function(response) {
       if (response.status !== 200 || response.status !== 304) {
-        alert("There is an error loading politician");
         console.log("Error loading politicians", response);
       }
     });

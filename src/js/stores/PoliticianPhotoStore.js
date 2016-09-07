@@ -53,7 +53,6 @@ class PoliticianPhotoStore extends EventEmitter {
     .catch(function(response) {
       if (response.status !== 200 || response.status !== 304) {
         that.error = 'There is an error loading Politician Photos';
-        alert("There is an error loading Politician Photos");
         console.log("Error loading Politician Photos", response);
         that.emitEvent();
       }
@@ -85,7 +84,6 @@ class PoliticianPhotoStore extends EventEmitter {
     })
     .catch(function(response) {
       if (response.status !== 200 || response.status !== 304) {
-        alert("There is an error loading politician_photo");
         console.log("Error loading politician_photo", response);
       }
     });
