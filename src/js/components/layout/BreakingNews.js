@@ -1,6 +1,5 @@
 import React from 'react';
 import Radium from 'radium';
-import { Link } from "react-router";
 import AuthStore from '../../stores/AuthStore';
 var moment = require('moment');
 
@@ -18,6 +17,8 @@ export default class BreakingNews extends React.Component {
     return {
       breakingNews: {
         height: '50px',
+        fontSize: '16px',
+        marginTop: '7px',
         backgroundColor: '#fff'
         },
         container: {
@@ -25,7 +26,7 @@ export default class BreakingNews extends React.Component {
           maxWidth: '750px',
           minWidth: '480px',
           position: 'relative',
-          padding: '20px',
+          padding: '15px 20px',
           '@media (min-width: 768px)': {
             left: '-15px'
           },

@@ -83,8 +83,6 @@ export default class AdminEvent extends React.Component {
       }
     }
 
-
-
     var trimmedHeadline = headline.length < headlineMax ? headline : headline.substring(0, headlineMax) + '...';
 
     var publishLink = (this.state.isPublished ? 'Publish' : 'UnPublish')

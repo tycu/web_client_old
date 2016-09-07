@@ -6,7 +6,7 @@ import AuthStore from '../stores/AuthStore';
 import Messages from '../components/layout/Messages';
 import { collections } from 'lodash';
 
-import DonorCity from './donorInfo/DonorCity';
+// import DonorCity from './donorInfo/DonorCity';
 export default class DonorInfo extends React.Component {
 
   constructor() {

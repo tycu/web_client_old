@@ -60,21 +60,21 @@ export default class Events extends React.Component {
   getStyles = () => {
     return {
       events: {
-          minHeight: '150px',
-          marginBottom: '20px',
-          display: 'block',
-        },
-        container: {
-        },
-        ul: {
-          listStyle: 'none'
-        },
-        pseudoBefore: {
-        },
-        pseudoAfter: {
-          clear: 'both',
-        }
-      };
+        minHeight: '150px',
+        marginBottom: '20px',
+        display: 'block',
+      },
+      container: {
+      },
+      ul: {
+        listStyle: 'none'
+      },
+      pseudoBefore: {
+      },
+      pseudoAfter: {
+        clear: 'both',
+      }
+    };
   }
 
   render() {
@@ -83,9 +83,15 @@ export default class Events extends React.Component {
       return <Event eventId={event.id} key={event.id + Math.random()} {...event}/>;
     });
     const defStyle = this.getStyles();
+
+    const style = {
+      spinner: {
+      }
+    }
     const {eventStyle, contStyle, ulStyle} = this.props;
     const hasMore = this.state.hasMore;
     const loader = <div className="loader">Loading more articles...</div>;
+    // const loader = <img style={style.spinner} class="alignnone" src="https://i0.wp.com/cdnjs.cloudflare.com/ajax/libs/galleriffic/2.0.1/css/loader.gif?resize=48%2C48" alt="" width="32" height="32"/>;
 
     return (
       <div>
