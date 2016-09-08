@@ -1,13 +1,13 @@
 ### To run locally
 
-get latest packages:
+get latest packages (only occasionally):
 `$ npm install`
 
-remove unncessary stuff:
+remove unncessary stuff (only occasionally):
 `$ npm prune`
 
-start webpack locally:
-`$ npm run dev`
+start redis, start api, then start webpack locally (always):
+`$ npm start`
 
 One should see VALID in terminal if it says INVALID there are errors.
 
@@ -16,3 +16,10 @@ One should see VALID in terminal if it says INVALID there are errors.
 
 building static files:
 `$ npm run static`
+
+
+
+### To run on server
+
+
+`$ npm start`

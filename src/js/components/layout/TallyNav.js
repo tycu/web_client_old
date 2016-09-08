@@ -22,9 +22,7 @@ export default class TallyNav extends React.Component {
     ];
 
     var navitems = [
-      {link: 'events', title: 'Events'},
-      {link: 'about', title: 'About'},
-      {link: 'faq', title: 'FAQ'}
+      {link: 'about', title: 'About'}
     ];
 
     var adminItem = {link: 'admin', title: 'Admin'};

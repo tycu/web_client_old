@@ -7,6 +7,10 @@ import Events from "./pages/Events";
 import EventShow from './components/contributions/EventShow';
 import About from "./pages/static/About";
 import Faq from "./pages/static/Faq";
+import PrivacyPolicy from './pages/static/PrivacyPolicy';
+import TermsOfService from './pages/static/TermsOfService';
+import Careers from './pages/static/Careers';
+
 import Layout from "./pages/Layout";
 import Settings from "./pages/Settings";
 
@@ -82,17 +86,23 @@ var invalidIfSignedIn = function(nextState, replace) {
     })
   }
 }
+// <Route path="events" component={Events}></Route>
 
 let routes = (
   <Router history={browserHistory}>
     <Route path="/" component={Layout}>
       <IndexRoute component={Events}></IndexRoute>
       <Route path="email_verification" component={EmailVerification}></Route>
-      <Route path="events" component={Events}></Route>
       <Route path="events/:eventId" component={EventShow} onEnter={requireAuth}></Route>
 
       <Route path="about" component={About}></Route>
       <Route path="faq" component={Faq}></Route>
+
+      <Route path="privacy_policy" component={PrivacyPolicy}></Route>
+      <Route path="terms_of_service" component={TermsOfService}></Route>
+      <Route path="careers" component={Careers}></Route>
+
+
       <Route path="settings" component={Settings} onEnter={requireAuth}></Route>
 
       <Route path="admin" component={Admin} onEnter={requireAdmin}></Route>
