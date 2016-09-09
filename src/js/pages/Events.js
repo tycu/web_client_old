@@ -80,7 +80,7 @@ export default class Events extends React.Component {
   render() {
     const { events } = this.state;
     const EventComponents = events.map((event) => {
-      return <Event eventId={event.id} key={event.id + Math.random()} {...event}/>;
+      return <Event eventId={event.id} key={event.id + Math.random()} {...event} />;
     });
     const defStyle = this.getStyles();
 
