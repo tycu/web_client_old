@@ -25,7 +25,11 @@ export default class ColorField extends React.Component {
 
   displayColors() {
     this.setState({
-      colors: [{value: '', name: "pick color"}, {value: 'blue', name: "Blue"}, {value: 'red', name: "Red"}]
+      colors: [ {value: 'undecided', name: "undecided"},
+                {value: 'blue', name: "Blue"},
+                {value: 'red', name: "Red"},
+                {value: 'independent', name: "Independent"}
+              ]
     });
   }
 
