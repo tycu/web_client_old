@@ -23,7 +23,7 @@ class CardStore extends EventEmitter {
   }
 
   getError() {
-    return this.message;
+    return this.error;
   }
 
   getStripeError() {
@@ -41,8 +41,17 @@ class CardStore extends EventEmitter {
   getCCLast4() {
     return this.last4;
   }
+
   getCCBrand() {
     return this.brand;
+  }
+
+  stripePublicKey() {
+    if (process.env.NODE_ENV === "production") {
+      return Constants.PUBLIC_KEY_LIVE;
+    } else {
+      return Constants.PUBLIC_KEY_TEST;
+    }
   }
 
   fetchCustomerId(stripePublicKey) {
@@ -61,7 +70,7 @@ class CardStore extends EventEmitter {
       },
       data: {
         email: email,
-        stripePublicKey: stripePublicKey
+        stripePublicKey: that.stripePublicKey()
       }
     })));
   }
@@ -69,10 +78,9 @@ class CardStore extends EventEmitter {
   handleGetCustomer(customerPromise) {
     var that = this;
 
-    return customerPromise.then(function(response) {
-      // that.message = '';
-
-      var customerId = response.stripeCustomerUuid;
+    return customerPromise
+    .then(function(response) {
+      var customerId = response.user.stripeCustomerUuid;
       if (customerId) {
         that.customerId = customerId;
       }
@@ -128,8 +136,9 @@ class CardStore extends EventEmitter {
   handleSetCustomer(customerPromise) {
     var that = this;
 
-    return customerPromise.then(function(response) {
-      // that.message = '';
+    return customerPromise
+    .then(function(response) {
+      that.message = 'Card Added Successfully';
       that.stripeError = false;
       that.error = '';
       that.emit('change');
@@ -148,6 +157,79 @@ class CardStore extends EventEmitter {
     });
   }
 
+  chargeCustomer(chargeDetails) {
+    var that = this;
+    const url = Constants.CHARGE_CUSTOMER;
+    const tokenLocal = AuthStore.getAuthToken();
+    const email = AuthStore.currentUser();
+
+    return this.handleCreateCharge(when(request({
+      url: url,
+      method: 'POST',
+      crossOrigin: true,
+      type: 'json',
+      headers: {
+        authorization: "Bearer " + tokenLocal
+      },
+      data: {
+        email: email,
+        stripePublicKey: that.stripePublicKey(),
+        amount: chargeDetails.amount,
+        customerId: chargeDetails.customerId,
+        pacId: chargeDetails.pacId,
+        eventId: chargeDetails.eventId,
+        support: chargeDetails.support
+      }
+    })));
+  }
+
+  handleCreateCharge(chargePromise) {
+    var that = this;
+
+    return chargePromise
+    .then(function(response) {
+
+
+
+      // TODO clean up response here and post donation flow.
+
+      // var customerId = response.user.stripeCustomerUuid;
+      // if (customerId) {
+      //   that.customerId = customerId;
+      // }
+      // var customer = response.customer;
+      // if (customer) {
+      //   that.customer = customer;
+      //   var showCardData = customer.sources.data[0]
+      //   that.last4 = showCardData.last4;
+      //   that.brand = showCardData.brand;
+      // }
+      // localStorage.setItem('stripeCustomerId', customerId)
+
+
+      that.stripeError = false;
+      that.error = '';
+      that.emit('change');
+      return true;
+    })
+    .catch(function(response) {
+      // TODO clean up response/error handling here
+
+      if ((response.status !== 200) || response.status !== 304) {
+        var alertText = JSON.parse(response.response).message;
+        that.stripeError = true;
+        that.message = '';
+        that.error = alertText;
+
+
+        console.log("Error create chrage.", response);
+        that.emit('change');
+        return false;
+      }
+    });
+  }
+
+
   addChangeListener(callback) {
     this.on('change', callback);
   }
@@ -157,11 +239,10 @@ class CardStore extends EventEmitter {
   }
 
   handleActions(action) {
-    // console.log("CardStore received an action", action);
 
     switch(action.type) {
       case "GET_CUSTOMER_ID": {
-        this.fetchCustomerId(action.stripePublicKey);
+        this.fetchCustomerId();
         break;
       }
     }
@@ -171,14 +252,12 @@ class CardStore extends EventEmitter {
         break;
       }
     }
-
-
-    // switch(action.type) {
-    //   case "CHARGE_CUSTOMER": {
-    //     this.signin(action.email, action.password);
-    //     break;
-    //   }
-    // }
+    switch(action.type) {
+      case "CHARGE_CUSTOMER": {
+        this.chargeCustomer(action.chargeDetails);
+        break;
+      }
+    }
 
     // switch(action.type) {
     //   case "DELETE_CARD": {

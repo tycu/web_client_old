@@ -2,7 +2,6 @@ import React from 'react';
 import { Link, browserHistory } from "react-router";
 import PacEventStore from "../../stores/PacEventStore";
 import * as PacEventActions from "../../actions/PacEventActions";
-// import * as Constants from '../../constants/CardConstants';
 import Messages from '../layout/Messages';
 
 export default class DonationAmount extends React.Component {
@@ -12,7 +11,8 @@ export default class DonationAmount extends React.Component {
 
     this.state = {
       donationAmount: '0.00',
-      selectedPac: 0,
+      selectedPacId: '',
+      selectedPacName: '',
       amountFocus: true,
       paymentFocus: false,
       pacEvents: PacEventStore.getPacEvents(),
@@ -22,10 +22,11 @@ export default class DonationAmount extends React.Component {
 
   static propTypes = {
     donationAmount: React.PropTypes.string,
-    selectedPac: React.PropTypes.number,
+    selectedPacId: React.PropTypes.number,
+    selectedPacName: React.PropTypes.string,
     pacEvents:     React.PropTypes.array,
     event: React.PropTypes.shape({
-      eventId:     React.PropTypes.string,
+      eventId:     React.PropTypes.number,
       isPinned:    React.PropTypes.bool,
       imageUrl:    React.PropTypes.string,
       imageAttribution: React.PropTypes.string,
@@ -38,7 +39,13 @@ export default class DonationAmount extends React.Component {
   }
 
   handleStateChange(val) {
-    this.props.onComplete(val);
+    this.props.onComplete({
+      amountFocus: false,
+      paymentFocus: true,
+      donationAmount: this.state.donationAmount,
+      selectedPacId: this.state.selectedPacId,
+      selectedPacName: this.state.selectedPacName
+    });
   }
 
   componentDidMount() {
@@ -46,16 +53,13 @@ export default class DonationAmount extends React.Component {
       amountFocus: true
     })
     const eventId = this.props.eventId;
-    // const support = this.props.support;
-    // EventActions.fetchEvent(eventId);
-    // EventStore.addChangeListener(this.getEvent);
-
     PacEventActions.fetchPacEvents(eventId, this.props.support);
     PacEventStore.addChangeListener(this.getPacEvents);
+
+    var blankEvent = new Event('blank');
   }
 
   componentWillUnmount() {
-    // EventStore.removeChangeListener(this.getEvent);
     PacEventStore.removeChangeListener(this.getPacEvents);
   }
 
@@ -67,28 +71,20 @@ export default class DonationAmount extends React.Component {
 
   getPacEvents() {
     const pacEvents = PacEventStore.getPacEvents();
+    const defaultPacId = pacEvents[0].Pac.id;
+    const defaultPacName = pacEvents[0].Pac.name;
 
     this.setState({
       pacEvents: PacEventStore.getPacEvents(),
       supportPacs: PacEventStore.getSupportPacEvents(),
-      opposePacs:  PacEventStore.getOpposePacEvents()
+      opposePacs:  PacEventStore.getOpposePacEvents(),
+      selectedPacId: defaultPacId,
+      selectedPacName: defaultPacName
     })
   }
 
-  // handleBlur(){
-  //   if (this.props.pwError) {
-  //     this.props.onUpdate('pwError', false);
-  //   }
-  // }
-
-  selectTargetPac(pacId, e) {
-    this.setState({
-      selectedPac: pacId
-    })
-  }
-
-
-  setCard(e) {
+  selectTargetPac(pacOpts, e) {
+    this.setState(pacOpts);
   }
 
   onUpdate(amount, e) {
@@ -125,10 +121,7 @@ export default class DonationAmount extends React.Component {
     else {
       that.setState({error: ""});
       const eventId = that.props.event.eventId;
-      that.handleStateChange({
-        amountFocus: false,
-        paymentFocus: true
-      })
+      that.handleStateChange()
     }
   }
 
@@ -209,20 +202,22 @@ export default class DonationAmount extends React.Component {
       }
 
     }
+    // TODO clean up props and state handling so state is only in eventShow and props are passed up to it
+
 
     const donationAmount = this.state.donationAmount || "0.00";
     const pacEvents = this.state.pacEvents;
 
     if (pacEvents.length > 0) {
-      const selectedPac = this.state.selectedPac || this.state.pacEvents[0].pacId;
+      const selectedPacId = this.state.selectedPacId || this.state.pacEvents[0].pacId;
 
       var selectPacButtons = pacEvents.map(function(pacEventWithPac, i) {
         return (
           <div class="radio" key={i + Math.random()}>
             <input class='btn btn-default' type="radio" name={pacEventWithPac.Pac.name}
                    value={pacEventWithPac.id} // pacEvent.id
-                   checked={pacEventWithPac.pacId === selectedPac}
-                   onChange={this.selectTargetPac.bind(this, pacEventWithPac.pacId)} />
+                   checked={pacEventWithPac.pacId === selectedPacId}
+                   onChange={this.selectTargetPac.bind(this, {selectedPacId: pacEventWithPac.pacId, selectedPacName: pacEventWithPac.Pac.name})} />
              <span>{pacEventWithPac.Pac.name}</span>
           </div>
         );

@@ -67,8 +67,8 @@ export default class ForgotPassword extends React.Component {
   render() {
     const style = {
       container: {
-        width: '550px',
-        height: '400px',
+        width: '450px',
+        height: '350px',
         background: '#fff',
       },
       account: {

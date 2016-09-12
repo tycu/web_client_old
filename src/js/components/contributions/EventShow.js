@@ -14,10 +14,13 @@ import EventStore from "../../stores/EventStore";
 export default class  extends React.Component {
   constructor() {
     super();
+    this.getEvent = this.getEvent.bind(this);
 
     this.state = {
+      donationAmount: '0.00',
+      selectedPacName: '',
       support: false,
-      event: EventStore.getEvent(),
+      event: {},
       amountFocus: true,
       paymentFocus: false,
       key: 1
@@ -27,7 +30,8 @@ export default class  extends React.Component {
   static propTypes = {
     donationAmount: React.PropTypes.string,
     support: React.PropTypes.bool,
-    selectedPac: React.PropTypes.number,
+    selectedPacId: React.PropTypes.number,
+    selectedPacName: React.PropTypes.string,
     event: React.PropTypes.shape({
       eventId:     React.PropTypes.number,
       isPinned:    React.PropTypes.bool,
@@ -42,24 +46,28 @@ export default class  extends React.Component {
 
   componentDidMount() {
     var support = this.props.location.query.support === 'true';
+    const eventId = this.props.params.eventId;
 
     this.setState({
+      event: EventStore.getEvent(eventId),
       support: support,
       amountFocus: true
-    })
+    });
   }
 
   componentWillUnmount() {
   }
 
   getEvent() {
+    const eventId = this.props.params.eventId;
+
     this.setState({
-      event: EventStore.getEvent()
+      event: EventStore.getEvent(eventId)
     })
   }
 
-  handleUserInput(contributionStep) {
-    this.setState(contributionStep);
+  handleUserInput(childState) {
+    this.setState(childState);
   }
 
   render() {
@@ -84,25 +92,38 @@ export default class  extends React.Component {
         padding: '30px',
         border: '1px solid #999',
         margin: '0px auto'
+      },
+      clear: {
+        width: '100%',
+        clear: 'both'
       }
     }
 
     const supportText = this.props.location.query.support === 'true' ? 'Support' : 'Oppose';
-    const support = this.state.event.headline;
-    const eventId = this.props.params.eventId;
 
+    const headline = this.state.event.headline;
+    const eventId = parseInt(this.props.params.eventId, 10);
+    const selectedPacName = this.state.selectedPacName;
+    const selectedPacId = this.state.selectedPacId;
 
     return (
       <div style={style.container}>
         <div style={style.topWrapper}>
-          <h4>{supportText}: {support}</h4>
+          <h4>{supportText}: {headline}</h4>
           {( (this.state.amountFocus) ? (
-            <DonationAmount {...this.state} eventId={eventId} onComplete={this.handleUserInput.bind(this)} />
+            <DonationAmount {...this.state} eventId={eventId} donationAmount={this.state.donationAmount} onComplete={this.handleUserInput.bind(this)} />
           ) : (
-            <PaymentInfo {...this.state} eventId={eventId} onComplete={this.handleUserInput.bind(this)} />
+            <PaymentInfo {...this.state} eventId={eventId} selectedPacName={selectedPacName} selectedPacId={this.state.selectedPacId} onComplete={this.handleUserInput.bind(this)} />
           ))}
-
         </div>
+
+        <div style={style.clear}></div>
+        {( (this.state.amountFocus) ? (
+          <Link to='/'>Back To Articles</Link>
+        ) : (
+          <span></span>
+        ))}
+        <br/><br/>
 
         <div style={style.donationWarning}>
           <p><strong>You are about to make a political contribution.</strong></p>

@@ -1,37 +1,44 @@
 import React from 'react';
 import { Link } from "react-router";
-// import * as Constants from '../../constants/CardConstants';
+import MainCard from './MainCard';
+import SetCard from './SetCard';
+import CardStore from '../../stores/CardStore';
+import * as CardActions from '../../actions/CardActions';
+
 // import Messages from '../layout/Messages';
 
 export default class PaymentInfo extends React.Component {
   constructor() {
     super();
-    // this.getCard = this.getCard.bind(this);
+    this.getCard = this.getCard.bind(this);
 
     this.state = {
-      donationAmount: '0.00',
-      selectedPac: 0,
+      customerId: '',
       amountFocus: false,
       paymentFocus: true,
+      showEditCard: false,
       key: 1
     };
   }
 
   static propTypes = {
     amountFocus: React.PropTypes.bool,
-    paymentFocus: React.PropTypes.bool
+    paymentFocus: React.PropTypes.bool,
+    customerId: React.PropTypes.string
   }
 
   componentDidMount() {
-    // CardStore.addChangeListener(this.getCard);
+    CardStore.addChangeListener(this.getCard);
 
   }
   componentWillUnmount() {
-    // CardStore.removeChangeListener(this.getCard);
+    CardStore.removeChangeListener(this.getCard);
   }
 
   getCard() {
     this.setState({
+      customerId: CardStore.getCustomerId(),
+      customer: CardStore.getCustomer(),
       key: Math.random()
     });
   }
@@ -40,12 +47,7 @@ export default class PaymentInfo extends React.Component {
     this.props.onComplete(val);
   }
 
-
   backToDonation(e) {
-
-    // NOTE needs to keep track of amount in event show
-    // and event and pac ID
-
     e.preventDefault();
     this.handleStateChange({
       amountFocus: true,
@@ -53,50 +55,131 @@ export default class PaymentInfo extends React.Component {
     })
   }
 
+  showEditCard(val, e) {
+    e.preventDefault();
 
-  createDonation() {
-          // TODO get this setting up contribution and
-      // checking if has card etc.
-
-
-      // const supportPacs = that.state.supportPacs;
-      // const opposePacs  = that.state.opposePacs;
-
-      // ContribiutionActions.updateEvent(eventId, {
-      //   imageUrl: this.state.event.imageUrl,
-      //   imageAttribution: this.state.event.imageAttribution,
-      //   // politicianId: this.state.event.politicianId,
-      //   headline: this.state.event.headline,
-      //   summary: this.state.event.summary
-      // });
-
+    this.setState({
+      showEditCard: val
+    })
   }
 
-  setCard(e) {
+  createDonation(createDonation, e) {
+    e.preventDefault();
+    const chargeDetails = {
+      amount: this.props.donationAmount,
+      customerId: this.state.customerId,
+      pacId: this.props.selectedPacId,
+      eventId: this.props.eventId,
+      support: this.props.support
+    }
+    CardActions.chargeCustomer(chargeDetails);
   }
 
-  onUpdate(key, val, fromCard) {
+  handleUserInput(childState) {
+    this.setState(childState);
   }
 
 
   render() {
     const style = {
-      container: {
-        padding: '20px',
-        background: 'white',
-        width: '400px',
-        height: '330px',
-        borderRadius: '2px'
+      donateButtonRow: {
+        paddingTop: '20px',
+        // width: '300px',
       },
+      donateButton: {
+        float: 'right'
+      },
+      clear: {
+        width: '100%',
+        clear: 'both'
+      },
+      checkout: {
+        float: 'right',
+        width: '300px'
+      },
+      cardInfo: {
+        width: '400px',
+        float: 'left',
+      },
+      justifyRight: {
+        textAlign: 'right'
+      },
+      columnSplit: {
+        width: '15%'
+      }
     }
 
     const eventId = this.props.eventId;
+    const pacName = this.props.selectedPacName;
+    const showEditCard = this.state.showEditCard;
+    const hasCard = this.state.customerId.length > 0;
+    const customerId = this.state.customerId;
+
+    const donationDollar = parseFloat(this.props.donationAmount, 10);
+    const donationCents  = Math.floor(donationDollar * 100);
+    const feeCents  = Math.min(Math.round(donationCents * 0.15), 2000)
+    const feeDollar = feeCents / 100;
+    const chargeSum = donationDollar + feeDollar
+
 
     return (
       <div>
-        <div>payment info</div>
+        <div><strong>Make a donation of ${donationDollar}</strong> to {pacName}</div>
+        <br/><br/>
 
-        <button type="button" class="btn btn-danger" style={style.continueButton} onClick={this.backToDonation.bind(this)}><span class="glyphicon glyphicon-arrow-left" aria-hidden="true">&nbsp;</span>&nbsp;&nbsp;Back to Amount</button>
+        <div style={style.cardInfo}>
+          {((showEditCard) ? (
+            <div>
+              <SetCard />
+              <a to='' onClick={this.showEditCard.bind(this, false)}>Close Card Change</a>
+            </div>
+          ) : (
+            <a to='' onClick={this.showEditCard.bind(this, true)}>Add or Edit Card</a>
+          ))}
+        </div>
+
+        <div style={style.checkout}>
+          <table ref="table" class="table table-striped">
+            <thead>
+              <tr>
+                <th style={style.columnSplit}>&nbsp;</th>
+                <th style={style.columnSplit}>
+                  <MainCard cardInfo={this.handleUserInput.bind(this)} />
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Donation Amount</td>
+                <td style={style.justifyRight}>${donationDollar.toFixed(2)}</td>
+              </tr>
+              <tr>
+                <td>Fees</td>
+                <td style={style.justifyRight}>${feeDollar.toFixed(2)}</td>
+              </tr>
+              <tr>
+                <td><strong>Total</strong></td>
+                <td style={style.justifyRight}><strong>${chargeSum.toFixed(2)}</strong></td>
+              </tr>
+              {(hasCard) ? (
+                <tr>
+                  <td>&nbsp;</td>
+                  <td style={style.donateButtonRow}><button style={style.donateButton} type='button' class="btn btn-primary" onClick={this.createDonation.bind(this, customerId)}>Pay Now</button></td>
+                </tr>
+                ) : (
+                <tr>
+                  <td></td>
+                  <td></td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+        <br/>
+        <div style={style.clear}></div>
+        <br/>
+        <a href='' onClick={this.backToDonation.bind(this)}>Back to Amount</a>
+        <br/>
       </div>
     )
   }

@@ -23,7 +23,7 @@ export default class Cvc extends React.Component {
 
     return (
       <div className="form-group">
-        <label htmlFor="cvc">Secuity Pin</label>
+        <label htmlFor="cvc">Security Pin</label>
         <input
           type="text"
           size="4"

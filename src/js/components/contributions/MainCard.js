@@ -9,7 +9,7 @@ export default class MainCard extends React.Component {
     this.getCard = this.getCard.bind(this);
 
     this.state = {
-      hasCard: true,
+      customerId: true,
       cardText: '',
       brand: '',
       last4: '',
@@ -18,7 +18,7 @@ export default class MainCard extends React.Component {
   }
 
   static propTypes = {
-    hasCard: React.PropTypes.bool,
+    customerId: React.PropTypes.string,
     cardText: React.PropTypes.string,
     brand: React.PropTypes.string,
     last4: React.PropTypes.string
@@ -53,7 +53,7 @@ export default class MainCard extends React.Component {
     this.setState({
       last4: CardStore.getCCLast4(),
       brand: CardStore.getCCBrand(),
-      hasCard: CardStore.getCustomerId(),
+      customerId: CardStore.getCustomerId(),
       key:   Math.random()
     });
   }
@@ -71,12 +71,7 @@ export default class MainCard extends React.Component {
   render() {
     const style = {
       container: {
-        padding: '20px',
         background: 'white',
-        width: '400px',
-        height: '80px',
-        borderRadius: '2px',
-        marginBottom: '20px'
       },
       button: {
         marginLeft: '20px'

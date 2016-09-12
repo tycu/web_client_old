@@ -20,18 +20,23 @@ class EventStore extends EventEmitter {
     return this.breakingId || '';
   }
 
-  getEvent() {
-    return this.eventObj || {
-      eventId: '',
-      isPinned: '',
-      breakingId: '',
-      isPublished: '',
-      imageUrl: '',
-      imageAttribution: '',
-      politicianId: '',
-      headline: '',
-      summary: ''
-    };
+  getEvent(id) {
+    if (id !== undefined) {
+      return _.find(this.eventObjs, function(user) { return user.id === parseInt(id, 10); });
+    } else {
+      return this.eventObj || {
+        eventId: '',
+        isPinned: '',
+        breakingId: '',
+        isPublished: '',
+        imageUrl: '',
+        imageAttribution: '',
+        politicianId: '',
+        headline: '',
+        summary: ''
+      };
+    }
+
   }
 
   getMessage() {

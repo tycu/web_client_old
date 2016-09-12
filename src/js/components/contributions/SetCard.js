@@ -60,10 +60,8 @@ export default class SetCard extends React.Component {
       stripePublicKey = Constants.PUBLIC_KEY_TEST;
     }
     Stripe.setPublishableKey(stripePublicKey);
-    CardActions.getCustomerId(stripePublicKey);
-    CardActions.getCustomerId(AuthStore.currentUser());
+    CardActions.getCustomerId();
     CardStore.addChangeListener(this.getCard);
-
   }
   componentWillUnmount() {
     CardStore.removeChangeListener(this.getCard);
@@ -103,16 +101,19 @@ export default class SetCard extends React.Component {
 
     // validate that month/year is used, otherwise add error
     if (!that.cardInfoComplete()) {
-      that.setState({error: "You must complete all Fields to save your Credit Card."});
+      that.setState({
+        error: "You must complete all Fields to save your Credit Card."
+      });
       return false;
     } else {
       that.setState({
-        error: ''});
+        error: ''
+      });
 
       Stripe.createToken(this.state.card, function (status, response) {
-        console.log( status, response );
+        console.log(status, response);
         // then send this response to server
-        CardActions.setCustomer(response.id)
+        CardActions.setCustomer(response.id);
       });
     }
   }
@@ -134,58 +135,53 @@ export default class SetCard extends React.Component {
   render() {
     const style = {
       container: {
-        padding: '20px',
-        background: 'white',
         width: '400px',
-        height: '330px',
-        borderRadius: '2px'
       },
       number: {
-        marginLeft: '10px',
         clear: 'both',
-        width: '300px'
-      },
-      cvc: {
-        width: '80px',
-        display: 'inline',
-        float: 'left',
-        marginRight: '20px'
+        width: '340px'
       },
       exp_month: {
         width: '110px',
-        display: 'inline',
         float: 'left',
+        clear: 'both',
         marginRight: '20px'
       },
       exp_year: {
         width: '90px',
-        display: 'inline',
         float: 'left',
         marginRight: '20px'
       },
-      linkback: {
-        clear: 'both',
+      cvc: {
+        width: '98px',
+        float: 'left',
+        marginRight: '20px'
+      },
+      addCard: {
+        width: '98px',
         marginTop: '20px'
       }
     }
 
     return (
       <form role='form' style={style.container}>
-        <h3>Add/Update Card</h3>
         <Messages key={this.state.key + 1}  {...this.state} />
 
-        <CardNumber value={this.state.card.number} onChange={this.onUpdate.bind(this, 'number')} style={style.number} />
-        <MonthList value={this.state.card.exp_month} onChange={this.onUpdate.bind(this, 'exp_month')} defaultValue="1" style={style.exp_month} />
-        <YearList value={this.state.card.exp_year} onChange={this.onUpdate.bind(this, 'exp_year')} style={style.exp_year}/>
-        <Cvc value={this.state.card.cvc} onChange={this.onUpdate.bind(this, 'cvc')} style={style.cvc} />
         <div className="form-group">
-          <div className="form-group pull-left">
-            <button type="submit" className="btn btn-primary" onClick={this.setCard.bind(this)}>Add Card</button>
-          </div>
+          <CardNumber value={this.state.card.number} onChange={this.onUpdate.bind(this, 'number')} style={style.number} />
+        </div>
+        <div className="form-group">
+          <MonthList value={this.state.card.exp_month} onChange={this.onUpdate.bind(this, 'exp_month')} defaultValue="1" style={style.exp_month} />
+        </div>
+        <div className="form-group">
+          <YearList value={this.state.card.exp_year} onChange={this.onUpdate.bind(this, 'exp_year')} style={style.exp_year}/>
+        </div>
+        <div className="form-group">
+          <Cvc value={this.state.card.cvc} onChange={this.onUpdate.bind(this, 'cvc')} style={style.cvc} />
         </div>
 
-        <div style={style.linkback}>
-          <Link to="/contributions">Back To Contributions</Link>
+        <div className="form-group">
+          <button style={style.addCard} type="submit" className="btn btn-primary" onClick={this.setCard.bind(this)}>Add Card</button>
         </div>
       </form>
     )
