@@ -10,6 +10,7 @@ import * as FileUtils from "../../../utils/FileUtils";
 import PoliticianImage from './PoliticianImage';
 import * as PoliticianPhotoActions from "../../../actions/PoliticianPhotoActions";
 import * as Validators from "../../../utils/ValidationUtils";
+import ColorField from '../pacs/ColorField';
 
 export default class EditPolitician extends React.Component {
   constructor() {
@@ -26,14 +27,15 @@ export default class EditPolitician extends React.Component {
   }
 
   static propTypes = {
-    politician: React.PropTypes.shape({
-      politicianId: React.PropTypes.string,
-      url: React.PropTypes.string,
-      main: React.PropTypes.string,
-      jobTitle: React.PropTypes.string,
+    politician:        React.PropTypes.shape({
+      politicianId:    React.PropTypes.string,
+      url:             React.PropTypes.string,
+      main:            React.PropTypes.string,
+      color:           React.PropTypes.string,
+      jobTitle:        React.PropTypes.string,
       twitterUsername: React.PropTypes.string
     }),
-    politicianPhotos: React.PropTypes.array
+    politicianPhotos:   React.PropTypes.array
   }
 
   componentDidMount() {
@@ -102,8 +104,9 @@ export default class EditPolitician extends React.Component {
       PoliticianActions.updatePolitician(politicianId, {
         thumbnail: this.state.politician.thumbnail,
         firstName: this.state.politician.firstName,
-        lastName: this.state.politician.lastName,
-        jobTitle: this.state.politician.jobTitle,
+        lastName:  this.state.politician.lastName,
+        jobTitle:  this.state.politician.jobTitle,
+        color:     this.state.politician.color,
         twitterUsername: this.state.politician.twitterUsername
       });
 
@@ -218,7 +221,10 @@ export default class EditPolitician extends React.Component {
             <label htmlFor="twitterUsername">twitterUsername</label>
             <input type="text" value={this.state.politician.twitterUsername} onChange={this.onUpdate.bind(this, 'twitterUsername')} className="form-control" id="twitterUsername" ref="twitterUsername" placeholder="twitterUsername" />
           </div>
-
+          <div className="form-group" style={style.color}>
+            <label htmlFor="name">Color</label>
+            <ColorField value={this.state.politician.color} onChange={this.onUpdate.bind(this, 'color')} />
+          </div>
           <input type="file" id="fileInput" accept="image/jpeg, image/png" style={style.file} onChange={FileUtils.upLoadFile.bind(this)}/>
 
           <div className='form-group'>

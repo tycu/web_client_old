@@ -61,10 +61,11 @@ export default class PacsField extends React.Component {
     }
 
     const pacList = availablePacs.map((pac, i) => {
-      return <option
-               value={pac.id}
-               key={i}>{pac.name}</option>
+      if (availablePacs.length > 0) {
+        return <option value={pac.id} key={i}>{pac.name}</option>
+      }
     });
+
 
     return (
       <div style={style.container}>

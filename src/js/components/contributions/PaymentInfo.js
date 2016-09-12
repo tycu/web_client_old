@@ -127,7 +127,7 @@ export default class PaymentInfo extends React.Component {
       <div>
         <ReactTooltip // NOTE serves as globals for component
           effect='solid'
-          multiline='true'
+          multiline={true}
           delayShow={400}
           delayHide={200}
         />

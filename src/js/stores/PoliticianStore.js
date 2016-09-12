@@ -21,6 +21,7 @@ class PoliticianStore extends EventEmitter {
       firstName: '',
       lastName: '',
       jobTitle: '',
+      color: '',
       twitterUsername: ''
     };
   }
@@ -74,13 +75,14 @@ class PoliticianStore extends EventEmitter {
     }))
     .then(function(response) {
       var politician = {}
-      politician['politicianId'] = response.id || '';
-      politician['thumbnail'] = response.thumbnail || '';
-      politician['firstName'] = response.firstName || '';
-      politician['lastName'] = response.lastName || '';
-      politician['jobTitle'] = response.jobTitle || '';
+      politician['politicianId']    = response.id || '';
+      politician['color']           = response.color || '';
+      politician['thumbnail']       = response.thumbnail || '';
+      politician['firstName']       = response.firstName || '';
+      politician['lastName']        = response.lastName || '';
+      politician['jobTitle']        = response.jobTitle || '';
       politician['twitterUsername'] = response.twitterUsername || '';
-      that.politician = politician;
+      that.politician               = politician;
       that.emitEvent();
     })
     .catch(function(response) {

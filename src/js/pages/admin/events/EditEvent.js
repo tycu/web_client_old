@@ -34,6 +34,7 @@ export default class EditEvent extends React.Component {
 
   static propTypes = {
     event: React.PropTypes.shape({
+      politician:  React.PropTypes.object,
       eventId:     React.PropTypes.number,
       isPinned:    React.PropTypes.bool,
       imageUrl:    React.PropTypes.string,
@@ -178,18 +179,35 @@ export default class EditEvent extends React.Component {
   }
 
   render() {
-    const supportPacs = this.state.supportPacs || [];
-    const opposePacs  = this.state.opposePacs  || [];
-    const eventId = this.props.params.eventId;
+    const supportPacs   = this.state.supportPacs || [];
+    const opposePacs    = this.state.opposePacs  || [];
+    const eventId       = this.props.params.eventId;
+    const availablePacs = this.state.availablePacs;
 
-    const supportIndex = supportPacs.length - 1;
-    const opposeIndex = opposePacs.length - 1;
+    const supportIndex  = supportPacs.length - 1;
+    const opposeIndex   = opposePacs.length - 1;
+    const politician    = this.state.event.politician;
+    var availableSupportPacs = [], availableOpposePacs = [];
 
-    const supportPacList = supportPacs.map((pac) => {
-      return <PacsField key={Math.random()} {...pac} setPacId={this.setPacId.bind(this, 'supportPacs', supportIndex)} availablePacs={this.state.availablePacs} pacEventId={pac.id} eventId={eventId} />
+    if (politician && politician.color) {
+      _(availablePacs).forEach(function(pac) {
+        if (pac.color === politician.color) {
+          availableSupportPacs.push(pac);
+        }
+      });
+      _(availablePacs).forEach(function(pac) {
+        if (pac.color !== politician.color) {
+          availableOpposePacs.push(pac);
+        }
+
+      });
+    }
+
+    const supportPacList = supportPacs.map((pac, i) => {
+      return <PacsField key={Math.random()} {...pac} setPacId={this.setPacId.bind(this, 'supportPacs', supportIndex)} availablePacs={availableSupportPacs} pacEventId={pac.id} eventId={eventId} />
     });
     const opposePacList  = opposePacs.map((pac) => {
-      return <PacsField key={Math.random()} {...pac} setPacId={this.setPacId.bind(this, 'opposePacs', opposeIndex)} availablePacs={this.state.availablePacs} pacEventId={pac.id} eventId={eventId} />
+      return <PacsField key={Math.random()} {...pac} setPacId={this.setPacId.bind(this, 'opposePacs', opposeIndex)} availablePacs={availableOpposePacs} pacEventId={pac.id} eventId={eventId} />
     });
 
     const style = {

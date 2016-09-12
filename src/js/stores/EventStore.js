@@ -25,6 +25,7 @@ class EventStore extends EventEmitter {
       return _.find(this.eventObjs, function(user) { return user.id === parseInt(id, 10); });
     } else {
       return this.eventObj || {
+        politician: {},
         eventId: '',
         isPinned: '',
         breakingId: '',
@@ -196,6 +197,7 @@ class EventStore extends EventEmitter {
     }))
     .then(function(response) {
       var eventObj = {}
+      eventObj['politician'] = response.Politician;
       eventObj['eventId'] = response.id || '';
       eventObj['isPinned'] = response.isPinned || '';
       eventObj['breakingId'] = response.breakingId || '';
@@ -460,7 +462,6 @@ class EventStore extends EventEmitter {
         break;
       }
     }
-
     switch(action.type) {
       case "UPDATE_EVENT": {
         this.updateEvent(action.eventId, action.eventInfo);
