@@ -3,6 +3,7 @@ import { Link, browserHistory } from "react-router";
 import PacEventStore from "../../stores/PacEventStore";
 import * as PacEventActions from "../../actions/PacEventActions";
 import Messages from '../layout/Messages';
+import ReactTooltip from 'react-tooltip';
 
 export default class DonationAmount extends React.Component {
   constructor() {
@@ -146,6 +147,7 @@ export default class DonationAmount extends React.Component {
       pacSelectBox: {
         float: 'left',
         width: '330px',
+        marginTop: '50px',
         '@media (minWidth: 768px)': {
           marginTop: '20px',
           minHeight: '100px',
@@ -227,6 +229,13 @@ export default class DonationAmount extends React.Component {
 
     return (
       <div>
+        <ReactTooltip // NOTE serves as globals for component
+          effect='solid'
+          multiline='true'
+          delayShow={400}
+          delayHide={200}
+        />
+
         <div style={style.donationAmountBox}>
           <br/>
           <Messages key={this.state.key + 1} {...this.state} />
@@ -287,7 +296,7 @@ export default class DonationAmount extends React.Component {
 
         </div>
         <div style={style.pacSelectBox}>
-          <strong>Select Organization</strong><br/>
+          <strong>Select Organization&nbsp;<span data-tip="Select the PAC where<br/>we'll route your contribution." class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></strong><br/>
             <form role="form">
               {selectPacButtons}
             </form>

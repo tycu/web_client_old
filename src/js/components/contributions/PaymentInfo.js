@@ -4,6 +4,7 @@ import MainCard from './MainCard';
 import SetCard from './SetCard';
 import CardStore from '../../stores/CardStore';
 import * as CardActions from '../../actions/CardActions';
+import ReactTooltip from 'react-tooltip';
 
 // import Messages from '../layout/Messages';
 
@@ -124,6 +125,12 @@ export default class PaymentInfo extends React.Component {
 
     return (
       <div>
+        <ReactTooltip // NOTE serves as globals for component
+          effect='solid'
+          multiline='true'
+          delayShow={400}
+          delayHide={200}
+        />
         <div><strong>Make a donation of ${donationDollar}</strong> to {pacName}</div>
         <br/><br/>
 
@@ -150,11 +157,11 @@ export default class PaymentInfo extends React.Component {
             </thead>
             <tbody>
               <tr>
-                <td>Donation Amount</td>
+                <td>Contribution Amount</td>
                 <td style={style.justifyRight}>${donationDollar.toFixed(2)}</td>
               </tr>
               <tr>
-                <td>Fees</td>
+                <td>Fees&nbsp;<span data-tip="Our fees keep the Tally US news team bringing you<br/>the highest quality political coverage. It also keeps our<br/>servers running and and helps us stay ad free." class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></td>
                 <td style={style.justifyRight}>${feeDollar.toFixed(2)}</td>
               </tr>
               <tr>
