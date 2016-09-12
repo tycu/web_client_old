@@ -48,6 +48,7 @@ export default class StatesField extends React.Component {
           value={residenceState}
           onChange={this.handleStateChange.bind(this)}
           id="residenceState">
+          <option value=''>Select State</option>
           {stateList}
         </select>
       </div>
