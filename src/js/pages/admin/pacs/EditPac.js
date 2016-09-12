@@ -6,6 +6,7 @@ import * as PacActions from "../../../actions/PacActions";
 
 import Messages from '../../../components/layout/Messages';
 import ColorField from './ColorField';
+import StatesField from "../../../components/StatesField";
 
 export default class EditPac extends React.Component {
   constructor() {
@@ -24,7 +25,11 @@ export default class EditPac extends React.Component {
       name: React.PropTypes.string,
       description: React.PropTypes.string,
       color: React.PropTypes.string,
-      twitterUsername: React.PropTypes.string
+      twitterUsername: React.PropTypes.string,
+      streetAddress: React.PropTypes.string,
+      city: React.PropTypes.string,
+      mailingState: React.PropTypes.string,
+      zip: React.PropTypes.string
     })
   }
 
@@ -50,9 +55,10 @@ export default class EditPac extends React.Component {
   onUpdate(key, e) {
     let pac = this.state.pac;
 
-    if (key === 'color') {
+    if (key === 'color' || key === 'mailingState') {
       pac[key] = e;
-    } else {
+    }
+    else {
       var val = e.target.value;
       pac[key] = val;
     }
@@ -88,7 +94,11 @@ export default class EditPac extends React.Component {
         name: this.state.pac.name,
         description: this.state.pac.description,
         color: this.state.pac.color,
-        twitterUsername: this.state.pac.twitterUsername
+        twitterUsername: this.state.pac.twitterUsername,
+        streetAddress: this.state.pac.streetAddress,
+        city: this.state.pac.city,
+        mailingState: this.state.pac.mailingState,
+        zip: this.state.pac.zip
       });
       browserHistory.replace('/manage_pacs');
     }
@@ -110,6 +120,9 @@ export default class EditPac extends React.Component {
 
       },
       color: {
+
+      },
+      mailingState: {
 
       }
     }
@@ -136,6 +149,24 @@ export default class EditPac extends React.Component {
             <label htmlFor="name">Color</label>
             <ColorField value={this.state.pac.color} onChange={this.onUpdate.bind(this, 'color')} />
           </div>
+
+          <div className="form-group" style={style.streetAddress}>
+            <label htmlFor="streetAddress">Street Address</label>
+            <input type="text" value={this.state.pac.streetAddress} onChange={this.onUpdate.bind(this, 'streetAddress')} className="form-control" id="streetAddress" ref="streetAddress" placeholder="street address" />
+          </div>
+          <div className="form-group" style={style.city}>
+            <label htmlFor="city">City</label>
+            <input type="text" value={this.state.pac.city} onChange={this.onUpdate.bind(this, 'city')} className="form-control" id="city" ref="city" placeholder="city" />
+          </div>
+          <div className="form-group" style={style.mailingState}>
+            <label htmlFor="name">State</label>
+            <StatesField value={this.state.pac.mailingState} onChange={this.onUpdate.bind(this, 'mailingState')} />
+          </div>
+          <div className="form-group" style={style.zip}>
+            <label htmlFor="zip">Zip Code</label>
+            <input type="text" value={this.state.pac.zip} onChange={this.onUpdate.bind(this, 'zip')} className="form-control" id="zip" ref="zip" placeholder="zip" />
+          </div>
+
           <div className='form-group'>
             <button type="submit" className="btn btn-primary" onClick={this.updatePac.bind(this)}>Save Pac</button>
           </div>

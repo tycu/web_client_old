@@ -20,7 +20,11 @@ class PacStore extends EventEmitter {
       name: '',
       description: '',
       color: '',
-      twitterUsername: ''
+      twitterUsername: '',
+      streetAddress: '',
+      city: '',
+      mailingState: '',
+      zip: ''
     };
   }
 
@@ -80,6 +84,10 @@ class PacStore extends EventEmitter {
       pac['description'] = response.description || '';
       pac['twitterUsername'] = response.twitterUsername || '';
       pac['color'] = response.color || '';
+      pac['streetAddress'] = response.streetAddress || '';
+      pac['city'] = response.city || '';
+      pac['mailingState'] = response.mailingState || '';
+      pac['zip'] = response.zip || '';
       that.pac = pac;
       that.emitEvent();
     })
