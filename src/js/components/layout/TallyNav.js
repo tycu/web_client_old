@@ -17,21 +17,21 @@ export default class TallyNav extends React.Component {
     const isAdmin  = this.props.isAdmin;
 
     const loggedOutNavItems = [
-      {link: 'signup', title: 'SIGNUP'},
-      {link: 'signin', title: 'LOGIN'}
+      {link: '/signup', title: 'SIGNUP'},
+      {link: '/signin', title: 'LOGIN'}
     ];
 
     var navitems = [
-      {link: 'about', title: 'About'}
+      {link: '/about', title: 'About'}
     ];
 
-    var adminItem = {link: 'admin', title: 'Admin'};
+    var adminItem = {link: '/admin', title: 'Admin'};
 
     const dropdownItems = [
-      {href: 'contributions', name: 'Contributions'},
-      {href: 'settings', name: 'Settings'},
-      {href: 'donor-info', name: 'Donor Info'},
-      {href: 'signout', name: 'Logout'}
+      {href: '/contributions', name: 'Contributions'},
+      {href: '/settings', name: 'Settings'},
+      {href: '/donor-info', name: 'Donor Info'},
+      {href: '/signout', name: 'Logout'}
     ];
 
     var dropdown = <span></span>;
