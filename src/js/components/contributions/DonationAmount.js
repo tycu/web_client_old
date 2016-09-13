@@ -17,23 +17,25 @@ export default class DonationAmount extends React.Component {
       amountFocus: true,
       paymentFocus: false,
       pacEvents: PacEventStore.getPacEvents(),
+      displayAmt: '',
       key: 1
     };
   }
 
   static propTypes = {
-    donationAmount: React.PropTypes.string,
-    selectedPacId: React.PropTypes.number,
+    donationAmount:  React.PropTypes.string,
+    selectedPacId:   React.PropTypes.number,
     selectedPacName: React.PropTypes.string,
-    pacEvents:     React.PropTypes.array,
-    event: React.PropTypes.shape({
-      eventId:     React.PropTypes.number,
-      isPinned:    React.PropTypes.bool,
-      imageUrl:    React.PropTypes.string,
+    pacEvents:       React.PropTypes.array,
+    displayAmt:      React.PropTypes.string,
+    event:           React.PropTypes.shape({
+      eventId:       React.PropTypes.number,
+      isPinned:      React.PropTypes.bool,
+      imageUrl:      React.PropTypes.string,
       imageAttribution: React.PropTypes.string,
-      politicianId: React.PropTypes.number,
-      headline:    React.PropTypes.string,
-      summary:     React.PropTypes.string
+      politicianId:  React.PropTypes.number,
+      headline:      React.PropTypes.string,
+      summary:       React.PropTypes.string
     }),
     amountFocus: React.PropTypes.bool,
     paymentFocus: React.PropTypes.bool
@@ -91,20 +93,25 @@ export default class DonationAmount extends React.Component {
   onUpdate(amount, e) {
     e.preventDefault();
     var that = this,
-        val;
+        val,
+        displayAmt = that.state.displayAmt;
 
     if (amount === 'enterAmount') {
-      val = parseInt(e.target.value.replace(/\D/g,''), 10).toFixed(2);
-    } else {
-      val = parseInt(amount.replace(/\D/g,''), 10).toFixed(2);
-    }
+      val = Math.floor(parseFloat(e.target.value, 10) * 100) / 100;
+      displayAmt = e.target.value;
+      if ((/\./).test(displayAmt) && displayAmt.split('.')[1].length > 2) {
+        displayAmt = (Math.floor(parseFloat(displayAmt, 10) * 100) / 100).toFixed(2);
+      }
 
-    if (isNaN(val) > 2700) {
-      that.setState({error: "Invalid amount, you can donate between $5 and $2700"});
-      return false;
+      if (isNaN(val)) {
+        val = '0.00';
+      }
+    } else {
+      val = parseFloat(amount.replace(/\D/g,''), 10);
     }
     this.setState({
-      donationAmount: val
+      donationAmount: val,
+      displayAmt: displayAmt
     });
   }
 
@@ -115,8 +122,8 @@ export default class DonationAmount extends React.Component {
 
     const donationAmount = this.state.donationAmount;
 
-    if (isNaN(donationAmount) || donationAmount < 5 || donationAmount > 2700) {
-      that.setState({error: "Invalid amount, you can donate between $5 and $2700"});
+    if (isNaN(donationAmount) || donationAmount < 5) {
+      that.setState({error: "Invalid amount, the minimum donation is $5.00."});
       return false;
     }
     else {
@@ -207,8 +214,9 @@ export default class DonationAmount extends React.Component {
     // TODO clean up props and state handling so state is only in eventShow and props are passed up to it
 
 
-    const donationAmount = this.state.donationAmount || "0.00";
+    const donationAmount = parseFloat(this.state.donationAmount || "0.00", 10).toFixed(2);
     const pacEvents = this.state.pacEvents;
+    const displayAmt = this.state.displayAmt;
 
     if (pacEvents.length > 0) {
       const selectedPacId = this.state.selectedPacId || this.state.pacEvents[0].pacId;
@@ -281,9 +289,8 @@ export default class DonationAmount extends React.Component {
                   type='text'
                   className="form-control"
                   onChange={this.onUpdate.bind(this, 'enterAmount')}
-                  value={this.props.oldPassword}
+                  value={displayAmt}
                   placeholder="other amount"
-                  // onBlur={this.handleBlur.bind(this)}
                 />
               </div>
             </div>
