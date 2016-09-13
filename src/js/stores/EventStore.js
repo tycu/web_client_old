@@ -37,8 +37,23 @@ class EventStore extends EventEmitter {
         summary: ''
       };
     }
-
   }
+
+  getBreakingEvent() {
+    return this.breakingEventObj || {
+      politician: {},
+      eventId: '',
+      isPinned: '',
+      breakingId: '',
+      isPublished: '',
+      imageUrl: '',
+      imageAttribution: '',
+      politicianId: '',
+      headline: '',
+      summary: ''
+    };
+  }
+
 
   getMessage() {
     return this.message;
@@ -290,13 +305,13 @@ class EventStore extends EventEmitter {
       that.message = "Breaking event set Successfully";
       that.error = '';
 
-      var eventObj = {}
-      eventObj['eventId'] = response.id || '';
-      eventObj['breakingId'] = response.id || '';
-      eventObj['headline'] = response.headline || '';
-      eventObj['createdAt'] = response.createdAt || '';
+      var breakingEventObj = {}
+      breakingEventObj['eventId'] = response.id || '';
+      breakingEventObj['breakingId'] = response.id || '';
+      breakingEventObj['headline'] = response.headline || '';
+      breakingEventObj['createdAt'] = response.createdAt || '';
       that.breakingId = eventId;
-      that.eventObj = eventObj;
+      that.breakingEventObj = breakingEventObj;
       that.emit('change');
 
     })
@@ -322,11 +337,11 @@ class EventStore extends EventEmitter {
       }
     }))
     .then(function(response) {
-      var eventObj = {}
+      var breakingEventObj = {}
       that.message = "Breaking event unset Successfully";
       that.breakingId = '';
       that.error = '';
-      that.eventObj = eventObj;
+      that.breakingEventObj = breakingEventObj;
       that.emit('change');
     })
     .catch(function(response) {

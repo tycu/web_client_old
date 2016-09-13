@@ -16,7 +16,7 @@ export default class Layout extends React.Component {
     this.getBreakingEvent = this.getBreakingEvent.bind(this);
 
     this.state = {
-      breakingEvent: EventStore.getEvent(),
+      breakingEvent: EventStore.getBreakingEvent(),
       loggedIn: AuthStore.signedIn(),
       isAdmin:  AuthStore.isAdmin(),
       email:    AuthStore.currentUser(),
@@ -50,7 +50,7 @@ export default class Layout extends React.Component {
 
   getBreakingEvent() {
     this.setState({
-      breakingEvent: EventStore.getEvent(),
+      breakingEvent: EventStore.getBreakingEvent(),
       breakingId: EventStore.getBreakingId()
     })
   }
