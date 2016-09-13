@@ -121,8 +121,8 @@ export default class PaymentInfo extends React.Component {
     const customerId = this.state.customerId;
 
     const donationDollar = parseFloat(this.props.donationAmount, 10);
-    const donationCents  = Math.floor(donationDollar * 100);
-    const feeCents  = Math.min(Math.round(donationCents * 0.15), 2000)
+    const donationCents  = Math.floor(Math.max(donationDollar * 100, 500));
+    const feeCents  = Math.max(Math.round(donationCents * 0.15), 99)
     const feeDollar = feeCents / 100;
     const chargeSum = donationDollar + feeDollar
 
