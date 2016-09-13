@@ -1,4 +1,5 @@
 import React from 'react';
+import Radium from 'radium';
 import { Link } from "react-router";
 import * as AuthActions from "../../actions/AuthActions";
 import * as AuthUtils from "../../utils/AuthUtils";
@@ -9,6 +10,7 @@ import Email from './Email';
 import Password from './Password';
 import Messages from '../layout/Messages';
 
+@Radium
 export default class SignIn extends React.Component {
   constructor() {
     super();
@@ -33,7 +35,8 @@ export default class SignIn extends React.Component {
     message:  React.PropTypes.string,
     error:  React.PropTypes.string,
     emailError: React.PropTypes.bool,
-    pwError: React.PropTypes.bool
+    pwError: React.PropTypes.bool,
+    style: React.PropTypes.object
   }
 
   componentDidMount() {
@@ -93,55 +96,92 @@ export default class SignIn extends React.Component {
     this.setState({
       [key]: val
     });
-  }
+  };
 
-  render() {
-    const style = {
+
+  getStyles = () => {
+    return {
       container: {
-        width: '650px',
-        padding: '40px',
-        height: '480px',
         background: '#fff',
+
+        '@media (min-width: 480px)': {
+          maxWidth: '400px',
+          height: '780px'
+        },
+        '@media (min-width: 768px)': {
+          maxWidth: '650px',
+          height: '480px',
+          padding: '40px',
+        }
+
       },
       emailSignup: {
-        float: 'right',
-        width: '280px',
-        paddingLeft: '20px'
+        width: '270px',
+        paddingLeft: '20px',
+        '@media (min-width: 768px)': {
+          float: 'right',
+        }
       },
       FacebookAuth: {
-        float: 'left',
-        width: '280px'
+        width: '270px',
+        '@media (min-width: 480px)': {
+          margin: '20px 0px 0px 20px',
+        },
+        '@media (min-width: 768px)': {
+          float: 'left'
+        }
       },
       account: {
-        marginTop: '46px'
+        '@media (min-width: 768px)': {
+          marginTop: '46px'
+        }
       },
       p: {
-        color: '#888',
-        fontSize: '16px'
+        display: 'none',
+        '@media (min-width: 480px)': {
+          display: 'none'
+        },
+        '@media (min-width: 768px)': {
+          display: 'inline',
+          color: '#888',
+          fontSize: '16px'
+        }
       },
       oauth: {
-        marginTop: '50px',
-        paddingRight: '40px',
-        minHeight: '240px',
-        borderRight: '1px solid #888'
-      }
+        '@media (min-width: 768px)': {
+          marginTop: '50px',
+          paddingRight: '40px',
+          minHeight: '240px',
+          borderRight: '1px solid #888'
+        }
+      },
+      loginButton: {
+        width: '250px',
+        '@media (min-width: 480px)': {
+        }
+      },
     };
+  }
+
+
+  render() {
+    const defStyle = this.getStyles();
 
     return (
-      <div className="jumbotron center-block" style={style.container}>
+      <div className="jumbotron center-block" style={[defStyle.container]}>
         <h2>Login</h2>
-        <div style={style.emailSignup}>
-          <p style={style.p}>Sign in with email</p>
+        <div style={[defStyle.emailSignup]}>
+          <p style={[defStyle.p]}>Sign in with email</p>
           <form role="form">
             <Messages key={this.state.key + 1}  {...this.state} />
             <Email {...this.state} key={this.state.key + 2} onUpdate={this.onUpdate.bind(this)} />
             <Password {...this.state} key={this.state.key + 3} onUpdate={this.onUpdate.bind(this)} />
 
             <div className="form-group pull-left">
-              <button type="submit" className="btn btn-primary" onClick={this.signin.bind(this)}>Login</button>
+              <button type="submit" className="btn btn-primary" style={[defStyle.loginButton]} onClick={this.signin.bind(this)}>Login</button>
             </div>
             <div className="form-group pull-right">
-              <div style={style.resetPassword}>
+              <div style={[defStyle.resetPassword]}>
                 <Link to="/reset_password">Forgot Password</Link>
               </div>
             </div>
@@ -149,10 +189,10 @@ export default class SignIn extends React.Component {
           </form>
         </div>
 
-        <div style={style.FacebookAuth}>
-          <p style={style.p}>Login with Social</p>
-          <div style={style.oauth}>
-            <div style={style.account}>
+        <div style={[defStyle.FacebookAuth]}>
+          <p style={[defStyle.p]}>Login with Social</p>
+          <div style={[defStyle.oauth]}>
+            <div style={[defStyle.account]}>
               <br/>
               <FacebookLogin
                 appId={Constants.fbAppId}
@@ -166,7 +206,7 @@ export default class SignIn extends React.Component {
                 icon="fa-facebook"
               />
               <br/><br/><br/>
-              <div style={style.account}>
+              <div style={[defStyle.account]}>
                 <span>No Account? | </span>
                 <Link to="/signup"> Sign Up</Link>
               </div>

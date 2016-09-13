@@ -1,4 +1,5 @@
 import React from 'react';
+import Radium from 'radium';
 import { Link } from "react-router";
 import FacebookLogin from 'react-facebook-login';
 import * as AuthActions from "../../actions/AuthActions";
@@ -10,6 +11,7 @@ import Password from './Password';
 import PasswordMatch from './PasswordMatch';
 import Messages from '../layout/Messages';
 
+@Radium
 export default class SignUp extends React.Component {
   constructor() {
     super();
@@ -36,7 +38,8 @@ export default class SignUp extends React.Component {
     error:  React.PropTypes.string,
     emailError: React.PropTypes.bool,
     pwError: React.PropTypes.bool,
-    passwordMatch: React.PropTypes.string
+    passwordMatch: React.PropTypes.string,
+    style: React.PropTypes.object
   }
 
   componentDidMount() {
@@ -104,64 +107,100 @@ export default class SignUp extends React.Component {
     });
   }
 
+  getStyles = () => {
+    return {
+      container: {
+        background: '#fff',
+
+        '@media (min-width: 480px)': {
+          maxWidth: '400px',
+          height: '780px'
+        },
+        '@media (min-width: 768px)': {
+          maxWidth: '650px',
+          height: '480px',
+          padding: '40px',
+        }
+
+      },
+      emailSignup: {
+        width: '270px',
+        paddingLeft: '20px',
+        '@media (min-width: 768px)': {
+          float: 'right',
+        }
+      },
+      FacebookAuth: {
+        width: '270px',
+        '@media (min-width: 480px)': {
+          margin: '20px 0px 0px 20px',
+        },
+        '@media (min-width: 768px)': {
+          float: 'left'
+        }
+      },
+      account: {
+        '@media (min-width: 768px)': {
+          marginTop: '46px'
+        }
+      },
+      p: {
+        display: 'none',
+        '@media (min-width: 480px)': {
+          display: 'none'
+        },
+        '@media (min-width: 768px)': {
+          display: 'inline',
+          color: '#888',
+          fontSize: '16px'
+        }
+      },
+      oauth: {
+        '@media (min-width: 768px)': {
+          marginTop: '50px',
+          paddingRight: '40px',
+          minHeight: '240px',
+          borderRight: '1px solid #888'
+        }
+      },
+      createButton: {
+        width: '260px',
+        '@media (min-width: 480px)': {
+        }
+      },
+      mobileOr: {
+        display: 'none',
+        '@media (max-width: 768px)': {
+          position: 'relative',
+          padding: '20px 0px',
+          margin: '0 auto',
+          width: '100%',
+          position: 'relative',
+          top: '30px',
+          left: '20px',
+          display: 'inline-block'
+        }
+
+      }
+    }
+  }
+
 
   render() {
+    const defStyle = this.getStyles();
     const { email } = this.state;
     const { password } = this.state;
     const { passwordMatch } = this.state;
 
-    const style = {
-      container: {
-        width: '650px',
-        padding: '40px',
-        height: '480px',
-        background: '#fff',
-      },
-      emailSignup: {
-        float: 'right',
-        width: '280px',
-        paddingLeft: '20px'
-      },
-      FacebookAuth: {
-        float: 'left',
-        width: '280px'
-      },
-      account: {
-        marginTop: '46px'
-      },
-      p: {
-        color: '#888',
-        fontSize: '16px'
-      },
-      oauth: {
-        marginTop: '50px',
-        paddingRight: '40px',
-        minHeight: '240px',
-        borderRight: '1px solid #888'
-      }
-    };
 
     return (
-      <div className="jumbotron center-block" style={style.container}>
+      <div className="jumbotron center-block" style={[defStyle.container]}>
         <h2>Sign up For Tally</h2>
-        <br/>
-        <div style={style.emailSignup}>
-          <p style={style.p}>Sign up with your email</p>
-          <form role="form">
-            <Messages key={this.state.key + 1} {...this.state} />
-            <Email {...this.state} key={this.state.key + 2} onUpdate={this.onUpdate.bind(this)} value={email} />
-            <Password {...this.state} key={this.state.key + 3 } onUpdate={this.onUpdate.bind(this)} value={password} />
-            <PasswordMatch {...this.state} key={this.state.key + 4} onUpdate={this.onUpdate.bind(this)} value={passwordMatch} />
-            <div className="form-group pull-right">
-              <button type="submit" className="btn btn-primary" onClick={this.signup.bind(this)}>Create Account</button>
-            </div>
-          </form>
-        </div>
-        <div style={style.FacebookAuth}>
-          <p style={style.p}>Use a social account</p>
-          <div style={style.oauth}>
-            <div style={style.account}>
-              <br/>
+        <div style={[defStyle.FacebookAuth]}>
+          <p style={[defStyle.p]}>Use a social account</p>
+          <div style={[defStyle.oauth]}>
+            <div style={[defStyle.account]}>
+
               <FacebookLogin
                 appId={Constants.fbAppId}
                 autoLoad={true}
@@ -173,12 +212,29 @@ export default class SignUp extends React.Component {
                 textButton='Login With Facebook'
                 icon="fa-facebook"
               />
-              <br/><br/><br/><br/><br/>
-              <span>Already have an Account? | </span>
-              <Link to="/signin"> Log In</Link>
             </div>
           </div>
+          <span>Already have an Account? | </span>
+            <Link to="/signin"> Log In</Link><br/>
         </div>
+
+        <p style={[defStyle.mobileOr]}>Or SignUp With Email</p>
+
+        <div style={[defStyle.emailSignup]}>
+          <p style={[defStyle.p]}>Sign up with your email</p>
+          <form role="form">
+            <Messages key={this.state.key + 1} {...this.state} />
+            <Email {...this.state} key={this.state.key + 2} onUpdate={this.onUpdate.bind(this)} value={email} />
+            <Password {...this.state} key={this.state.key + 3 } onUpdate={this.onUpdate.bind(this)} value={password} />
+            <PasswordMatch {...this.state} key={this.state.key + 4} onUpdate={this.onUpdate.bind(this)} value={passwordMatch} />
+            <div className="form-group pull-right">
+              <button style={[defStyle.createButton]} type="submit" className="btn btn-primary" onClick={this.signup.bind(this)}>Create Account</button>
+            </div>
+          </form>
+        </div>
+
+
+
       </div>
     );
   }
