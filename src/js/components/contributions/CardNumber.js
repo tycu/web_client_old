@@ -1,10 +1,17 @@
-import ReactDOM from 'react-dom'
-import React, { Component, PropTypes } from 'react'
+import ReactDOM from 'react-dom';
+import React, { Component, PropTypes } from 'react';
+var cardParser = require('creditcards/card');
 
 export default class CardNumber extends React.Component {
   state = {
     value: this.props.value,
-    number: ''
+    number: '',
+    cardType: ''
+  }
+
+  static propTypes = {
+    number: React.PropTypes.string,
+    cardType: React.PropTypes.string
   }
 
   handleNumberChange(event) {
@@ -12,18 +19,29 @@ export default class CardNumber extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const type = cardParser.type(this.state.number, false);
+
     this.setState({
-      number: nextProps.value
+      number: nextProps.value,
+      cardType: type
     });
   }
 
+  handleBlur() {
+    this.props.onChange(cardParser.format(this.state.number, '  '), true);
+  }
 
   render () {
-    const { number }  = this.state;
+    const { number, cardType }  = this.state;
+    const style = {
+      label: {
+        lineHeight: '30px'
+      }
+    }
 
     return (
       <div className="form-group">
-        <label htmlFor="number">Card Number</label>
+        <label htmlFor="number" style={style.label}>Card Number - {cardType}</label>
         <input
           autoFocus
           type="text"
@@ -33,6 +51,7 @@ export default class CardNumber extends React.Component {
           style={this.props.style}
           className="form-control"
           placeholder="card number"
+          onBlur={this.handleBlur.bind(this)}
           onChange={this.handleNumberChange.bind(this)}
         />
       </div>

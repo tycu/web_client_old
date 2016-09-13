@@ -1,5 +1,7 @@
-import ReactDOM from 'react-dom'
-import React, { Component, PropTypes } from 'react'
+import ReactDOM from 'react-dom';
+import React, { Component, PropTypes } from 'react';
+// var cvcParser = require('creditcards/cvc');
+// NOTE can add cvc validation here: https://github.com/bendrucker/creditcards
 
 export default class Cvc extends React.Component {
   state = {

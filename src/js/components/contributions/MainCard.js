@@ -32,7 +32,7 @@ export default class MainCard extends React.Component {
 
     setTimeout(() => {
       this.setState({
-        cardText: ' Card not set.'
+        cardText: ' No card set.'
       });
     }, 4000);
   }
@@ -72,14 +72,21 @@ export default class MainCard extends React.Component {
     const style = {
       container: {
         background: 'white',
+        minWidth: '200px',
+        marginTop: '20px',
+        lineHeight: '30px',
       },
       button: {
         marginLeft: '20px'
       }
     }
     const { last4 } = this.state;
-    const { brand } = this.state;
+    var { brand } = this.state;
     const { cardText } = this.state;
+
+    if (brand === 'American Express') {
+      brand = 'Amex';
+    }
 
     // NOTE stripe suggests deleting entire customer
     // perhaps add to settings
@@ -89,7 +96,7 @@ export default class MainCard extends React.Component {
 
     return (
       <div style={style.container}>
-        <b>Your Primary Card:</b>
+        <b>Primary Card:</b>
         {(last4 ? (
           <div>
             <input type="radio" defaultChecked />

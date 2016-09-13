@@ -83,6 +83,10 @@ export default class PaymentInfo extends React.Component {
 
   render() {
     const style = {
+      donationHeader: {
+        marginTop: '20px',
+        width: '100%'
+      },
       donateButtonRow: {
         paddingTop: '20px',
         // width: '300px',
@@ -106,7 +110,7 @@ export default class PaymentInfo extends React.Component {
         textAlign: 'right'
       },
       columnSplit: {
-        width: '15%'
+        width: '90%'
       }
     }
 
@@ -131,8 +135,8 @@ export default class PaymentInfo extends React.Component {
           delayShow={400}
           delayHide={200}
         />
-        <div><strong>Make a donation of ${donationDollar}</strong> to {pacName}</div>
-        <br/><br/>
+        <div style={style.donationHeader}><strong>Make a donation of ${donationDollar}</strong> to {pacName}</div>
+
 
         <div style={style.cardInfo}>
           {((showEditCard) ? (
@@ -149,10 +153,10 @@ export default class PaymentInfo extends React.Component {
           <table ref="table" class="table table-striped">
             <thead>
               <tr>
-                <th style={style.columnSplit}>&nbsp;</th>
                 <th style={style.columnSplit}>
                   <MainCard cardInfo={this.handleUserInput.bind(this)} />
                 </th>
+                <th>&nbsp;</th>
               </tr>
             </thead>
             <tbody>
