@@ -115,7 +115,12 @@ class CardStore extends EventEmitter {
     })
     .catch(function(response) {
       if ((response.status !== 200) || response.status !== 304) {
-        var alertText = JSON.parse(response.response).message;
+        var alertText;
+        if (response.response == 'Bad Request') {
+          alertText = 'Something went wrong, please verify your card details';
+        } else {
+          alertText = JSON.parse(response.response).error.message;
+        }
         that.stripeError = true;
         that.message = '';
         that.error = alertText;
@@ -163,7 +168,12 @@ class CardStore extends EventEmitter {
     })
     .catch(function(response) {
       if ((response.status !== 200) || response.status !== 304) {
-        var alertText = JSON.parse(response.response).message;
+        var alertText;
+        if (response.response == 'Bad Request') {
+          alertText = 'Something went wrong, please verify your card details';
+        } else {
+          alertText = JSON.parse(response.response).error.message;
+        }
         that.stripeError = true;
         that.spinner = '';
         that.message = '';
@@ -211,7 +221,6 @@ class CardStore extends EventEmitter {
       that.modalText = 'Your payment was processed successfully.';
       that.modalButton = 'Back To Articles';
       that.stripeError = false;
-      that.error = '';
       that.emit('change');
       return true;
     })
@@ -221,14 +230,12 @@ class CardStore extends EventEmitter {
       // https://stripe.com/docs/testing
 
       if ((response.status !== 200) || response.status !== 304) {
-        var alertText = JSON.parse(response.response).message;
+        var alertText = JSON.parse(response.response).error.message;
         that.spinner = '';
         that.modalTitle = 'Oops';
         that.modalText = alertText;
         that.modalButton = 'Try again';
         that.stripeError = true;
-        that.message = '';
-        // that.error = alertText;
         console.log("Error processing payment.", response);
         that.emit('change');
         return false;

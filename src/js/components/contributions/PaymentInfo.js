@@ -39,7 +39,9 @@ export default class PaymentInfo extends React.Component {
 
   closeModal() {
     this.setState({modalIsOpen: false});
-    browserHistory.replace('/');
+    if (!this.state.stripeError) {
+      browserHistory.replace('/');
+    }
   }
 
   componentDidMount() {

@@ -24,10 +24,10 @@ export default class Messages extends React.Component {
     };
 
     const errorStyles = {
-      color: 'red'
+      color: '#d53543'
     };
     const messageStyles = {
-      color: '#44c4a1'
+      color: '#3FC59D'
     };
 
     return (

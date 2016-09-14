@@ -87,6 +87,7 @@ export default class Event extends React.Component {
         marginTop: '40px',
         marginLeft: '180px',
         marginBottom: '30px',
+        fontSize: '16px',
       },
       politicianImg: {
         margin: '10px 30px 30px 0px',
