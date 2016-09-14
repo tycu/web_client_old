@@ -23,6 +23,27 @@ class PacEventStore extends EventEmitter {
     return this.opposePacEvents || [];
   }
 
+  getFirstMatchingName() {
+    return this.firstMatchingName;
+  }
+
+  getFirstMatchingId() {
+    return this.firstMatchingId;
+  }
+
+  firstMatching(support) {
+    const that = this;
+    if (support === undefined) {
+      return;
+    }
+    const pacEvent = _.find(that.pacEvents, function(pacEvent) {
+      if (pacEvent.support === support) {
+        return pacEvent;
+      }
+    });
+    return pacEvent;
+  }
+
   getPacEvent() {
     return this.pacEvent || {
       pacEventId: '',
@@ -57,7 +78,8 @@ class PacEventStore extends EventEmitter {
     }))
     .then(function(response) {
       that.pacEvents = response || [];
-
+      that.firstMatchingName = that.firstMatching(support).Pac.name;
+      that.firstMatchingId = that.firstMatching(support).Pac.id;
       that.error = '';
       that.emitEvent();
     })

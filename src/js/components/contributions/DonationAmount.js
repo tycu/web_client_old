@@ -52,14 +52,15 @@ export default class DonationAmount extends React.Component {
   }
 
   componentDidMount() {
+    const eventId = this.props.eventId;
+    const support = window.location.search.split('=')[1] === 'true';
+    PacEventStore.addChangeListener(this.getPacEvents);
+    PacEventActions.fetchPacEvents(eventId, support);
+
     this.setState({
       amountFocus: true,
       pacEvents: PacEventStore.getPacEvents()
-    })
-    const eventId = this.props.eventId;
-    PacEventStore.addChangeListener(this.getPacEvents);
-    PacEventActions.fetchPacEvents(eventId)
-    // var blankEvent = new Event('blank');
+    });
   }
 
   componentWillUnmount() {
@@ -72,28 +73,13 @@ export default class DonationAmount extends React.Component {
     });
   }
 
-  firstPacEventId(pacEvents, support) {
-    if (support === undefined) {
-      return;
-    }
-    const pacEvent = _.find(pacEvents, function(pacEvent) {
-      if (pacEvent.support === support) {
-        return pacEvent;
-      }
-    });
-    return pacEvent.pacId;
-  }
-
   getPacEvents() {
-    const that = this;
-    const pacEvents = PacEventStore.getPacEvents();
-    const defaultPacName = pacEvents[0].Pac.name;
-
+    var that = this;
     this.setState({
       pacEvents: PacEventStore.getPacEvents(),
-      selectedPacId: that.firstPacEventId(pacEvents, that.state.support),
-      selectedPacName: defaultPacName
-    })
+      selectedPacId: PacEventStore.getFirstMatchingId(),
+      selectedPacName: PacEventStore.getFirstMatchingName()
+    });
   }
 
   selectTargetPac(pacOpts, e) {
@@ -162,8 +148,10 @@ export default class DonationAmount extends React.Component {
       },
 
       pacSelectBox: {
+        marginLeft: '20px',
         float: 'left',
-        width: '330px',
+        width: '360px',
+        padding: '20px',
         marginTop: '50px',
         '@media (minWidth: 768px)': {
           marginTop: '20px',
@@ -179,10 +167,8 @@ export default class DonationAmount extends React.Component {
           minHeight: '287px',
           marginTop: '108px',
           marginBottom: '30px'
-        },
-        padding: '30px'
+        }
       },
-
       donorFormPull: {
         cursor: 'auto',
         backgroundAttachment: 'scroll',
@@ -230,16 +216,14 @@ export default class DonationAmount extends React.Component {
     const that = this;
 
     if (pacEvents.length > 0 && support !== undefined) {
-      const selectedPacId = that.state.selectedPacId || that.firstPacEventId(pacEvents, support);
-
       var selectPacButtons = pacEvents.map(function(pacEventWithPac, i) {
         // NOTE must match support or oppose
         if (pacEventWithPac.support === support) {
           return (
             <div class="radio" key={i + Math.random()}>
               <input class='btn btn-default' type="radio" name={pacEventWithPac.Pac.name}
-                     value={pacEventWithPac.id} // pacEvent.id
-                     checked={pacEventWithPac.pacId === selectedPacId}
+                     value={pacEventWithPac.id}
+                     checked={pacEventWithPac.pacId === this.state.selectedPacId}
                      onChange={this.selectTargetPac.bind(this, {selectedPacId: pacEventWithPac.pacId, selectedPacName: pacEventWithPac.Pac.name})} />
                <span>{pacEventWithPac.Pac.name}</span>
             </div>

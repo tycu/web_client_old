@@ -19,7 +19,7 @@ export default class CardNumber extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const type = cardParser.type(this.state.number, false);
+    const type = cardParser.type(this.state.number.replace( /\s/g, ''), false);
 
     this.setState({
       number: nextProps.value,

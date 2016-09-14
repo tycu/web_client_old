@@ -1,9 +1,10 @@
 import dispatcher from "../dispatcher";
 
-export function fetchPacEvents(eventId) {
+export function fetchPacEvents(eventId, support) {
   dispatcher.dispatch({
     type: "FETCH_PAC_EVENTS",
-    eventId
+    eventId,
+    support
   })
 }
 

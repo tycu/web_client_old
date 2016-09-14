@@ -31,6 +31,7 @@ export default class SetCard extends React.Component {
       message: '',
       email: '',
       customer: {},
+      spinnerState: '',
       key: 1
     };
   }
@@ -42,6 +43,7 @@ export default class SetCard extends React.Component {
       exp_month:  React.PropTypes.string,
       exp_year:   React.PropTypes.string
     }),
+    spinnerState:      React.PropTypes.string,
     customerId: React.PropTypes.string,
     exp_month: React.PropTypes.string,
     exp_year:  React.PropTypes.string,
@@ -72,6 +74,7 @@ export default class SetCard extends React.Component {
       email:       AuthStore.currentUser(),
       customerId:  CardStore.getCustomerId(),
       message:     CardStore.getMessage(),
+      spinnerState: CardStore.getSpinnerState(),
       exp_month:   this.state.exp_month,
       exp_year:    this.state.exp_year,
       error:       CardStore.getError(),
@@ -107,10 +110,11 @@ export default class SetCard extends React.Component {
       return false;
     } else {
       that.setState({
-        error: ''
+        error: '',
+        spinnerState: '<img class="alignnone" src="https://i0.wp.com/cdnjs.cloudflare.com/ajax/libs/galleriffic/2.0.1/css/loader.gif?resize=48%2C48" alt="" width="32" height="32"/>'
       });
 
-      Stripe.createToken(this.state.card, function (status, response) {
+      Stripe.createToken(this.state.cardresponse, function (status, response) {
         console.log(status, response);
         // then send this response to server
         CardActions.setCustomer(response.id);
@@ -160,6 +164,12 @@ export default class SetCard extends React.Component {
       addCard: {
         width: '98px',
         marginTop: '20px'
+      },
+      spinnerState: {
+        float: 'right',
+        position: 'relative',
+        left: '-180px',
+         top: '40px'
       }
     }
 
@@ -180,6 +190,7 @@ export default class SetCard extends React.Component {
           <Cvc value={this.state.card.cvc} onChange={this.onUpdate.bind(this, 'cvc')} style={style.cvc} />
         </div>
 
+        <span style={style.spinnerState} dangerouslySetInnerHTML={{__html: this.state.spinnerState}}></span>
         <div className="form-group">
           <button style={style.addCard} type="submit" className="btn btn-primary" onClick={this.setCard.bind(this)}>Add Card</button>
         </div>
