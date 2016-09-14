@@ -44,11 +44,8 @@ class PacEventStore extends EventEmitter {
     var that = this;
     const urlBase = Constants.GET_PAC_EVENTS;
     const tokenLocal = AuthStore.getAuthToken();
-    var url = urlBase + eventId + '/pac_events';
+    var url = urlBase + eventId + '/pac_events?include_pacs=true';
 
-    if (support !== undefined) {
-      url = url + '?include_pacs=true&support=' + support;
-    }
     return when(request({
       url: url,
       method: 'GET',
@@ -60,12 +57,6 @@ class PacEventStore extends EventEmitter {
     }))
     .then(function(response) {
       that.pacEvents = response || [];
-      that.supportPacEvents = _.filter(response, function(v, i) {
-        return v.support === true
-      });
-      that.opposePacEvents = _.filter(response, function(v, i) {
-        return v.support === false
-      });
 
       that.error = '';
       that.emitEvent();

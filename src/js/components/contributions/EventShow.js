@@ -19,7 +19,7 @@ export default class  extends React.Component {
     this.state = {
       donationAmount: '0.00',
       selectedPacName: '',
-      support: false,
+      // support: false,
       event: {},
       amountFocus: true,
       paymentFocus: false,

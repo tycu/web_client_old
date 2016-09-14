@@ -53,13 +53,13 @@ export default class DonationAmount extends React.Component {
 
   componentDidMount() {
     this.setState({
-      amountFocus: true
+      amountFocus: true,
+      pacEvents: PacEventStore.getPacEvents()
     })
     const eventId = this.props.eventId;
-    PacEventActions.fetchPacEvents(eventId, this.props.support);
     PacEventStore.addChangeListener(this.getPacEvents);
-
-    var blankEvent = new Event('blank');
+    PacEventActions.fetchPacEvents(eventId)
+    // var blankEvent = new Event('blank');
   }
 
   componentWillUnmount() {
@@ -72,16 +72,26 @@ export default class DonationAmount extends React.Component {
     });
   }
 
+  firstPacEventId(pacEvents, support) {
+    if (support === undefined) {
+      return;
+    }
+    const pacEvent = _.find(pacEvents, function(pacEvent) {
+      if (pacEvent.support === support) {
+        return pacEvent;
+      }
+    });
+    return pacEvent.pacId;
+  }
+
   getPacEvents() {
+    const that = this;
     const pacEvents = PacEventStore.getPacEvents();
-    const defaultPacId = pacEvents[0].Pac.id;
     const defaultPacName = pacEvents[0].Pac.name;
 
     this.setState({
       pacEvents: PacEventStore.getPacEvents(),
-      supportPacs: PacEventStore.getSupportPacEvents(),
-      opposePacs:  PacEventStore.getOpposePacEvents(),
-      selectedPacId: defaultPacId,
+      selectedPacId: that.firstPacEventId(pacEvents, that.state.support),
       selectedPacName: defaultPacName
     })
   }
@@ -213,24 +223,28 @@ export default class DonationAmount extends React.Component {
     }
     // TODO clean up props and state handling so state is only in eventShow and props are passed up to it
 
-
     const donationAmount = parseFloat(this.state.donationAmount || "0.00", 10).toFixed(2);
     const pacEvents = this.state.pacEvents;
     const displayAmt = this.state.displayAmt;
+    const support = this.props.support;
+    const that = this;
 
-    if (pacEvents.length > 0) {
-      const selectedPacId = this.state.selectedPacId || this.state.pacEvents[0].pacId;
+    if (pacEvents.length > 0 && support !== undefined) {
+      const selectedPacId = that.state.selectedPacId || that.firstPacEventId(pacEvents, support);
 
       var selectPacButtons = pacEvents.map(function(pacEventWithPac, i) {
-        return (
-          <div class="radio" key={i + Math.random()}>
-            <input class='btn btn-default' type="radio" name={pacEventWithPac.Pac.name}
-                   value={pacEventWithPac.id} // pacEvent.id
-                   checked={pacEventWithPac.pacId === selectedPacId}
-                   onChange={this.selectTargetPac.bind(this, {selectedPacId: pacEventWithPac.pacId, selectedPacName: pacEventWithPac.Pac.name})} />
-             <span>{pacEventWithPac.Pac.name}</span>
-          </div>
-        );
+        // NOTE must match support or oppose
+        if (pacEventWithPac.support === support) {
+          return (
+            <div class="radio" key={i + Math.random()}>
+              <input class='btn btn-default' type="radio" name={pacEventWithPac.Pac.name}
+                     value={pacEventWithPac.id} // pacEvent.id
+                     checked={pacEventWithPac.pacId === selectedPacId}
+                     onChange={this.selectTargetPac.bind(this, {selectedPacId: pacEventWithPac.pacId, selectedPacName: pacEventWithPac.Pac.name})} />
+               <span>{pacEventWithPac.Pac.name}</span>
+            </div>
+          );
+        }
       }, this);
     }
 
