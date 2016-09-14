@@ -43,15 +43,15 @@ export default class SetCard extends React.Component {
       exp_month:  React.PropTypes.string,
       exp_year:   React.PropTypes.string
     }),
-    spinnerState:      React.PropTypes.string,
-    customerId: React.PropTypes.string,
-    exp_month: React.PropTypes.string,
-    exp_year:  React.PropTypes.string,
-    stripeError: React.PropTypes.bool,
-    error:     React.PropTypes.string,
-    message:   React.PropTypes.string,
-    email:     React.PropTypes.string,
-    customer:  React.PropTypes.object
+    spinnerState: React.PropTypes.string,
+    customerId:   React.PropTypes.string,
+    exp_month:    React.PropTypes.string,
+    exp_year:     React.PropTypes.string,
+    stripeError:  React.PropTypes.bool,
+    error:        React.PropTypes.string,
+    message:      React.PropTypes.string,
+    email:        React.PropTypes.string,
+    customer:     React.PropTypes.object
   }
 
   componentDidMount() {
@@ -114,7 +114,7 @@ export default class SetCard extends React.Component {
         spinnerState: '<img class="alignnone" src="https://i0.wp.com/cdnjs.cloudflare.com/ajax/libs/galleriffic/2.0.1/css/loader.gif?resize=48%2C48" alt="" width="32" height="32"/>'
       });
 
-      Stripe.createToken(this.state.cardresponse, function (status, response) {
+      Stripe.createToken(this.state.card, function (status, response) {
         console.log(status, response);
         // then send this response to server
         CardActions.setCustomer(response.id);

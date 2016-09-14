@@ -1,12 +1,11 @@
 import React from 'react';
-import { Link } from "react-router";
+import { Link, browserHistory } from "react-router";
 import MainCard from './MainCard';
 import SetCard from './SetCard';
 import CardStore from '../../stores/CardStore';
 import * as CardActions from '../../actions/CardActions';
 import ReactTooltip from 'react-tooltip';
-
-// import Messages from '../layout/Messages';
+var Modal = require('react-modal');
 
 export default class PaymentInfo extends React.Component {
   constructor() {
@@ -18,14 +17,29 @@ export default class PaymentInfo extends React.Component {
       amountFocus: false,
       paymentFocus: true,
       showEditCard: false,
+      modalIsOpen: false,
+      spinner: '',
+      modalTitle: '',
+      modalText: '',
+      modalButton: '',
       key: 1
     };
   }
 
   static propTypes = {
-    amountFocus: React.PropTypes.bool,
+    modalIsOpen:  React.PropTypes.bool,
+    spinner:      React.PropTypes.string,
+    modalText:    React.PropTypes.string,
+    modalText:    React.PropTypes.string,
+    modalButton:  React.PropTypes.string,
+    amountFocus:  React.PropTypes.bool,
     paymentFocus: React.PropTypes.bool,
-    customerId: React.PropTypes.string
+    customerId:   React.PropTypes.string
+  }
+
+  closeModal() {
+    this.setState({modalIsOpen: false});
+    browserHistory.replace('/');
   }
 
   componentDidMount() {
@@ -38,8 +52,13 @@ export default class PaymentInfo extends React.Component {
 
   getCard() {
     this.setState({
-      customerId: CardStore.getCustomerId(),
-      customer: CardStore.getCustomer(),
+      customerId:  CardStore.getCustomerId(),
+      customer:    CardStore.getCustomer(),
+      spinner:     CardStore.getSpinnerState(),
+      stripeError: CardStore.getStripeError(),
+      modalTitle:  CardStore.getModalTitle(),
+      modalText:   CardStore.getModalText(),
+      modalButton: CardStore.getModalButtonText(),
       key: Math.random()
     });
   }
@@ -66,6 +85,11 @@ export default class PaymentInfo extends React.Component {
 
   createDonation(createDonation, e) {
     e.preventDefault();
+    this.setState({
+      spinner: '<img class="alignnone" src="https://i0.wp.com/cdnjs.cloudflare.com/ajax/libs/galleriffic/2.0.1/css/loader.gif?resize=48%2C48" alt="" width="32" height="32"/>',
+      modalIsOpen: true,
+      modalText: 'Processing payment...'
+    })
     const chargeDetails = {
       amount: this.props.donationAmount,
       customerId: this.state.customerId,
@@ -84,12 +108,11 @@ export default class PaymentInfo extends React.Component {
   render() {
     const style = {
       donationHeader: {
-        marginTop: '20px',
+        margin: '20px 0px',
         width: '100%'
       },
       donateButtonRow: {
         paddingTop: '20px',
-        // width: '300px',
       },
       donateButton: {
         float: 'right'
@@ -111,6 +134,60 @@ export default class PaymentInfo extends React.Component {
       },
       columnSplit: {
         width: '90%'
+      },
+      modal: {
+        success: {
+          backgroundColor: '#3FC59D',
+          height: '160px',
+          fontSize: '40px',
+          textAlign: 'center',
+        },
+        error: {
+          backgroundColor: '#E2747E',
+          height: '160px',
+          fontSize: '40px',
+          textAlign: 'center',
+        },
+        button: {
+          position: 'relative',
+          margin: '0 auto',
+          top: '20px',
+        },
+        glyf: {
+          position: 'relative',
+          top: '65px',
+        },
+        contents: {
+          padding: '20px',
+          textAlign: 'center',
+        }
+      },
+      modalStyle: {
+        overlay : {
+          position: 'fixed',
+          padding: '0px',
+          top: '0px',
+          left: '0px',
+          right: '0px',
+          bottom: '0px',
+          backgroundColor: 'rgba(255, 255, 255, 0.75)'
+        },
+        content : {
+          padding: '0px',
+          width: '350px',
+          height: '350px',
+          position: 'absolute',
+          left: '50%',
+          top: '25%',
+          marginLeft: '-150px',
+          marginTop: '-150px',
+          border: '1px solid #ccc',
+          background: '#fff',
+          overflow: 'auto',
+          WebkitOverflowScrolling: 'touch',
+          borderRadius: '3px',
+          outline: 'none',
+        }
       }
     }
 
@@ -126,6 +203,7 @@ export default class PaymentInfo extends React.Component {
     const feeDollar = feeCents / 100;
     const chargeSum = donationDollar + feeDollar
 
+    const spinner = this.state.spinner;
 
     return (
       <div>
@@ -191,6 +269,33 @@ export default class PaymentInfo extends React.Component {
         <br/>
         <a href='' onClick={this.backToDonation.bind(this)}>Back to Amount</a>
         <br/>
+
+        <Modal
+          isOpen={this.state.modalIsOpen}
+          shouldCloseOnOverlayClick={false}
+          onRequestClose={this.closeModal.bind(this)}
+          style={style.modalStyle}
+        >
+          {((this.state.stripeError) ? (
+            <div style={style.modal.error}><span style={style.modal.glyf} class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span></div>
+          ) : (
+            <div style={style.modal.success}><span style={style.modal.glyf} class="glyphicon glyphicon glyphicon-check" aria-hidden="true"></span></div>
+          ))}
+
+          <div style={style.modal.contents}>
+            <h3>{this.state.modalTitle}</h3>
+
+            <div dangerouslySetInnerHTML={{__html: spinner}}></div>
+            <div>{this.state.modalText}</div>
+
+            {((this.state.modalButton === undefined) ? (
+              <span></span>
+            ) : (
+              <button style={style.modal.button} className="btn btn-danger" onClick={this.closeModal.bind(this)}>{this.state.modalButton}</button>
+            ))}
+          </div>
+        </Modal>
+
       </div>
     )
   }

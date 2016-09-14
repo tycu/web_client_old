@@ -46,6 +46,22 @@ class CardStore extends EventEmitter {
     return this.brand;
   }
 
+  getSpinnerState() {
+    return this.spinner;
+  }
+
+  getModalText() {
+    return this.modalText;
+  }
+
+  getModalTitle() {
+    return this.modalTitle;
+  }
+
+  getModalButtonText() {
+    return this.modalButton;
+  }
+
   stripePublicKey() {
     if (process.env.NODE_ENV === "production") {
       return Constants.PUBLIC_KEY_LIVE;
@@ -141,6 +157,7 @@ class CardStore extends EventEmitter {
       that.message = 'Card Added Successfully';
       that.stripeError = false;
       that.error = '';
+      that.spinner = '';
       that.emit('change');
       return true;
     })
@@ -148,6 +165,7 @@ class CardStore extends EventEmitter {
       if ((response.status !== 200) || response.status !== 304) {
         var alertText = JSON.parse(response.response).message;
         that.stripeError = true;
+        that.spinner = '';
         that.message = '';
         that.error = alertText;
         console.log("Error fetching Card Details", response);
@@ -187,26 +205,11 @@ class CardStore extends EventEmitter {
     var that = this;
 
     return chargePromise
-    .then(function(response) {
-
-
-
-      // TODO clean up response here and post donation flow.
-
-      // var customerId = response.user.stripeCustomerUuid;
-      // if (customerId) {
-      //   that.customerId = customerId;
-      // }
-      // var customer = response.customer;
-      // if (customer) {
-      //   that.customer = customer;
-      //   var showCardData = customer.sources.data[0]
-      //   that.last4 = showCardData.last4;
-      //   that.brand = showCardData.brand;
-      // }
-      // localStorage.setItem('stripeCustomerId', customerId)
-
-
+    .then(function(user) { // NOTE returns Tally JWT/User object
+      that.spinner = '';
+      that.modalTitle = 'Great!';
+      that.modalText = 'Your payment was processed successfully.';
+      that.modalButton = 'Back To Articles';
       that.stripeError = false;
       that.error = '';
       that.emit('change');
@@ -214,15 +217,19 @@ class CardStore extends EventEmitter {
     })
     .catch(function(response) {
       // TODO clean up response/error handling here
+      // test with card failures
+      // https://stripe.com/docs/testing
 
       if ((response.status !== 200) || response.status !== 304) {
         var alertText = JSON.parse(response.response).message;
+        that.spinner = '';
+        that.modalTitle = 'Oops';
+        that.modalText = alertText;
+        that.modalButton = 'Try again';
         that.stripeError = true;
         that.message = '';
-        that.error = alertText;
-
-
-        console.log("Error create chrage.", response);
+        // that.error = alertText;
+        console.log("Error processing payment.", response);
         that.emit('change');
         return false;
       }
