@@ -60,13 +60,10 @@
   "optionalDependencies": {},
   "engines": {},
   "scripts": {
-    "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
-    "start:dev": "NODE_ENV=development webpack-dev-server --content-base src --inline --hot --history-api-fallback",
-    "start:prod": "webpack && node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack -p --progress --colors",
-    "build-prod": "NODE_ENV=production webpack -p --progress --colors",
-    "static": "webpack --progress --colors"
+    "start": "NODE_ENV=development webpack-dev-server --content-base src --inline --hot --history-api-fallback",
+    "build": "NODE_ENV=production webpack -p --progress --colors --config webpack.config.prod.js",
+    "static": "webpack --progress --colors",
+    "clean": "rm -rf ./src/routes.min.js ./src/*.woff2 ./src/*.eot ./src/*.svg ./src/*.woff ./src/*.ttf"
   },
   "bugs": {
     "url": "https://github.com/tallyus/tally_web/issues"
