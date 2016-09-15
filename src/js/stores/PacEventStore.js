@@ -78,8 +78,10 @@ class PacEventStore extends EventEmitter {
     }))
     .then(function(response) {
       that.pacEvents = response || [];
-      that.firstMatchingName = that.firstMatching(support).Pac.name;
-      that.firstMatchingId = that.firstMatching(support).Pac.id;
+      if (support !== undefined) {
+        that.firstMatchingName = that.firstMatching(support).Pac.name;
+        that.firstMatchingId = that.firstMatching(support).Pac.id;
+      }
       that.error = '';
       that.emitEvent();
     })

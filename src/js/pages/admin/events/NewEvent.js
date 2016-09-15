@@ -5,6 +5,7 @@ import EventStore from "../../../stores/EventStore";
 import ImageStore from "../../../stores/ImageStore";
 import * as EventActions from "../../../actions/EventActions";
 import Messages from '../../../components/layout/Messages';
+import DraftJsStatefulEditor from './DraftJsStatefulEditor';
 import PoliticiansField from './PoliticiansField';
 import * as FileUtils from "../../../utils/FileUtils";
 import * as Validators from "../../../utils/ValidationUtils";
@@ -67,10 +68,10 @@ export default class NewEvent extends React.Component {
 
   onUpdate(key, e) {
     let event = this.state.event;
-
-    if (key === 'politicianId') {
+    if (key === 'politicianId' || key === 'summary') {
       event[key] = e;
-    } else {
+    }
+    else {
       var val = e.target.value;
       event[key] = val;
     }
@@ -134,9 +135,7 @@ export default class NewEvent extends React.Component {
 
       },
       summary: {
-        textArea: {
-          height: '300px'
-        }
+        minHeight: '200px'
       },
       file: {
         display: 'none'
@@ -175,9 +174,9 @@ export default class NewEvent extends React.Component {
             <label htmlFor="headline">headline</label>
             <input type="text" value={this.state.event.headline || ''} onChange={this.onUpdate.bind(this, 'headline')} className="form-control" id="headline" ref="headline" placeholder="headline" />
           </div>
-          <div className="form-group" style={style.summary}>
-            <label htmlFor="summary">summary</label>
-            <textarea style={style.summary.textArea} type="text" value={this.state.event.summary || ''} onChange={this.onUpdate.bind(this, 'summary')} className="form-control" id="summary" ref="summary" placeholder="summary" />
+          <div className="form-group" style={style.summary || ''}>
+            <label htmlFor="summary">summary (saves output as markdown)</label>
+            <DraftJsStatefulEditor value={this.state.event.summary} onChange={this.onUpdate.bind(this, 'summary')} className="form-control" id="summary" ref="summary" placeholder="summary" />
           </div>
 
           <div className='form-group'>

@@ -6,6 +6,7 @@ import ImageStore from "../../../stores/ImageStore";
 import * as EventActions from "../../../actions/EventActions";
 import * as PacEventActions from "../../../actions/PacEventActions";
 import Messages from '../../../components/layout/Messages';
+import DraftJsStatefulEditor from './DraftJsStatefulEditor';
 import PacsField from './PacsField';
 import PacStore from "../../../stores/PacStore";
 import PacEventStore from "../../../stores/PacEventStore";
@@ -105,9 +106,13 @@ export default class EditEvent extends React.Component {
 
   onUpdate(key, e) {
     let event = this.state.event;
-
-    var val = e.target.value;
-    event[key] = val;
+    if (key === 'summary') {
+      event[key] = e;
+    }
+    else {
+      var val = e.target.value;
+      event[key] = val;
+    }
     this.setState(event);
   }
 
@@ -243,9 +248,7 @@ export default class EditEvent extends React.Component {
 
       },
       summary: {
-        textArea: {
-          height: '300px'
-        }
+        minHeight: '200px'
       },
       file: {
         display: 'none'
@@ -269,10 +272,10 @@ export default class EditEvent extends React.Component {
           </div>
           <div className="form-group" style={style.imageAttribution}>
             <label htmlFor="imageAttribution">imageAttribution</label>
-            <input type="text" value={this.state.event.imageAttribution} onChange={this.onUpdate.bind(this, 'imageAttribution')} className="form-control" id="imageAttribution" ref="imageAttribution" placeholder="imageAttribution" />
+            <input type="text" value={this.state.event.imageAttribution || ''} onChange={this.onUpdate.bind(this, 'imageAttribution')} className="form-control" id="imageAttribution" ref="imageAttribution" placeholder="imageAttribution" />
           </div>
           <div className="form-group" style={style.politicianId}>
-            <label htmlFor="politicianId">politicianId: {this.state.event.politicianId} (cannot be changed after event is created)</label>
+            <label htmlFor="politicianId">politicianId: {this.state.event.politicianId || ''} (cannot be changed after event is created)</label>
           </div>
 
           <div className="form-group" style={style.pacId} id='supportPacField'>
@@ -293,13 +296,12 @@ export default class EditEvent extends React.Component {
 
           <div className="form-group" style={style.headline}>
             <label htmlFor="headline">headline</label>
-            <input type="text" value={this.state.event.headline} onChange={this.onUpdate.bind(this, 'headline')} className="form-control" id="headline" ref="headline" placeholder="headline" />
+            <input type="text" value={this.state.event.headline || ''} onChange={this.onUpdate.bind(this, 'headline')} className="form-control" id="headline" ref="headline" placeholder="headline" />
           </div>
           <div className="form-group" style={style.summary}>
             <label htmlFor="summary">summary</label>
-            <textarea style={style.summary.textArea} type="text" value={this.state.event.summary} onChange={this.onUpdate.bind(this, 'summary')} className="form-control" id="summary" ref="summary" placeholder="summary" />
+            <DraftJsStatefulEditor value={this.state.event.summary || ''} onChange={this.onUpdate.bind(this, 'summary')} className="form-control" id="summary" ref="summary" placeholder="summary" />
           </div>
-
 
           <div className='form-group'>
             <button type="submit" className="btn btn-primary" onClick={this.updateEvent.bind(this)}>Save Event</button>

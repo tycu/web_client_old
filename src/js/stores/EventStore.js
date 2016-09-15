@@ -251,6 +251,7 @@ class EventStore extends EventEmitter {
         }
       })
     );
+    this.message = 'event updated successfully';
     this.emit('change');
   }
 
