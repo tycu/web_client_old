@@ -82,6 +82,13 @@ class PacEventStore extends EventEmitter {
         that.firstMatchingName = that.firstMatching(support).Pac.name;
         that.firstMatchingId = that.firstMatching(support).Pac.id;
       }
+      that.supportPacEvents = _.filter(response, function(v, i) {
+        return v.support === true
+      });
+      that.opposePacEvents = _.filter(response, function(v, i) {
+        return v.support === false
+      });
+
       that.error = '';
       that.emitEvent();
     })
