@@ -52,10 +52,10 @@ export default class PoliticiansField extends React.Component {
       }
     }
 
-    const politicianList = politicians.map((politician, i) => {
+    const politicianList = politicians.map((pol, i) => {
       return <option
-               value={politician.id}
-               key={i}>{politician.lastName}, {politician.firstName}
+               value={pol.id}
+               key={i}>{pol.lastName}, {pol.firstName} ({pol.color})
              </option>
     });
 

@@ -148,9 +148,15 @@ module.exports = {
   },
   plugins: getPlugins(),
   devServer: {
-    proxy: { // https://github.com/chimurai/http-proxy-middleware#options
-      '/api/v1/*': 'http://localhost:5000'
-    }
+    port: 8080,
+    // proxy: { // https://github.com/chimurai/http-proxy-middleware#options
+    //   '/api/v1/**': {
+    //     default: false,
+    //     target: 'http://localhost:5000/',
+    //     secure: false,
+    //     changeOrigin: true
+    //   }
+    // }
   }
 };
 console.log('process.env.NODE_ENV', process.env.NODE_ENV);

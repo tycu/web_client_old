@@ -268,7 +268,7 @@ export default class EditEvent extends React.Component {
 
           <div className="form-group" style={style.imageUrl}>
             <label htmlFor="imageUrl">imageUrl</label>
-            <input type="text" value={this.state.event.imageUrl || ''} onChange={this.onUpdate.bind(this, 'imageUrl')} className="form-control" id="imageUrl" ref="imageUrl" placeholder="imageUrl" />
+            <input type="text" disabled="disabled" value={this.state.event.imageUrl || ''} onChange={this.onUpdate.bind(this, 'imageUrl')} className="form-control" id="imageUrl" ref="imageUrl" placeholder="imageUrl" />
           </div>
           <div className="form-group" style={style.imageAttribution}>
             <label htmlFor="imageAttribution">imageAttribution</label>
