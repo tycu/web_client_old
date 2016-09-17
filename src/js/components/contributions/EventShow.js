@@ -45,7 +45,7 @@ export default class  extends React.Component {
   }
 
   componentDidMount() {
-    var support = this.props.location.query.support === 'true';
+    const support = this.props.location.query.support === 'true';
     const eventId = this.props.params.eventId;
 
     this.setState({

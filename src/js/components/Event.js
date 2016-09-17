@@ -146,10 +146,21 @@ export default class Event extends React.Component {
 
           <div style={[defStyle.donateLinks]}>
             <span style={[defStyle.supportLink, style && style.link]}>
-              <Link to={eventShow + '?support=true'} class="text-success"><strong>Support</strong>&nbsp;&nbsp;<span class="glyphicon glyphicon-menu-up" aria-hidden="true">&nbsp;</span></Link>
+              <Link
+                // to={eventShow + '?support=true'}
+                to={"events/" + eventId}
+                class="text-success"
+              >
+                <strong>Support</strong>&nbsp;&nbsp;<span class="glyphicon glyphicon-menu-up" aria-hidden="true">&nbsp;</span>
+              </Link>
             </span>
             <span style={[defStyle.opposeLink, style && style.link]}>
-              <Link to={eventShow + '?support=false'} class="text-danger"><strong>Oppose</strong>&nbsp;&nbsp;<span class="glyphicon glyphicon-menu-down" aria-hidden="true">&nbsp;</span></Link>
+              <Link
+                to={eventShow + '?support=false'}
+                class="text-danger"
+              >
+                <strong>Oppose</strong>&nbsp;&nbsp;<span class="glyphicon glyphicon-menu-down" aria-hidden="true">&nbsp;</span>
+              </Link>
             </span>
           </div>
 
