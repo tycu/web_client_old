@@ -5,10 +5,10 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 exports.default = function (target) {
-  target.prototype.bindWindowEvents = function () {
+  target.prototype.bindWindowEvents = function (resizeHide) {
     // ReactTooltip.hide
-    window.removeEventListener(_constant2.default.GLOBAL.HIDE, this.hideTooltip);
-    window.addEventListener(_constant2.default.GLOBAL.HIDE, this.hideTooltip, false);
+    window.removeEventListener(_constant2.default.GLOBAL.HIDE, this.globalHide);
+    window.addEventListener(_constant2.default.GLOBAL.HIDE, this.globalHide, false);
 
     // ReactTooltip.rebuild
     window.removeEventListener(_constant2.default.GLOBAL.REBUILD, this.globalRebuild);
@@ -19,12 +19,14 @@ exports.default = function (target) {
     window.addEventListener(_constant2.default.GLOBAL.SHOW, this.globalShow, false);
 
     // Resize
-    window.removeEventListener('resize', this.onWindowResize);
-    window.addEventListener('resize', this.onWindowResize, false);
+    if (resizeHide) {
+      window.removeEventListener('resize', this.onWindowResize);
+      window.addEventListener('resize', this.onWindowResize, false);
+    }
   };
 
   target.prototype.unbindWindowEvents = function () {
-    window.removeEventListener(_constant2.default.GLOBAL.HIDE, this.hideTooltip);
+    window.removeEventListener(_constant2.default.GLOBAL.HIDE, this.globalHide);
     window.removeEventListener(_constant2.default.GLOBAL.REBUILD, this.globalRebuild);
     window.removeEventListener(_constant2.default.GLOBAL.SHOW, this.globalShow);
     window.removeEventListener('resize', this.onWindowResize);

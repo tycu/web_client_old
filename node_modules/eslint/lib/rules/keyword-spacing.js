@@ -30,7 +30,7 @@ const KEYS = keywords.concat(["as", "await", "from", "get", "let", "of", "set", 
     KEYS.sort();
     for (let i = 1; i < KEYS.length; ++i) {
         if (KEYS[i] === KEYS[i - 1]) {
-            throw new Error("Duplication was found in the keyword list: " + KEYS[i]);
+            throw new Error(`Duplication was found in the keyword list: ${KEYS[i]}`);
         }
     }
 }());
@@ -100,7 +100,7 @@ module.exports = {
         ]
     },
 
-    create: function(context) {
+    create(context) {
         const sourceCode = context.getSourceCode();
 
         /**
@@ -126,7 +126,7 @@ module.exports = {
                     loc: token.loc.start,
                     message: "Expected space(s) before \"{{value}}\".",
                     data: token,
-                    fix: function(fixer) {
+                    fix(fixer) {
                         return fixer.insertTextBefore(token, " ");
                     }
                 });
@@ -156,7 +156,7 @@ module.exports = {
                     loc: token.loc.start,
                     message: "Unexpected space(s) before \"{{value}}\".",
                     data: token,
-                    fix: function(fixer) {
+                    fix(fixer) {
                         return fixer.removeRange([prevToken.range[1], token.range[0]]);
                     }
                 });
@@ -186,7 +186,7 @@ module.exports = {
                     loc: token.loc.start,
                     message: "Expected space(s) after \"{{value}}\".",
                     data: token,
-                    fix: function(fixer) {
+                    fix(fixer) {
                         return fixer.insertTextAfter(token, " ");
                     }
                 });
@@ -216,7 +216,7 @@ module.exports = {
                     loc: token.loc.start,
                     message: "Unexpected space(s) after \"{{value}}\".",
                     data: token,
-                    fix: function(fixer) {
+                    fix(fixer) {
                         return fixer.removeRange([token.range[1], nextToken.range[0]]);
                     }
                 });

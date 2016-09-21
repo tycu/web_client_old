@@ -68,7 +68,7 @@ module.exports = {
         schema: []
     },
 
-    create: function(context) {
+    create(context) {
 
         /**
          * Checks if the escape character in given slice is unnecessary.
@@ -85,12 +85,15 @@ module.exports = {
 
             if (escapeNotFound && !isQuoteEscape) {
                 context.report({
-                    node: node,
+                    node,
                     loc: {
                         line: node.loc.start.line,
                         column: node.loc.start.column + elm.index
                     },
-                    message: "Unnecessary escape character: " + elm[0] + "."
+                    message: "Unnecessary escape character: {{character}}.",
+                    data: {
+                        character: elm[0]
+                    }
                 });
             }
         }

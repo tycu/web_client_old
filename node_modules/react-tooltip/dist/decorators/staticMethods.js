@@ -9,8 +9,8 @@ exports.default = function (target) {
    * Hide all tooltip
    * @trigger ReactTooltip.hide()
    */
-  target.hide = function () {
-    dispatchGlobalEvent(_constant2.default.GLOBAL.HIDE);
+  target.hide = function (target) {
+    dispatchGlobalEvent(_constant2.default.GLOBAL.HIDE, { target: target });
   };
 
   /**
@@ -42,6 +42,13 @@ exports.default = function (target) {
       // only `float` type cares e.clientX e.clientY
       var e = { currentTarget: event.detail.target };
       this.showTooltip(e, true);
+    }
+  };
+
+  target.prototype.globalHide = function (event) {
+    if (this.mount) {
+      var hasTarget = event && event.detail && event.detail.target && true || false;
+      this.hideTooltip({ currentTarget: hasTarget && event.detail.target }, hasTarget);
     }
   };
 };

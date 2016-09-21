@@ -73,6 +73,46 @@ module.exports = {
                     MemberExpression: {
                         type: "integer",
                         minimum: 0
+                    },
+                    FunctionDeclaration: {
+                        type: "object",
+                        properties: {
+                            parameters: {
+                                oneOf: [
+                                    {
+                                        type: "integer",
+                                        minimum: 0
+                                    },
+                                    {
+                                        enum: ["first"]
+                                    }
+                                ]
+                            },
+                            body: {
+                                type: "integer",
+                                minimum: 0
+                            }
+                        }
+                    },
+                    FunctionExpression: {
+                        type: "object",
+                        properties: {
+                            parameters: {
+                                oneOf: [
+                                    {
+                                        type: "integer",
+                                        minimum: 0
+                                    },
+                                    {
+                                        enum: ["first"]
+                                    }
+                                ]
+                            },
+                            body: {
+                                type: "integer",
+                                minimum: 0
+                            }
+                        }
                     }
                 },
                 additionalProperties: false
@@ -80,10 +120,12 @@ module.exports = {
         ]
     },
 
-    create: function(context) {
+    create(context) {
 
         const MESSAGE = "Expected indentation of {{needed}} {{type}} {{characters}} but found {{gotten}}.";
         const DEFAULT_VARIABLE_INDENT = 1;
+        const DEFAULT_PARAMETER_INDENT = null; // For backwards compatibility, don't check parameter indentation unless specified in the config
+        const DEFAULT_FUNCTION_BODY_INDENT = 1;
 
         let indentType = "space";
         let indentSize = 4;
@@ -94,7 +136,15 @@ module.exports = {
                 let: DEFAULT_VARIABLE_INDENT,
                 const: DEFAULT_VARIABLE_INDENT
             },
-            outerIIFEBody: null
+            outerIIFEBody: null,
+            FunctionDeclaration: {
+                parameters: DEFAULT_PARAMETER_INDENT,
+                body: DEFAULT_FUNCTION_BODY_INDENT
+            },
+            FunctionExpression: {
+                parameters: DEFAULT_PARAMETER_INDENT,
+                body: DEFAULT_FUNCTION_BODY_INDENT
+            }
         };
 
         const sourceCode = context.getSourceCode();
@@ -131,6 +181,14 @@ module.exports = {
                 if (typeof opts.MemberExpression === "number") {
                     options.MemberExpression = opts.MemberExpression;
                 }
+
+                if (typeof opts.FunctionDeclaration === "object") {
+                    Object.assign(options.FunctionDeclaration, opts.FunctionDeclaration);
+                }
+
+                if (typeof opts.FunctionExpression === "object") {
+                    Object.assign(options.FunctionExpression, opts.FunctionExpression);
+                }
             }
         }
 
@@ -152,10 +210,10 @@ module.exports = {
          */
         function report(node, needed, gotten, loc, isLastNodeCheck) {
             const msgContext = {
-                needed: needed,
+                needed,
                 type: indentType,
                 characters: needed === 1 ? "character" : "characters",
-                gotten: gotten
+                gotten
             };
             const indentChar = indentType === "space" ? " " : "\t";
 
@@ -168,7 +226,7 @@ module.exports = {
                 let rangeToFix = [];
 
                 if (needed > gotten) {
-                    const spaces = "" + new Array(needed - gotten + 1).join(indentChar);  // replace with repeat in future
+                    const spaces = indentChar.repeat(needed - gotten);
 
                     if (isLastNodeCheck === true) {
                         rangeToFix = [
@@ -206,15 +264,15 @@ module.exports = {
 
             if (loc) {
                 context.report({
-                    node: node,
-                    loc: loc,
+                    node,
+                    loc,
                     message: MESSAGE,
                     data: msgContext,
                     fix: getFixerFunction()
                 });
             } else {
                 context.report({
-                    node: node,
+                    node,
                     message: MESSAGE,
                     data: msgContext,
                     fix: getFixerFunction()
@@ -268,6 +326,16 @@ module.exports = {
             ) {
                 report(node, indent, nodeIndent);
             }
+
+            if (node.type === "IfStatement" && node.alternate) {
+                const elseToken = sourceCode.getTokenBefore(node.alternate);
+
+                checkNodeIndent(elseToken, indent, excludeCommas);
+
+                if (!isNodeFirstInLine(node.alternate)) {
+                    checkNodeIndent(node.alternate, indent, excludeCommas);
+                }
+            }
         }
 
         /**
@@ -278,14 +346,7 @@ module.exports = {
          * @returns {void}
          */
         function checkNodesIndent(nodes, indent, excludeCommas) {
-            nodes.forEach(function(node) {
-                if (node.type === "IfStatement" && node.alternate) {
-                    const elseToken = sourceCode.getTokenBefore(node.alternate);
-
-                    checkNodeIndent(elseToken, indent, excludeCommas);
-                }
-                checkNodeIndent(node, indent, excludeCommas);
-            });
+            nodes.forEach(node => checkNodeIndent(node, indent, excludeCommas));
         }
 
         /**
@@ -489,11 +550,15 @@ module.exports = {
             }
 
             // function body indent should be indent + indent size, unless this
-            // is the outer IIFE and that option is enabled.
+            // is a FunctionDeclaration, FunctionExpression, or outer IIFE and the corresponding options are enabled.
             let functionOffset = indentSize;
 
             if (options.outerIIFEBody !== null && isOuterIIFE(calleeNode)) {
                 functionOffset = options.outerIIFEBody * indentSize;
+            } else if (calleeNode.type === "FunctionExpression") {
+                functionOffset = options.FunctionExpression.body * indentSize;
+            } else if (calleeNode.type === "FunctionDeclaration") {
+                functionOffset = options.FunctionDeclaration.body * indentSize;
             }
             indent += functionOffset;
 
@@ -784,7 +849,7 @@ module.exports = {
         }
 
         return {
-            Program: function(node) {
+            Program(node) {
                 if (node.body.length > 0) {
 
                     // Root nodes should have no indent
@@ -806,27 +871,27 @@ module.exports = {
 
             DoWhileStatement: blockLessNodes,
 
-            IfStatement: function(node) {
+            IfStatement(node) {
                 if (node.consequent.type !== "BlockStatement" && node.consequent.loc.start.line > node.loc.start.line) {
                     blockIndentationCheck(node);
                 }
             },
 
-            VariableDeclaration: function(node) {
+            VariableDeclaration(node) {
                 if (node.declarations[node.declarations.length - 1].loc.start.line > node.declarations[0].loc.start.line) {
                     checkIndentInVariableDeclarations(node);
                 }
             },
 
-            ObjectExpression: function(node) {
+            ObjectExpression(node) {
                 checkIndentInArrayOrObjectBlock(node);
             },
 
-            ArrayExpression: function(node) {
+            ArrayExpression(node) {
                 checkIndentInArrayOrObjectBlock(node);
             },
 
-            MemberExpression: function(node) {
+            MemberExpression(node) {
                 if (typeof options.MemberExpression === "undefined") {
                     return;
                 }
@@ -860,7 +925,7 @@ module.exports = {
                 checkNodesIndent(checkNodes, propertyIndent);
             },
 
-            SwitchStatement: function(node) {
+            SwitchStatement(node) {
 
                 // Switch is not a 'BlockStatement'
                 const switchIndent = getNodeIndent(node);
@@ -872,7 +937,7 @@ module.exports = {
                 checkLastNodeLineIndent(node, switchIndent);
             },
 
-            SwitchCase: function(node) {
+            SwitchCase(node) {
 
                 // Skip inline cases
                 if (isSingleLineNode(node)) {
@@ -881,6 +946,28 @@ module.exports = {
                 const caseIndent = expectedCaseIndent(node);
 
                 checkNodesIndent(node.consequent, caseIndent + indentSize);
+            },
+
+            FunctionDeclaration(node) {
+                if (isSingleLineNode(node)) {
+                    return;
+                }
+                if (options.FunctionDeclaration.parameters === "first" && node.params.length) {
+                    checkNodesIndent(node.params.slice(1), node.params[0].loc.start.column);
+                } else if (options.FunctionDeclaration.parameters !== null) {
+                    checkNodesIndent(node.params, indentSize * options.FunctionDeclaration.parameters);
+                }
+            },
+
+            FunctionExpression(node) {
+                if (isSingleLineNode(node)) {
+                    return;
+                }
+                if (options.FunctionExpression.parameters === "first" && node.params.length) {
+                    checkNodesIndent(node.params.slice(1), node.params[0].loc.start.column);
+                } else if (options.FunctionExpression.parameters !== null) {
+                    checkNodesIndent(node.params, indentSize * options.FunctionExpression.parameters);
+                }
             }
         };
 

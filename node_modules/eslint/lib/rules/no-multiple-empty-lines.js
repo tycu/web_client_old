@@ -42,7 +42,7 @@ module.exports = {
         ]
     },
 
-    create: function(context) {
+    create(context) {
 
         // Use options.max or 2 as default
         let max = 2,
@@ -66,7 +66,7 @@ module.exports = {
 
         return {
 
-            TemplateLiteral: function(node) {
+            TemplateLiteral(node) {
                 let start = node.loc.start.line;
                 const end = node.loc.end.line;
 
@@ -144,10 +144,13 @@ module.exports = {
                     rangeStart = linesRangeStart[firstNonBlankLine - diff];
                     rangeEnd = linesRangeStart[firstNonBlankLine];
                     context.report({
-                        node: node,
+                        node,
                         loc: node.loc.start,
-                        message: "Too many blank lines at the beginning of file. Max of " + maxBOF + " allowed.",
-                        fix: fix
+                        message: "Too many blank lines at the beginning of file. Max of {{maxBOF}} allowed.",
+                        data: {
+                            maxBOF
+                        },
+                        fix
                     });
                 }
                 currentLocation = firstNonBlankLine - 1;
@@ -162,7 +165,7 @@ module.exports = {
                     } else {
                         const location = {
                             line: lastLocation + 1,
-                            column: 1
+                            column: 0
                         };
 
                         if (lastLocation < firstOfEndingBlankLines) {
@@ -174,10 +177,14 @@ module.exports = {
                                 rangeEnd = linesRangeStart[location.line];
 
                                 context.report({
-                                    node: node,
+                                    node,
                                     loc: location,
-                                    message: "More than " + max + " blank " + (max === 1 ? "line" : "lines") + " not allowed.",
-                                    fix: fix
+                                    message: "More than {{max}} blank {{lines}} not allowed.",
+                                    data: {
+                                        max,
+                                        lines: (max === 1 ? "line" : "lines")
+                                    },
+                                    fix
                                 });
                             }
                         } else {
@@ -188,10 +195,13 @@ module.exports = {
                                 rangeStart = linesRangeStart[location.line - diff];
                                 rangeEnd = linesRangeStart[location.line - 1];
                                 context.report({
-                                    node: node,
+                                    node,
                                     loc: location,
-                                    message: "Too many blank lines at the end of file. Max of " + maxEOF + " allowed.",
-                                    fix: fix
+                                    message: "Too many blank lines at the end of file. Max of {{maxEOF}} allowed.",
+                                    data: {
+                                        maxEOF
+                                    },
+                                    fix
                                 });
                             }
                         }

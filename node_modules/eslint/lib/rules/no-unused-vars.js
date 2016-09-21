@@ -58,7 +58,7 @@ module.exports = {
         ]
     },
 
-    create: function(context) {
+    create(context) {
 
         const MESSAGE = "'{{name}}' is defined but never used.";
 
@@ -514,7 +514,7 @@ module.exports = {
          * @private
          */
         function getColumnInComment(variable, comment) {
-            const namePattern = new RegExp("[\\s,]" + lodash.escapeRegExp(variable.name) + "(?:$|[\\s,:])", "g");
+            const namePattern = new RegExp(`[\\s,]${lodash.escapeRegExp(variable.name)}(?:$|[\\s,:])`, "g");
 
             // To ignore the first text "global".
             namePattern.lastIndex = comment.value.indexOf("global") + 6;
@@ -550,7 +550,7 @@ module.exports = {
 
             return {
                 line: baseLoc.line + lineInComment,
-                column: column
+                column
             };
         }
 
@@ -559,7 +559,7 @@ module.exports = {
         //--------------------------------------------------------------------------
 
         return {
-            "Program:exit": function(programNode) {
+            "Program:exit"(programNode) {
                 const unusedVars = collectUnusedVariables(context.getScope(), []);
 
                 for (let i = 0, l = unusedVars.length; i < l; ++i) {
