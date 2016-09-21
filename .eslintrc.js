@@ -1,15 +1,16 @@
 module.exports = {
     "env": {
-        "browser": true,
+        "browser": false,
         "commonjs": true,
         "es6": true
     },
+    "parser": "babel-eslint",
     "extends": "./node_modules/eslint-config-bestpractices/index.js",
     "installedESLint": true,
     "parserOptions": {
         "ecmaFeatures": {
             "experimentalObjectRestSpread": true,
-            "jsx": true
+            "jsx": false
         },
         "sourceType": "module"
     },
