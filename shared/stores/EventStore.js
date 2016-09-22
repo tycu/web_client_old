@@ -76,13 +76,14 @@ class EventStore extends EventEmitter {
     const url = Constants.GET_EVENTS;
     const tokenLocal = AuthStore.getAuthToken() || '';
 
-    if (tokenLocal === '') {
-      AuthStore.signout();
-      // that.message = 'You need to sign back in';
-      browserHistory.push('/signin');
-      that.emit('change');
-      return;
-    }
+    // NOTE can't use because /events is not protected anymore
+    // if (tokenLocal === '') {
+    //   AuthStore.signout();
+    //   // that.message = 'You need to sign back in';
+    //   browserHistory.push('/signin');
+    //   that.emit('change');
+    //   return;
+    // }
 
     return when(request({
       url: url,
@@ -91,10 +92,11 @@ class EventStore extends EventEmitter {
       type: 'json',
       data: {
         offset: offset
-      },
-      headers: {
-        authorization: "Bearer " + tokenLocal
       }
+      // ,
+      // headers: {
+      //   authorization: "Bearer " + tokenLocal
+      // }
     }))
     .then(function(response) {
       var events = that.eventObjs || [];

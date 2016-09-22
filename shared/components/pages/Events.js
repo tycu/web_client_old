@@ -2,7 +2,6 @@ import React from "react";
 import Radium from 'radium';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Event from "../Event";
-
 import * as EventActions from "../../actions/EventActions";
 import EventStore from '../../stores/EventStore';
 

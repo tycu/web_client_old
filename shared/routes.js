@@ -82,10 +82,9 @@ const invalidIfSignedIn = function(nextState, replace) {
 };
 
 
-// <Route path="events" component={Events}></Route>
-
 const routes = (
   <Route path="/" component={Layout}>
+    <Route path="events" component={Events}></Route>
     <IndexRoute component={Events}></IndexRoute>
     <Route path="email_verification" component={EmailVerification}></Route>
     <Route path="reset_password" component={ForgotPassword}></Route>

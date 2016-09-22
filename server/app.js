@@ -175,9 +175,10 @@ app.use((req, res) => {
 function renderHTML({ componentHTML, initialState, metaData, config }) {
     return `
         <!DOCTYPE html>
-        <html>
+        <html lang='en'>
         <head>
             <meta charset="utf-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <link rel="shortcut icon" href="/static/favicon.ico"/>
             <title>${escapeHTML(metaData.title)} - Tally US</title>
@@ -210,8 +211,39 @@ function renderHTML({ componentHTML, initialState, metaData, config }) {
                 // NOTE: Insert Google Analytics code here
             </script>
 
+
+
+
+            <script>
+              // export const fbAppId = process.env.NODE_ENV === 'production' ? '1627624840901548' : '1627626620901370';
+              window.fbAsyncInit = function(){
+                FB.init({
+                  appId: '1627626620901370',
+                  status: true,
+                  cookie: true,
+                  version: 'v2.7',
+                  xfbml: true
+                });
+              };
+              (function(d, s, id){
+                 var js, fjs = d.getElementsByTagName(s)[0];
+                 if (d.getElementById(id)) {return;}
+                 js = d.createElement(s); js.id = id;
+                 js.src = "//connect.facebook.net/en_US/sdk.js";
+                 fjs.parentNode.insertBefore(js, fjs);
+               }(document, 'script', 'facebook-jssdk'));
+            </script>
+
+          <style type="text/css">
+            html {
+              box-sizing: border-box;
+            }
+            *, *:before, *:after {
+              box-sizing: inherit;
+            }
+          </style>
         </head>
-        <body>
+        <body style="background-color: #eee">
         <div id="react-view">${componentHTML}</div>
           <script type="application/javascript">
             window.__CONFIG__ = ${serializeJs(config, { isJSON: true })};
